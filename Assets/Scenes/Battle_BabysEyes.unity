@@ -775,7 +775,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a114d33f65b3d46fb8505614f9bed87b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  actionBarObj: {fileID: 579521159}
+  actionBar: {fileID: 579521160}
 --- !u!4 &437525447
 Transform:
   m_ObjectHideFlags: 0
@@ -820,15 +820,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d720c5bac95f141d5a5fbb3691bb2015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ActionsBar
-  attackBtnObj: {fileID: 1519973491}
-  blockBtnObj: {fileID: 125299185}
-  runAwayBtnObj: {fileID: 1370264663}
-  headBtnObj: {fileID: 1180697966}
-  bodyBtnObj: {fileID: 417104382}
-  eyesBtnObj: {fileID: 1485067728}
+  attackActionBtn: {fileID: 1519973496}
+  blockActionBtn: {fileID: 125299190}
+  runAwayActionBtn: {fileID: 1370264668}
+  headChoiceBtn: {fileID: 1180697971}
+  bodyChoiceBtn: {fileID: 417104387}
+  eyesChoiceBtn: {fileID: 1485067733}
   targetsSpriteRenderer: {fileID: 270283988}
-  chosenAction: 0
-  chosenBodyPart: 0
 --- !u!4 &579521161
 Transform:
   m_ObjectHideFlags: 0

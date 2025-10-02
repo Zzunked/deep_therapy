@@ -1,3 +1,4 @@
+using System.Data;
 using UnityEngine;
 
 
@@ -9,17 +10,12 @@ public enum BattleState
 
 public class BattleSystem : MonoBehaviour
 {
-    [SerializeField] GameObject actionBarObj;
+    [SerializeField] private ActionBar actionBar;
 
-    private ActionBar actionBar;
     private BattleState battleState = BattleState.PlayersTurn;
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        actionBar = actionBarObj.GetComponent<ActionBar>();
-    }
+    private bool isActionsEnabled = false;
+    private bool isTargetsEnabled = false;
 
     // Update is called once per frame
     void Update()
@@ -43,10 +39,13 @@ public class BattleSystem : MonoBehaviour
 
     void HandlePlayerTurn()
     {
-        switch (actionBar.chosenAction)
+        switch (actionBar.GetChousenAction())
         {
             case ChousenAction.None:
-                actionBar.EnableActionButtons();
+                if (!isActionsEnabled)
+                {
+                    actionBar.EnableActionButtons();
+                }
                 break;
 
             case ChousenAction.Attack:
@@ -56,56 +55,53 @@ public class BattleSystem : MonoBehaviour
             case ChousenAction.Block:
                 Debug.Log("Player is blocking!");
                 battleState = BattleState.EnemysTurn;
-                actionBar.chosenAction = ChousenAction.None;
+                actionBar.ResetChosenAction();
                 break;
 
             case ChousenAction.RunAway:
                 Debug.Log("Player runs away!");
                 battleState = BattleState.EnemysTurn;
-                actionBar.chosenAction = ChousenAction.None;
+                actionBar.ResetChosenAction();
                 break;
 
             default:
+                Debug.LogError("Unexpected player action!");
                 break;
         }
     }
 
     void HandlePlayerAttack()
     {
-        switch (actionBar.chosenBodyPart)
+        switch (actionBar.GetChosenTarget())
         {
-            case ChosenBodyPart.Head:
+            case ChosenTarget.None:
+                if (actionBar.GetChousenAction() == ChousenAction.Attack && !isTargetsEnabled)
+                {
+                    actionBar.EnableTargetButtons();
+                }
+                break;
+
+            case ChosenTarget.Head:
                 Debug.Log("Player attacks enemy's head!");
                 battleState = BattleState.EnemysTurn;
-                ResetActionBar();
+                actionBar.Reset();
                 break;
 
-            case ChosenBodyPart.Body:
+            case ChosenTarget.Body:
                 Debug.Log("Player attacks enemy's body!");
                 battleState = BattleState.EnemysTurn;
-                ResetActionBar();
+                actionBar.Reset();
                 break;
 
-            case ChosenBodyPart.Eyes:
+            case ChosenTarget.Eyes:
                 Debug.Log("Player attacks enemy's eyes!");
                 battleState = BattleState.EnemysTurn;
-                ResetActionBar();
+                actionBar.Reset();
                 break;
 
             default:
+                Debug.LogError("Unexpected target!");
                 break;
         }
-
     }
-
-    void ResetActionBar()
-    {
-        actionBar.chosenBodyPart = ChosenBodyPart.None;
-        actionBar.chosenAction = ChousenAction.None;
-        actionBar.DisableTargetButtons();
-        actionBar.HideTargetButtons();
-        actionBar.HideActionButtons();
-        actionBar.HideTargets();
-    }
-
 }

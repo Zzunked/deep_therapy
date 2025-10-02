@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Button : MonoBehaviour
@@ -16,6 +15,7 @@ public class Button : MonoBehaviour
     public void Disable()
     {
         isEnabled = false;
+        isMouseEntered = false;
     }
 
     public void Enable()
@@ -53,11 +53,10 @@ public class Button : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && isMouseEntered)
+        if (Input.GetMouseButtonDown(0) && isMouseEntered && isEnabled)
         {
             Debug.Log(gameObject.name + " CLICKED!");
             isClicked = true;
-            isMouseEntered = false;
         }
     }
 }

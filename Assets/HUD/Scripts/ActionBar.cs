@@ -1,6 +1,5 @@
-using System;
-using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
+
 
 public enum ChousenAction
 {
@@ -11,7 +10,8 @@ public enum ChousenAction
 
 }
 
-public enum ChosenBodyPart
+
+public enum ChosenTarget
 {
     None,
     Head,
@@ -22,81 +22,52 @@ public enum ChosenBodyPart
 
 public class ActionBar : MonoBehaviour
 {
-    [SerializeField] private GameObject attackBtnObj;
-    [SerializeField] private GameObject blockBtnObj;
-    [SerializeField] private GameObject runAwayBtnObj;
+    [SerializeField] private Button attackActionBtn;
+    [SerializeField] private Button blockActionBtn;
+    [SerializeField] private Button runAwayActionBtn;
 
-    [SerializeField] private GameObject headBtnObj;
-    [SerializeField] private GameObject bodyBtnObj;
-    [SerializeField] private GameObject eyesBtnObj;
+    [SerializeField] private Button headChoiceBtn;
+    [SerializeField] private Button bodyChoiceBtn;
+    [SerializeField] private Button eyesChoiceBtn;
 
-    [SerializeField] public SpriteRenderer targetsSpriteRenderer;
+    [SerializeField] private SpriteRenderer targetsSpriteRenderer;
 
-    public ChousenAction chosenAction = ChousenAction.None;
-    public ChosenBodyPart chosenBodyPart = ChosenBodyPart.None;
-
-    private Button attackActionBtn;
-    private Button blockActionBtn;
-    private Button runAwayActionBtn;
-
-    private Button headChoiceBtn;
-    private Button bodyChoiceBtn;
-    private Button eyesChoiceBtn;
+    private ChousenAction chosenAction = ChousenAction.None;
+    private ChosenTarget chosenTarget = ChosenTarget.None;
 
     void Start()
     {
-        attackActionBtn = attackBtnObj.GetComponent<Button>();
-        blockActionBtn = blockBtnObj.GetComponent<Button>();
-        runAwayActionBtn = runAwayBtnObj.GetComponent<Button>();
-
-        headChoiceBtn = headBtnObj.GetComponent<Button>();
-        bodyChoiceBtn = bodyBtnObj.GetComponent<Button>();
-        eyesChoiceBtn = eyesBtnObj.GetComponent<Button>();
-
-        EnableActionButtons();
-        HideTargets();
+        Reset();
     }
 
     void Update()
     {
-        HandleActionButton();
+        HandleActions();
 
         if (chosenAction == ChousenAction.Attack)
         {
-            ShowTargets();
-            EnableTargetButtons();
-            HandleBodyPartsButton();
+            HandleTargets();
         }
     }
 
-    void HandleBodyPartsButton()
+    public ChousenAction GetChousenAction()
     {
-        if (headChoiceBtn.isClicked)
-        {
-            chosenBodyPart = ChosenBodyPart.Head;
-            DisableTargetButtons();
-            headChoiceBtn.isClicked = false;
-        }
-        else if (bodyChoiceBtn.isClicked)
-        {
-            chosenBodyPart = ChosenBodyPart.Body;
-            DisableTargetButtons();
-            bodyChoiceBtn.isClicked = false;
-        }
-        else if (eyesChoiceBtn.isClicked)
-        {
-            chosenBodyPart = ChosenBodyPart.Eyes;
-            DisableTargetButtons();
-            eyesChoiceBtn.isClicked = false;
-        }
+        return chosenAction;
     }
 
-    void HandleActionButton()
+    public ChosenTarget GetChosenTarget()
+    {
+        return chosenTarget;
+    }
+
+    void HandleActions()
     {
         if (attackActionBtn.isClicked)
         {
             chosenAction = ChousenAction.Attack;
             DisableActionButtons();
+            ShowTargets();
+            EnableTargetButtons();
             attackActionBtn.isClicked = false;
         }
         else if (blockActionBtn.isClicked)
@@ -110,6 +81,28 @@ public class ActionBar : MonoBehaviour
             chosenAction = ChousenAction.RunAway;
             DisableActionButtons();
             runAwayActionBtn.isClicked = false;
+        }
+    }
+
+    void HandleTargets()
+    {
+        if (headChoiceBtn.isClicked)
+        {
+            chosenTarget = ChosenTarget.Head;
+            DisableTargetButtons();
+            headChoiceBtn.isClicked = false;
+        }
+        else if (bodyChoiceBtn.isClicked)
+        {
+            chosenTarget = ChosenTarget.Body;
+            DisableTargetButtons();
+            bodyChoiceBtn.isClicked = false;
+        }
+        else if (eyesChoiceBtn.isClicked)
+        {
+            chosenTarget = ChosenTarget.Eyes;
+            DisableTargetButtons();
+            eyesChoiceBtn.isClicked = false;
         }
     }
 
@@ -134,8 +127,9 @@ public class ActionBar : MonoBehaviour
         runAwayActionBtn.SetFrameInvisible();
     }
 
-    void EnableTargetButtons()
+    public void EnableTargetButtons()
     {
+        ShowTargets();
         headChoiceBtn.Enable();
         bodyChoiceBtn.Enable();
         eyesChoiceBtn.Enable();
@@ -143,6 +137,8 @@ public class ActionBar : MonoBehaviour
 
     public void DisableTargetButtons()
     {
+        HideTargets();
+        HideTargetButtons();
         headChoiceBtn.Disable();
         bodyChoiceBtn.Disable();
         eyesChoiceBtn.Disable();
@@ -165,4 +161,21 @@ public class ActionBar : MonoBehaviour
         targetsSpriteRenderer.sortingOrder = -1;
     }
 
+    public void ResetChosenAction()
+    {
+        chosenAction = ChousenAction.None;
+    }
+
+    public void ResetChosenTarget()
+    {
+        chosenTarget = ChosenTarget.None;
+    }
+
+    public void Reset()
+    {
+        ResetChosenAction();
+        ResetChosenTarget();
+        DisableTargetButtons();
+        HideActionButtons();
+    }
 }
