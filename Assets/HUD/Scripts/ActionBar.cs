@@ -30,6 +30,8 @@ public class ActionBar : MonoBehaviour
     [SerializeField] private GameObject bodyBtnObj;
     [SerializeField] private GameObject eyesBtnObj;
 
+    [SerializeField] public SpriteRenderer targetsSpriteRenderer;
+
     public ChousenAction chosenAction = ChousenAction.None;
     public ChosenBodyPart chosenBodyPart = ChosenBodyPart.None;
 
@@ -52,6 +54,7 @@ public class ActionBar : MonoBehaviour
         eyesChoiceBtn = eyesBtnObj.GetComponent<Button>();
 
         EnableActionButtons();
+        HideTargets();
     }
 
     void Update()
@@ -60,6 +63,7 @@ public class ActionBar : MonoBehaviour
 
         if (chosenAction == ChousenAction.Attack)
         {
+            ShowTargets();
             EnableTargetButtons();
             HandleBodyPartsButton();
         }
@@ -151,5 +155,14 @@ public class ActionBar : MonoBehaviour
         eyesChoiceBtn.SetFrameInvisible();
     }
 
+    public void ShowTargets()
+    {
+        targetsSpriteRenderer.sortingOrder = 1;
+    }
+
+    public void HideTargets()
+    {
+        targetsSpriteRenderer.sortingOrder = -1;
+    }
 
 }

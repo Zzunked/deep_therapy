@@ -105,6 +105,7 @@ public class BattleSystem : MonoBehaviour
         actionBar.DisableTargetButtons();
         actionBar.HideTargetButtons();
         actionBar.HideActionButtons();
+        actionBar.HideTargets();
     }
 
 }

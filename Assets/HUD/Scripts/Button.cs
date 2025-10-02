@@ -8,6 +8,11 @@ public class Button : MonoBehaviour
     public bool isClicked = false;
     private bool isEnabled = false;
 
+    void Start()
+    {
+        SetFrameInvisible();
+    }
+
     public void Disable()
     {
         isEnabled = false;
