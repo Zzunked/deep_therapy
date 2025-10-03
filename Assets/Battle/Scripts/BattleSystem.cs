@@ -11,15 +11,27 @@ public enum BattleState
 public class BattleSystem : MonoBehaviour
 {
     [SerializeField] private ActionBar actionBar;
+    [SerializeField] private Unit playerUnit;
+    [SerializeField] private Unit enemyUnit;
 
     private BattleState battleState = BattleState.PlayersTurn;
-
     private bool isActionsEnabled = false;
     private bool isTargetsEnabled = false;
 
     // Update is called once per frame
     void Update()
     {
+        if (playerUnit.isDead)
+        {
+            Debug.Log("GAME OVER");
+            ResetBattle();
+        }
+        else if (enemyUnit.isDead)
+        {
+            Debug.Log("VICTORY");
+            ResetBattle();
+        }
+
         switch (battleState)
         {
             case BattleState.PlayersTurn:
@@ -28,13 +40,40 @@ public class BattleSystem : MonoBehaviour
 
             case BattleState.EnemysTurn:
                 Debug.Log("Enemy attacks!");
-                battleState = BattleState.PlayersTurn;
+                HandleEnemyTurn();
+                EndRound();
                 break;
 
             default:
                 Debug.LogError("Unexpected battle state!");
                 break;
         }
+    }
+
+    void HandleEnemyTurn()
+    {
+        int enemyDamage = 10;
+
+        if (actionBar.GetChousenAction() == ChousenAction.Block)
+        {
+            enemyDamage -= 5;
+        }
+
+        playerUnit.TakeDamage(enemyDamage);
+    }
+
+    void EndRound()
+    {
+        actionBar.Reset();
+        battleState = BattleState.PlayersTurn;
+    }
+
+    void ResetBattle()
+    {
+        playerUnit.ResetHealth();
+        enemyUnit.ResetHealth();
+        actionBar.Reset();
+        battleState = BattleState.PlayersTurn;
     }
 
     void HandlePlayerTurn()
@@ -55,13 +94,11 @@ public class BattleSystem : MonoBehaviour
             case ChousenAction.Block:
                 Debug.Log("Player is blocking!");
                 battleState = BattleState.EnemysTurn;
-                actionBar.ResetChosenAction();
                 break;
 
             case ChousenAction.RunAway:
                 Debug.Log("Player runs away!");
                 battleState = BattleState.EnemysTurn;
-                actionBar.ResetChosenAction();
                 break;
 
             default:
@@ -83,20 +120,20 @@ public class BattleSystem : MonoBehaviour
 
             case ChosenTarget.Head:
                 Debug.Log("Player attacks enemy's head!");
+                enemyUnit.TakeDamage(10);
                 battleState = BattleState.EnemysTurn;
-                actionBar.Reset();
                 break;
 
             case ChosenTarget.Body:
                 Debug.Log("Player attacks enemy's body!");
+                enemyUnit.TakeDamage(10);
                 battleState = BattleState.EnemysTurn;
-                actionBar.Reset();
                 break;
 
             case ChosenTarget.Eyes:
                 Debug.Log("Player attacks enemy's eyes!");
+                enemyUnit.TakeDamage(10);
                 battleState = BattleState.EnemysTurn;
-                actionBar.Reset();
                 break;
 
             default:
