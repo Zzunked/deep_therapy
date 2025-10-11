@@ -776,7 +776,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   actionBar: {fileID: 579521160}
-  playerUnit: {fileID: 1582224805}
+  playerUnit: {fileID: 1582224804}
   enemyUnit: {fileID: 1947515732}
 --- !u!4 &437525447
 Transform:
@@ -1464,7 +1464,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1582224802}
   - component: {fileID: 1582224803}
-  - component: {fileID: 1582224805}
   - component: {fileID: 1582224804}
   m_Layer: 0
   m_Name: Player
@@ -1555,25 +1554,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 1582224801}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30ba9cf7b997c4db685f5861bd48ff7e, type: 3}
+  m_Script: {fileID: 11500000, guid: d27acc0e48804464daaa9315b11fb163, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Unit
-  healthPoints: 100
+  m_EditorClassIdentifier: Assembly-CSharp::BattlePlayer
+  level: 0
+  health: 100
+  maxAttackMultiplier: 1.2
+  minAttackMultiplier: 0.7
+  maxBlockMultiplier: 1
+  minBlockMultiplier: 0.6
+  attackAnimator: {fileID: 0}
+  takeDamageAnimator: {fileID: 0}
+  blockAnimator: {fileID: 0}
+  dieAnimator: {fileID: 0}
+  winAnimator: {fileID: 0}
   isDead: 0
---- !u!114 &1582224805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1582224801}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30ba9cf7b997c4db685f5861bd48ff7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  healthPoints: 100
-  isDead: 0
+  baseAttackDamage: 10
 --- !u!1 &1947515729
 GameObject:
   m_ObjectHideFlags: 0
@@ -1674,11 +1670,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 1947515729}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30ba9cf7b997c4db685f5861bd48ff7e, type: 3}
+  m_Script: {fileID: 11500000, guid: 8735a75e218734cbe9c736ea5d0f28f7, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Unit
-  healthPoints: 100
+  m_EditorClassIdentifier: Assembly-CSharp::BattleEyesEnemy
+  level: 0
+  health: 100
+  maxAttackMultiplier: 1.2
+  minAttackMultiplier: 0.8
+  maxBlockMultiplier: 1
+  minBlockMultiplier: 0.8
+  attackAnimator: {fileID: 0}
+  takeDamageAnimator: {fileID: 0}
+  blockAnimator: {fileID: 0}
+  dieAnimator: {fileID: 0}
+  winAnimator: {fileID: 0}
   isDead: 0
+  baseAttackDamage: 10
+  blockProbability: 0.1
+  headDamageMultiplier: 1
+  bodyDamageMultiplier: 1
+  eyesDamageMultiplier: 1
 --- !u!1 &2140259770
 GameObject:
   m_ObjectHideFlags: 0

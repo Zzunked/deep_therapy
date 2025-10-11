@@ -11,22 +11,29 @@ public enum BattleState
 public class BattleSystem : MonoBehaviour
 {
     [SerializeField] private ActionBar actionBar;
-    [SerializeField] private Unit playerUnit;
-    [SerializeField] private Unit enemyUnit;
+    [SerializeField] private BattlePlayer playerUnit;
+    [SerializeField] private BattleEyesEnemy enemyUnit;
 
     private BattleState battleState = BattleState.PlayersTurn;
     private bool isActionsEnabled = false;
     private bool isTargetsEnabled = false;
 
+    void Start()
+    {
+        playerUnit.SetTargetUnit(enemyUnit);
+        enemyUnit.SetTargetUnit(playerUnit);
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if (playerUnit.isDead)
+        if (playerUnit.IsDead())
         {
             Debug.Log("GAME OVER");
             ResetBattle();
         }
-        else if (enemyUnit.isDead)
+
+        if (enemyUnit.IsDead())
         {
             Debug.Log("VICTORY");
             ResetBattle();
@@ -39,7 +46,6 @@ public class BattleSystem : MonoBehaviour
                 break;
 
             case BattleState.EnemysTurn:
-                Debug.Log("Enemy attacks!");
                 HandleEnemyTurn();
                 EndRound();
                 break;
@@ -52,33 +58,33 @@ public class BattleSystem : MonoBehaviour
 
     void HandleEnemyTurn()
     {
-        int enemyDamage = 10;
-
-        if (actionBar.GetChousenAction() == ChousenAction.Block)
-        {
-            enemyDamage -= 5;
-        }
-
-        playerUnit.TakeDamage(enemyDamage);
+        enemyUnit.Attack();
     }
 
     void EndRound()
     {
         actionBar.Reset();
         battleState = BattleState.PlayersTurn;
+        Debug.Log("------------------------- END OF ROUND ----------------------------");
+        Debug.Log("Players health: " + playerUnit.GetHealth());
+        Debug.Log("Enemy health: " + enemyUnit.GetHealth());
+        Debug.Log("-------------------------------------------------------------------");
     }
 
     void ResetBattle()
     {
-        playerUnit.ResetHealth();
-        enemyUnit.ResetHealth();
+        playerUnit.Ressurect();
+        enemyUnit.Ressurect();
         actionBar.Reset();
         battleState = BattleState.PlayersTurn;
     }
 
     void HandlePlayerTurn()
     {
-        switch (actionBar.GetChousenAction())
+        ChosenTarget target = actionBar.GetChosenTarget();
+        ChousenAction action = actionBar.GetChousenAction();
+
+        switch (action)
         {
             case ChousenAction.None:
                 if (!isActionsEnabled)
@@ -88,10 +94,22 @@ public class BattleSystem : MonoBehaviour
                 break;
 
             case ChousenAction.Attack:
-                HandlePlayerAttack();
+                if (target == ChosenTarget.None && !isTargetsEnabled)
+                {
+                    actionBar.EnableTargetButtons();
+                }
+
+                if (target != ChosenTarget.None)
+                {
+                    enemyUnit.SetTargetPart(target);
+                    playerUnit.Attack();
+                    enemyUnit.ResetTargetPart();
+                    battleState = BattleState.EnemysTurn;
+                }
                 break;
 
             case ChousenAction.Block:
+                playerUnit.SetBlocking();
                 Debug.Log("Player is blocking!");
                 battleState = BattleState.EnemysTurn;
                 break;
