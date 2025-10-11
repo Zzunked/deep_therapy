@@ -10,93 +10,19 @@ public class BattleEyesEnemy : BattleUnit
     [SerializeField] private float eyesDamageMultiplier = 1f;
     private ChosenTarget targetPart;
 
-    public override void Attack()
+    protected override float CalculateAttackDamage()
     {
         float attackMultiplier = Random.Range(minAttackMultiplier, maxAttackMultiplier);
         float attackDamage = baseAttackDamage * attackMultiplier;
 
-        PlayAttackAnimation();
-
-        Debug.Log("Enemy attacks with damage: " + attackDamage);
-
-        targetUnit.TakeDamage(attackDamage);
+        return attackDamage;
     }
 
-    public override void TakeDamage(float damage)
-    {
-        if (damage < 0)
-        {
-            Debug.LogError("TakeDamage damage is negative number: " + damage + ". Taking absolute value.");
-            damage = Mathf.Abs(damage);
-        }
-
-        if (IsBlocking())
-        {
-            damage = Block(damage);
-            PlayBlockAnimation();
-        }
-        else
-        {
-            PlayTakeDamageAnimation();
-        }
-
-        health -= damage * GetPartDamageMultiplier(targetPart);
-
-        Debug.Log("Enemy got damage: " + damage + ", health left: " + health);
-
-        if (health <= 0)
-        {
-            Debug.Log("Enemy has died!");
-            PlayDieAnimation();
-            SetDead();
-        }
-    }
-
-    protected override float Block(float damage)
-    {
-        float damageAfterBlock;
-        float blockedDamage;
-        float blockMultiplier;
-
-        if (damage < 0)
-        {
-            Debug.LogError("Block damage is negative number: " + damage + ". Taking absolute value.");
-            damage = Mathf.Abs(damage);
-        }
-
-        blockMultiplier = Random.Range(minBlockMultiplier, maxBlockMultiplier);
-        blockedDamage = damage * blockMultiplier;
-        damageAfterBlock = damage - blockedDamage;
-
-        Debug.Log("Enemy blocks " + blockedDamage + " damage!");
-
-        return damageAfterBlock;
-    }
-
-    public void SetTargetPart(ChosenTarget chosenTarget)
-    {
-        targetPart = chosenTarget;
-    }
-
-    public void ResetTargetPart()
-    {
-        targetPart = ChosenTarget.None;
-    }
-
-    private bool IsBlocking()
-    {
-        float blockRate = Random.Range(0f, 1f);
-        Debug.Log("Enemy blockRate: " + blockRate + ", blockProbability: " + blockProbability);
-        bool isBlocking = (blockRate <= blockProbability) ? true : false;
-
-        return isBlocking;
-    }
-
-    private float GetPartDamageMultiplier(ChosenTarget target)
+    protected override float CalculateTakenDamgeMultiplier()
     {
         float multiplier;
 
-        switch (target)
+        switch (targetPart)
         {
             case ChosenTarget.Head:
                 multiplier = headDamageMultiplier;
@@ -114,5 +40,32 @@ public class BattleEyesEnemy : BattleUnit
         }
 
         return multiplier;
+    }
+
+    protected override float CalculateBlockedDamage(float damage)
+    {
+        float blockMultiplier = Random.Range(minBlockMultiplier, maxBlockMultiplier);
+        float blockedDamage = damage * blockMultiplier;
+
+        return blockedDamage;
+    }
+
+    public void SetTargetPart(ChosenTarget chosenTarget)
+    {
+        targetPart = chosenTarget;
+    }
+
+    public void ResetTargetPart()
+    {
+        targetPart = ChosenTarget.None;
+    }
+
+    protected override bool IsBlocking()
+    {
+        float blockRate = Random.Range(0f, 1f);
+        Debug.Log("Enemy blockRate: " + blockRate + ", blockProbability: " + blockProbability);
+        bool isBlocking = (blockRate <= blockProbability) ? true : false;
+
+        return isBlocking;
     }
 }

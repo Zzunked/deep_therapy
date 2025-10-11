@@ -1,12 +1,12 @@
-using System.Data;
 using UnityEngine;
 
 
-public enum BattleState
+enum BattleState
 {
     PlayersTurn,
     EnemysTurn
 }
+
 
 public class BattleSystem : MonoBehaviour
 {
@@ -17,6 +17,7 @@ public class BattleSystem : MonoBehaviour
     private BattleState battleState = BattleState.PlayersTurn;
     private bool isActionsEnabled = false;
     private bool isTargetsEnabled = false;
+    private int round = 1;
 
     void Start()
     {
@@ -65,10 +66,11 @@ public class BattleSystem : MonoBehaviour
     {
         actionBar.Reset();
         battleState = BattleState.PlayersTurn;
-        Debug.Log("------------------------- END OF ROUND ----------------------------");
+        Debug.Log("------------------------- END OF ROUND " + round + " ----------------------------");
         Debug.Log("Players health: " + playerUnit.GetHealth());
         Debug.Log("Enemy health: " + enemyUnit.GetHealth());
         Debug.Log("-------------------------------------------------------------------");
+        round++;
     }
 
     void ResetBattle()
@@ -121,41 +123,6 @@ public class BattleSystem : MonoBehaviour
 
             default:
                 Debug.LogError("Unexpected player action!");
-                break;
-        }
-    }
-
-    void HandlePlayerAttack()
-    {
-        switch (actionBar.GetChosenTarget())
-        {
-            case ChosenTarget.None:
-                if (actionBar.GetChousenAction() == ChousenAction.Attack && !isTargetsEnabled)
-                {
-                    actionBar.EnableTargetButtons();
-                }
-                break;
-
-            case ChosenTarget.Head:
-                Debug.Log("Player attacks enemy's head!");
-                enemyUnit.TakeDamage(10);
-                battleState = BattleState.EnemysTurn;
-                break;
-
-            case ChosenTarget.Body:
-                Debug.Log("Player attacks enemy's body!");
-                enemyUnit.TakeDamage(10);
-                battleState = BattleState.EnemysTurn;
-                break;
-
-            case ChosenTarget.Eyes:
-                Debug.Log("Player attacks enemy's eyes!");
-                enemyUnit.TakeDamage(10);
-                battleState = BattleState.EnemysTurn;
-                break;
-
-            default:
-                Debug.LogError("Unexpected target!");
                 break;
         }
     }

@@ -16,6 +16,7 @@ public class BattleUnit : MonoBehaviour
     [SerializeField] protected Animator dieAnimator;
     [SerializeField] protected Animator winAnimator;
     [SerializeField] protected bool isDead = false;
+    [SerializeField] protected bool isBlocking = false;
     protected BattleUnit targetUnit;
 
     public bool IsDead()
@@ -37,6 +38,71 @@ public class BattleUnit : MonoBehaviour
     public void SetTargetUnit(BattleUnit target)
     {
         targetUnit = target;
+    }
+
+    public void Attack()
+    {
+        float attackDamage = CalculateAttackDamage();
+
+        PlayAttackAnimation();
+
+        Debug.Log(gameObject.name + " attacks with damage: " + attackDamage);
+
+        targetUnit.TakeDamage(attackDamage);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        float takenDamageMultiplier = 1f;
+
+        if (damage < 0)
+        {
+            Debug.LogError("TakeDamage damage is negative number: " + damage + ". Taking absolute value.");
+            damage = Mathf.Abs(damage);
+        }
+
+        if (IsBlocking())
+        {
+            damage = Block(damage);
+            PlayBlockAnimation();
+            isBlocking = false;
+        }
+        else
+        {
+            takenDamageMultiplier = CalculateTakenDamgeMultiplier();
+            PlayTakeDamageAnimation();
+        }
+
+        health -= damage * takenDamageMultiplier;
+
+        Debug.Log(gameObject.name + " got damage: " + damage + ", health left: " + health);
+
+        if (health <= 0)
+        {
+            Debug.Log(gameObject.name + " has died!");
+            PlayDieAnimation();
+            SetDead();
+        }
+    }
+
+    private float Block(float damage)
+    {
+        float damageAfterBlock;
+        float blockedDamage;
+
+        if (damage < 0)
+        {
+            Debug.LogError("Block damage is negative number: " + damage + ". Taking absolute value.");
+            damage = Mathf.Abs(damage);
+        }
+
+        blockedDamage = CalculateBlockedDamage(damage);
+
+        damageAfterBlock = damage - blockedDamage;
+
+        Debug.Log(gameObject.name + " blocks " + blockedDamage + " damage!");
+
+        return damageAfterBlock;
     }
 
     protected void SetDead()
@@ -68,19 +134,31 @@ public class BattleUnit : MonoBehaviour
     {
         // play animation
     }
-    protected virtual float Block(float damage)
+
+    protected virtual float CalculateAttackDamage()
     {
-        Debug.LogError("Block method of base BattleUnit class has been called!");
-        return 0;
+        float attackDamage = 0;
+        Debug.LogError("Base CalculateAttackDamage method has been called!");
+        return attackDamage;
     }
 
-    public virtual void Attack()
+    protected virtual float CalculateTakenDamgeMultiplier()
     {
-        Debug.LogError("Attack method of base BattleUnit class has been called!");
+        float takenDamageMultiplier = 1f;
+        Debug.LogError("Base CalculateAttackDamage method has been called!");
+        return takenDamageMultiplier;
+
     }
 
-    public virtual void TakeDamage(float damage)
+    protected virtual float CalculateBlockedDamage(float damage)
     {
-        Debug.LogError("TakeDamage method of base BattleUnit class has been called!");
+        float blockedDamage = 0;
+        Debug.LogError("Base CalculateAttackDamage method has been called!");
+        return blockedDamage;
+    }
+
+    protected virtual bool IsBlocking()
+    {
+        return isBlocking;
     }
 }
