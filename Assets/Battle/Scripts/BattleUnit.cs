@@ -118,6 +118,7 @@ public class BattleUnit : MonoBehaviour
     protected void PlayTakeDamageAnimation()
     {
         // play animation
+        takeDamageAnimator.Play("TakeDamage", 0, 0f);
     }
 
     protected void PlayBlockAnimation()
