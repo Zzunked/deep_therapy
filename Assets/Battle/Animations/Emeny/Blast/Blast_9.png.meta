@@ -1,28 +1,28 @@
 fileFormatVersion: 2
-guid: 7d22b07a545ff4d7ca108540dd4b18e2
+guid: 343de295d4ed44dc3a83ab22be3a20e9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4113829005332862926
-    second: 9_0
+      213: 2829664437992637411
+    second: Blast_9_0
   - first:
-      213: -215640629934891304
-    second: 9_1
+      213: -7536633927284304992
+    second: Blast_9_1
   - first:
-      213: 6460059290704040764
-    second: 9_2
+      213: -263228038802992611
+    second: Blast_9_2
   - first:
-      213: -1084366493605160568
-    second: 9_3
+      213: 3381567195286127096
+    second: Blast_9_3
   - first:
-      213: -6911333492305490673
-    second: 9_4
+      213: 5724487188503405816
+    second: Blast_9_4
   - first:
-      213: 5874673946163824410
-    second: 9_5
+      213: -1774931360896406179
+    second: Blast_9_5
   - first:
-      213: 570056791386284564
-    second: 9_6
+      213: -6473106818104986471
+    second: Blast_9_6
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -131,7 +131,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 9_0
+      name: Blast_9_0
       rect:
         serializedVersion: 2
         x: 372
@@ -146,14 +146,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ec750913fa1471930800000000000000
-      internalID: 4113829005332862926
+      spriteID: 3e34b1c60dcf44720800000000000000
+      internalID: 2829664437992637411
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 9_1
+      name: Blast_9_1
       rect:
         serializedVersion: 2
         x: 387
@@ -168,14 +168,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8ded6955df3e10df0800000000000000
-      internalID: -215640629934891304
+      spriteID: 0a3df0abf5f786790800000000000000
+      internalID: -7536633927284304992
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 9_2
+      name: Blast_9_2
       rect:
         serializedVersion: 2
         x: 242
@@ -190,14 +190,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c335062b2bdb6a950800000000000000
-      internalID: 6460059290704040764
+      spriteID: d12993c4e73d85cf0800000000000000
+      internalID: -263228038802992611
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 9_3
+      name: Blast_9_3
       rect:
         serializedVersion: 2
         x: 251
@@ -212,14 +212,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 88914565b6e83f0f0800000000000000
-      internalID: -1084366493605160568
+      spriteID: 8f1c423a27dbdee20800000000000000
+      internalID: 3381567195286127096
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 9_4
+      name: Blast_9_4
       rect:
         serializedVersion: 2
         x: 393
@@ -234,14 +234,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f0d0fda7ec20610a0800000000000000
-      internalID: -6911333492305490673
+      spriteID: 8f42500b4c6717f40800000000000000
+      internalID: 5724487188503405816
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 9_5
+      name: Blast_9_5
       rect:
         serializedVersion: 2
         x: 264
@@ -256,14 +256,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a17465424d8078150800000000000000
-      internalID: 5874673946163824410
+      spriteID: d5da11dc45d2e57e0800000000000000
+      internalID: -1774931360896406179
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 9_6
+      name: Blast_9_6
       rect:
         serializedVersion: 2
         x: 329
@@ -278,8 +278,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 412e068a1af39e700800000000000000
-      internalID: 570056791386284564
+      spriteID: 99471b915a7ea26a0800000000000000
+      internalID: -6473106818104986471
       vertices: []
       indices: 
       edges: []
@@ -298,13 +298,13 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      9_0: 4113829005332862926
-      9_1: -215640629934891304
-      9_2: 6460059290704040764
-      9_3: -1084366493605160568
-      9_4: -6911333492305490673
-      9_5: 5874673946163824410
-      9_6: 570056791386284564
+      Blast_9_0: 2829664437992637411
+      Blast_9_1: -7536633927284304992
+      Blast_9_2: -263228038802992611
+      Blast_9_3: 3381567195286127096
+      Blast_9_4: 5724487188503405816
+      Blast_9_5: -1774931360896406179
+      Blast_9_6: -6473106818104986471
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

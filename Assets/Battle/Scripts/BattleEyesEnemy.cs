@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 
 public class BattleEyesEnemy : BattleUnit
@@ -8,6 +9,9 @@ public class BattleEyesEnemy : BattleUnit
     [SerializeField] private float headDamageMultiplier = 1f;
     [SerializeField] private float bodyDamageMultiplier = 1f;
     [SerializeField] private float eyesDamageMultiplier = 1f;
+    [SerializeField] private Animator blastAnimator;
+    [SerializeField] private Animator shieldAnimator;
+
     private ChosenTarget targetPart;
 
     protected override float CalculateAttackDamage()
@@ -53,11 +57,22 @@ public class BattleEyesEnemy : BattleUnit
     protected override void PlayTakeDamageAnimation()
     {
         // play animation
+        blastAnimator.Play("Blast");
     }
 
     protected override void PlayBlockAnimation()
     {
         // play animation
+        StartCoroutine(PlayBlastAndShield());
+    }
+
+    IEnumerator PlayBlastAndShield()
+    {
+        blastAnimator.Play("Blast");
+
+        yield return new WaitForSeconds(0.5f);
+
+        shieldAnimator.Play("Shield");
     }
 
     protected override void PlayDieAnimation()
