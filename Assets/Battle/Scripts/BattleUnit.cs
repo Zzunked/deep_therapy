@@ -124,6 +124,7 @@ public class BattleUnit : MonoBehaviour
     protected void PlayBlockAnimation()
     {
         // play animation
+        takeDamageAnimator.Play("BlockAnimation", 0, 0f);
     }
 
     protected void PlayDieAnimation()
