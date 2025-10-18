@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TakeDamage
+  m_Name: Blast
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -22,25 +22,25 @@ AnimationClip:
     curve:
     - time: 0
       value: {fileID: 5088316998373936774, guid: 772d86ee40c22462f903dbd5211634ed, type: 3}
-    - time: 0.06666667
+    - time: 0.16666667
       value: {fileID: 5088316998373936774, guid: 772d86ee40c22462f903dbd5211634ed, type: 3}
-    - time: 0.11666667
+    - time: 0.28333333
       value: {fileID: 21300000, guid: a04045071a59a44d59f940c48750f11c, type: 3}
-    - time: 0.18333334
+    - time: 0.43333334
       value: {fileID: 21300000, guid: d13c6e21625f14a438c637e898dfe4a7, type: 3}
-    - time: 0.23333333
+    - time: 0.56666666
       value: {fileID: 21300000, guid: f771a58cea26149fa85d43724fa9db1c, type: 3}
-    - time: 0.3
+    - time: 0.71666664
       value: {fileID: 21300000, guid: 5c2bb58725d36485da91babe064783c5, type: 3}
-    - time: 0.35
+    - time: 0.8333333
       value: {fileID: 21300000, guid: 972154b02cd09414098b884ae6973223, type: 3}
-    - time: 0.41666666
+    - time: 1
       value: {fileID: 21300000, guid: 3ba5b5ea2bf93415f84cc3042b671182, type: 3}
-    - time: 0.46666667
+    - time: 1.1166667
       value: {fileID: 21300000, guid: a5ce26ca13fe24f62a0bf80910e3c03d, type: 3}
-    - time: 0.53333336
+    - time: 1.2833333
       value: {fileID: 21300000, guid: 97529ef9c47ed49228145bb2156dbab9, type: 3}
-    - time: 0.5833333
+    - time: 1.4
       value: {fileID: 21300000, guid: 7d22b07a545ff4d7ca108540dd4b18e2, type: 3}
     attribute: m_Sprite
     path: 
@@ -80,7 +80,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.59999996
+    m_StopTime: 1.4166666
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0

@@ -10,11 +10,11 @@ public class BattleUnit : MonoBehaviour
     [SerializeField] protected float minAttackMultiplier;
     [SerializeField] protected float maxBlockMultiplier;
     [SerializeField] protected float minBlockMultiplier;
-    [SerializeField] protected Animator attackAnimator;
-    [SerializeField] protected Animator takeDamageAnimator;
-    [SerializeField] protected Animator blockAnimator;
-    [SerializeField] protected Animator dieAnimator;
-    [SerializeField] protected Animator winAnimator;
+    // [SerializeField] protected Animator attackAnimator;
+    // [SerializeField] protected Animator takeDamageAnimator;
+    // [SerializeField] protected Animator blockAnimator;
+    // [SerializeField] protected Animator dieAnimator;
+    // [SerializeField] protected Animator winAnimator;
     [SerializeField] protected bool isDead = false;
     [SerializeField] protected bool isBlocking = false;
     protected BattleUnit targetUnit;
@@ -43,8 +43,6 @@ public class BattleUnit : MonoBehaviour
     public void Attack()
     {
         float attackDamage = CalculateAttackDamage();
-
-        PlayAttackAnimation();
 
         Debug.Log(gameObject.name + " attacks with damage: " + attackDamage);
 
@@ -110,29 +108,22 @@ public class BattleUnit : MonoBehaviour
         isDead = true;
     }
 
-    protected void PlayAttackAnimation()
+    protected virtual void PlayTakeDamageAnimation()
     {
         // play animation
     }
 
-    protected void PlayTakeDamageAnimation()
-    {
-        // play animation
-        takeDamageAnimator.Play("TakeDamage", 0, 0f);
-    }
-
-    protected void PlayBlockAnimation()
-    {
-        // play animation
-        takeDamageAnimator.Play("BlockAnimation", 0, 0f);
-    }
-
-    protected void PlayDieAnimation()
+    protected virtual void PlayBlockAnimation()
     {
         // play animation
     }
 
-    protected void PlayWinAnimation()
+    protected virtual void PlayDieAnimation()
+    {
+        // play animation
+    }
+
+    protected virtual void PlayWinAnimation()
     {
         // play animation
     }

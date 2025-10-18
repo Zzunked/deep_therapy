@@ -50,6 +50,26 @@ public class BattleEyesEnemy : BattleUnit
         return blockedDamage;
     }
 
+    protected override void PlayTakeDamageAnimation()
+    {
+        // play animation
+    }
+
+    protected override void PlayBlockAnimation()
+    {
+        // play animation
+    }
+
+    protected override void PlayDieAnimation()
+    {
+        // play animation
+    }
+
+    protected override void PlayWinAnimation()
+    {
+        // play animation
+    }
+
     public void SetTargetPart(ChosenTarget chosenTarget)
     {
         targetPart = chosenTarget;
