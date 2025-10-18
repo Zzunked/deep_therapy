@@ -150,7 +150,7 @@ public class BattleUnit : MonoBehaviour
         return blockedDamage;
     }
 
-    protected virtual bool IsBlocking()
+    public virtual bool IsBlocking()
     {
         return isBlocking;
     }

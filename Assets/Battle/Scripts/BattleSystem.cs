@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 
 enum BattleState
@@ -13,6 +14,9 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] private ActionBar actionBar;
     [SerializeField] private BattlePlayer playerUnit;
     [SerializeField] private BattleEyesEnemy enemyUnit;
+    [SerializeField] private float delayBeforePlayerAttack = 1.5f;
+    [SerializeField] private float delayBeforePlayerBlock = 1.5f;
+    [SerializeField] private float delayBeforeEnemyAttack = 4f;
 
     private BattleState battleState = BattleState.PlayersTurn;
     private bool isActionsEnabled = false;
@@ -59,7 +63,9 @@ public class BattleSystem : MonoBehaviour
 
     void HandleEnemyTurn()
     {
-        enemyUnit.Attack();
+        float delay = playerUnit.IsBlocking() ? delayBeforePlayerBlock : delayBeforeEnemyAttack;
+
+        StartCoroutine(EnemyAttack(delay));
     }
 
     void EndRound()
@@ -104,7 +110,7 @@ public class BattleSystem : MonoBehaviour
                 if (target != ChosenTarget.None)
                 {
                     enemyUnit.SetTargetPart(target);
-                    playerUnit.Attack();
+                    StartCoroutine(PlayerAttack(delayBeforePlayerAttack));
                     enemyUnit.ResetTargetPart();
                     battleState = BattleState.EnemysTurn;
                 }
@@ -126,4 +132,17 @@ public class BattleSystem : MonoBehaviour
                 break;
         }
     }
+
+    IEnumerator PlayerAttack(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        playerUnit.Attack();
+    }
+
+    IEnumerator EnemyAttack(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        enemyUnit.Attack();
+    }
+
 }

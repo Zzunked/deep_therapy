@@ -1004,6 +1004,9 @@ MonoBehaviour:
   actionBar: {fileID: 579521160}
   playerUnit: {fileID: 1582224804}
   enemyUnit: {fileID: 1947515732}
+  delayBeforePlayerAttack: 1.5
+  delayBeforePlayerBlock: 1.5
+  delayBeforeEnemyAttack: 3
 --- !u!4 &437525447
 Transform:
   m_ObjectHideFlags: 0

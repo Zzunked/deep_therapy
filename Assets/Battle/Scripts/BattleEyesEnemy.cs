@@ -95,7 +95,7 @@ public class BattleEyesEnemy : BattleUnit
         targetPart = ChosenTarget.None;
     }
 
-    protected override bool IsBlocking()
+    public override bool IsBlocking()
     {
         float blockRate = Random.Range(0f, 1f);
         Debug.Log("Enemy blockRate: " + blockRate + ", blockProbability: " + blockProbability);
