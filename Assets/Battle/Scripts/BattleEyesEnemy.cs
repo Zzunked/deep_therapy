@@ -63,16 +63,8 @@ public class BattleEyesEnemy : BattleUnit
     protected override void PlayBlockAnimation()
     {
         // play animation
-        StartCoroutine(PlayBlastAndShield());
-    }
-
-    IEnumerator PlayBlastAndShield()
-    {
-        blastAnimator.Play("Blast");
-
-        yield return new WaitForSeconds(0.5f);
-
         shieldAnimator.Play("Shield");
+
     }
 
     protected override void PlayDieAnimation()

@@ -52,15 +52,6 @@ public class BattlePlayer : BattleUnit
     protected override void PlayBlockAnimation()
     {
         // play animation
-        StartCoroutine(PlayTentacleAndShield());
-    }
-
-    IEnumerator PlayTentacleAndShield()
-    {
-        tentacleAnimator.Play("Tentacle");
-
-        yield return new WaitForSeconds(0.5f);
-
         shieldAnimator.Play("Shield");
     }
 
