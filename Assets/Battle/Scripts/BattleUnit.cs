@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 
@@ -40,16 +41,16 @@ public class BattleUnit : MonoBehaviour
         targetUnit = target;
     }
 
-    public void Attack()
+    public IEnumerator Attack()
     {
         float attackDamage = CalculateAttackDamage();
 
         Debug.Log(gameObject.name + " attacks with damage: " + attackDamage);
 
-        targetUnit.TakeDamage(attackDamage);
+        yield return StartCoroutine(targetUnit.TakeDamage(attackDamage));
     }
 
-    public void TakeDamage(float damage)
+    public IEnumerator TakeDamage(float damage)
     {
         float takenDamageMultiplier = 1f;
 
@@ -62,13 +63,13 @@ public class BattleUnit : MonoBehaviour
         if (IsBlocking())
         {
             damage = Block(damage);
-            PlayBlockAnimation();
+            yield return StartCoroutine(PlayBlockAnimation());
             isBlocking = false;
         }
         else
         {
             takenDamageMultiplier = CalculateTakenDamgeMultiplier();
-            PlayTakeDamageAnimation();
+            yield return StartCoroutine(PlayTakeDamageAnimation());
         }
 
         health -= damage * takenDamageMultiplier;
@@ -108,13 +109,15 @@ public class BattleUnit : MonoBehaviour
         isDead = true;
     }
 
-    protected virtual void PlayTakeDamageAnimation()
+    protected virtual IEnumerator PlayTakeDamageAnimation()
     {
+        yield return null;
         // play animation
     }
 
-    protected virtual void PlayBlockAnimation()
+    protected virtual IEnumerator PlayBlockAnimation()
     {
+        yield return null;
         // play animation
     }
 
@@ -126,6 +129,22 @@ public class BattleUnit : MonoBehaviour
     protected virtual void PlayWinAnimation()
     {
         // play animation
+    }
+
+    protected IEnumerator PlayAnimation(string animation, Animator animator)
+    {
+        animator.Play(animation);
+
+        // Wait until the animation starts
+        yield return null;
+
+        // Get info about the current animation
+        AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
+
+        Debug.Log("Playing " + animation + " animation for " + info.length + "s");
+
+        // Wait for the duration of the animation
+        yield return new WaitForSeconds(info.length);
     }
 
     protected virtual float CalculateAttackDamage()

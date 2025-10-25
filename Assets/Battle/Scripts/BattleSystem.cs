@@ -162,13 +162,13 @@ public class BattleSystem : MonoBehaviour
         battleState = BattleState.EnemysTurn;
         enemyUnit.SetTargetPart(target);
 
-        yield return StartCoroutine(MoveCardToCenter());
+        yield return StartCoroutine(playerUnit.MoveCardToCenter());
 
         yield return StartCoroutine(PlayerAttack());
 
         yield return StartCoroutine(EnemyAttack());
 
-        yield return StartCoroutine(MoveCardToRight());
+        yield return StartCoroutine(playerUnit.MoveCardToRight());
 
         yield return StartCoroutine(NextRound());
  
@@ -185,29 +185,12 @@ public class BattleSystem : MonoBehaviour
         PlayersTurn();
     }
 
-    IEnumerator MoveCardToCenter()
-    {
-        Debug.Log("Card is moving towads center");
-
-        yield return new WaitForSeconds(3f);
-
-        Debug.Log("Card is in the center");
-    }
-    
-    IEnumerator MoveCardToRight()
-    {
-        Debug.Log("Card is moving to right corner");
-
-        yield return new WaitForSeconds(3f);
-
-        Debug.Log("Card is in the right corner");
-    }
-
     IEnumerator PlayerAttack()
     {
         Debug.Log("Player started attack");
         yield return new WaitForSeconds(3f);
-        playerUnit.Attack();
+
+        yield return StartCoroutine(playerUnit.Attack());
         Debug.Log("Player finished attack");
     }
 
@@ -215,7 +198,8 @@ public class BattleSystem : MonoBehaviour
     {
         Debug.Log("Enemy started attack");
         yield return new WaitForSeconds(3f);
-        enemyUnit.Attack();
+        
+        yield return StartCoroutine(enemyUnit.Attack());
         Debug.Log("Enemy finished attack");
     }
 }

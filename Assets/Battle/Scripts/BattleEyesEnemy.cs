@@ -54,17 +54,16 @@ public class BattleEyesEnemy : BattleUnit
         return blockedDamage;
     }
 
-    protected override void PlayTakeDamageAnimation()
+    protected override IEnumerator PlayTakeDamageAnimation()
     {
         // play animation
-        blastAnimator.Play("Blast");
+        yield return StartCoroutine(PlayAnimation("Blast", blastAnimator));
     }
 
-    protected override void PlayBlockAnimation()
+    protected override IEnumerator PlayBlockAnimation()
     {
         // play animation
-        shieldAnimator.Play("Shield");
-
+        yield return StartCoroutine(PlayAnimation("Shield", shieldAnimator));
     }
 
     protected override void PlayDieAnimation()
