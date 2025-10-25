@@ -64,7 +64,6 @@ public class BattleUnit : MonoBehaviour
         {
             damage = Block(damage);
             yield return StartCoroutine(PlayBlockAnimation());
-            isBlocking = false;
         }
         else
         {

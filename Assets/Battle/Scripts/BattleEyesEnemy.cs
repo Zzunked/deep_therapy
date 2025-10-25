@@ -90,8 +90,13 @@ public class BattleEyesEnemy : BattleUnit
     {
         float blockRate = Random.Range(0f, 1f);
         Debug.Log("Enemy blockRate: " + blockRate + ", blockProbability: " + blockProbability);
-        bool isBlocking = (blockRate <= blockProbability) ? true : false;
+        isBlocking = (blockRate <= blockProbability) ? true : false;
 
+        return isBlocking;
+    }
+
+    public bool DidBlock()
+    {
         return isBlocking;
     }
 }

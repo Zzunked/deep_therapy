@@ -127,12 +127,6 @@ public class BattleSystem : MonoBehaviour
                 {
                     actionBar.HideAndDisableAll();
                     StartCoroutine(HandleAttackRound());
-
-                    // enemyUnit.SetTargetPart(target);
-
-                    // StartCoroutine(PlayerAttack(delayBeforePlayerAttack));
-                    // enemyUnit.ResetTargetPart();
-                    // battleState = BattleState.EnemysTurn;
                 }
                 break;
 
@@ -161,21 +155,18 @@ public class BattleSystem : MonoBehaviour
 
         yield return StartCoroutine(PlayerAttack());
 
-        yield return StartCoroutine(EnemyAttack());
+        if (!enemyUnit.DidBlock())
+        {
+            yield return StartCoroutine(EnemyAttack());
+        }
 
         yield return StartCoroutine(playerUnit.MoveCardToRight());
 
-        yield return StartCoroutine(NextRound());
- 
+        NextRound();
     }
 
-    IEnumerator NextRound()
+    private void NextRound()
     {
-        yield return new WaitForSeconds(1f);
-        // actionBar.HideActionButtons();
-        // actionBar.ResetChosenAction();
-        // actionBar.ResetChosenTarget();
-        // actionBar.EnableActionButtons();
         actionBar.Reset();
         battleState = BattleState.PlayersTurn;
         PlayersTurn();
@@ -184,7 +175,7 @@ public class BattleSystem : MonoBehaviour
     IEnumerator PlayerAttack()
     {
         Debug.Log("Player started attack");
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1.5f);
 
         yield return StartCoroutine(playerUnit.Attack());
         Debug.Log("Player finished attack");
@@ -193,7 +184,7 @@ public class BattleSystem : MonoBehaviour
     IEnumerator EnemyAttack()
     {
         Debug.Log("Enemy started attack");
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1.5f);
 
         yield return StartCoroutine(enemyUnit.Attack());
         Debug.Log("Enemy finished attack");
