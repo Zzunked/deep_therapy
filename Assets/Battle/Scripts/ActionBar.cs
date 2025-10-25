@@ -31,6 +31,7 @@ public class ActionBar : MonoBehaviour
     [SerializeField] private Button eyesChoiceBtn;
 
     [SerializeField] private SpriteRenderer targetsSpriteRenderer;
+    [SerializeField] private SpriteRenderer actionsSpriteRenderer;
 
     private ChousenAction chosenAction = ChousenAction.None;
     private ChosenTarget chosenTarget = ChosenTarget.None;
@@ -89,19 +90,16 @@ public class ActionBar : MonoBehaviour
         if (headChoiceBtn.isClicked)
         {
             chosenTarget = ChosenTarget.Head;
-            DisableTargetButtons();
             headChoiceBtn.isClicked = false;
         }
         else if (bodyChoiceBtn.isClicked)
         {
             chosenTarget = ChosenTarget.Body;
-            DisableTargetButtons();
             bodyChoiceBtn.isClicked = false;
         }
         else if (eyesChoiceBtn.isClicked)
         {
             chosenTarget = ChosenTarget.Eyes;
-            DisableTargetButtons();
             eyesChoiceBtn.isClicked = false;
         }
     }
@@ -120,6 +118,16 @@ public class ActionBar : MonoBehaviour
         runAwayActionBtn.Disable();
     }
 
+    public void ShowActions()
+    {
+        actionsSpriteRenderer.sortingOrder = 1;
+    }
+    
+    public void HideActions()
+    {
+        actionsSpriteRenderer.sortingOrder = -1;
+    }
+
     public void HideActionButtons()
     {
         attackActionBtn.SetFrameInvisible();
@@ -129,7 +137,6 @@ public class ActionBar : MonoBehaviour
 
     public void EnableTargetButtons()
     {
-        ShowTargets();
         headChoiceBtn.Enable();
         bodyChoiceBtn.Enable();
         eyesChoiceBtn.Enable();
@@ -137,8 +144,6 @@ public class ActionBar : MonoBehaviour
 
     public void DisableTargetButtons()
     {
-        HideTargets();
-        HideTargetButtons();
         headChoiceBtn.Disable();
         bodyChoiceBtn.Disable();
         eyesChoiceBtn.Disable();
@@ -161,6 +166,17 @@ public class ActionBar : MonoBehaviour
         targetsSpriteRenderer.sortingOrder = -1;
     }
 
+    public void HideAndDisableAll()
+    {
+        DisableActionButtons();
+        HideActionButtons();
+        HideActions();
+
+        DisableTargetButtons();
+        HideTargetButtons();
+        HideTargets();
+    }
+
     public void ResetChosenAction()
     {
         chosenAction = ChousenAction.None;
@@ -175,7 +191,10 @@ public class ActionBar : MonoBehaviour
     {
         ResetChosenAction();
         ResetChosenTarget();
+        HideTargets();
         DisableTargetButtons();
+        ShowActions();
         HideActionButtons();
+        EnableActionButtons();
     }
 }

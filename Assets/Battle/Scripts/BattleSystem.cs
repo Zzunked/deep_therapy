@@ -92,13 +92,6 @@ public class BattleSystem : MonoBehaviour
         Debug.Log("Players turn!");
     }
 
-    void HandleEnemyTurn()
-    {
-        // float delay = playerUnit.IsBlocking() ? delayBeforePlayerBlock : delayBeforeEnemyAttack;
-
-        StartCoroutine(EnemyAttack());
-    }
-
     void EndRound()
     {
         actionBar.Reset();
@@ -125,12 +118,14 @@ public class BattleSystem : MonoBehaviour
             case ChousenAction.Attack:
                 if (target == ChosenTarget.None && !isTargetsEnabled)
                 {
+                    actionBar.ShowTargets();
                     actionBar.EnableTargetButtons();
                     actionBar.DisableActionButtons();
                 }
 
                 if (target != ChosenTarget.None)
                 {
+                    actionBar.HideAndDisableAll();
                     StartCoroutine(HandleAttackRound());
 
                     // enemyUnit.SetTargetPart(target);
@@ -177,10 +172,11 @@ public class BattleSystem : MonoBehaviour
     IEnumerator NextRound()
     {
         yield return new WaitForSeconds(1f);
-        actionBar.HideActionButtons();
-        actionBar.ResetChosenAction();
-        actionBar.ResetChosenTarget();
-        actionBar.EnableActionButtons();
+        // actionBar.HideActionButtons();
+        // actionBar.ResetChosenAction();
+        // actionBar.ResetChosenTarget();
+        // actionBar.EnableActionButtons();
+        actionBar.Reset();
         battleState = BattleState.PlayersTurn;
         PlayersTurn();
     }
@@ -198,7 +194,7 @@ public class BattleSystem : MonoBehaviour
     {
         Debug.Log("Enemy started attack");
         yield return new WaitForSeconds(3f);
-        
+
         yield return StartCoroutine(enemyUnit.Attack());
         Debug.Log("Enemy finished attack");
     }

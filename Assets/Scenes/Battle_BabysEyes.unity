@@ -1171,6 +1171,7 @@ MonoBehaviour:
   bodyChoiceBtn: {fileID: 417104387}
   eyesChoiceBtn: {fileID: 1485067733}
   targetsSpriteRenderer: {fileID: 270283988}
+  actionsSpriteRenderer: {fileID: 90154383}
 --- !u!4 &579521161
 Transform:
   m_ObjectHideFlags: 0
@@ -2137,6 +2138,7 @@ MonoBehaviour:
   isDead: 0
   isBlocking: 0
   baseAttackDamage: 10
+  smoothing: 1
   tentacleAnimator: {fileID: 421385438}
   crackAnimator: {fileID: 282494754}
   shieldAnimator: {fileID: 858700369}
@@ -2339,7 +2341,7 @@ MonoBehaviour:
   isDead: 0
   isBlocking: 0
   baseAttackDamage: 10
-  blockProbability: 0.5
+  blockProbability: 0
   headDamageMultiplier: 1
   bodyDamageMultiplier: 1
   eyesDamageMultiplier: 1
