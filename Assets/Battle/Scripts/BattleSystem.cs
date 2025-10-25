@@ -4,8 +4,11 @@ using System.Collections;
 
 enum BattleState
 {
+    Start,
     PlayersTurn,
-    EnemysTurn
+    EnemysTurn,
+    Win,
+    Defeat
 }
 
 
@@ -22,50 +25,78 @@ public class BattleSystem : MonoBehaviour
     private bool isActionsEnabled = false;
     private bool isTargetsEnabled = false;
     private int round = 1;
+    private ChosenTarget target;
+    private ChousenAction action;
+
+
+
+    // Update is called once per frame
+    // void Update()
+    // {
+    //     if (playerUnit.IsDead())
+    //     {
+    //         Debug.Log("GAME OVER");
+    //         ResetBattle();
+    //     }
+
+    //     if (enemyUnit.IsDead())
+    //     {
+    //         Debug.Log("VICTORY");
+    //         ResetBattle();
+    //     }
+
+    //     switch (battleState)
+    //     {
+    //         case BattleState.PlayersTurn:
+    //             HandlePlayerTurn();
+    //             break;
+
+    //         case BattleState.EnemysTurn:
+    //             HandleEnemyTurn();
+    //             EndRound();
+    //             break;
+
+    //         default:
+    //             Debug.LogError("Unexpected battle state!");
+    //             break;
+    //     }
+    // }
 
     void Start()
     {
         playerUnit.SetTargetUnit(enemyUnit);
         enemyUnit.SetTargetUnit(playerUnit);
+        StartCoroutine(SetupBattle());
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (playerUnit.IsDead())
+        if (battleState == BattleState.PlayersTurn)
         {
-            Debug.Log("GAME OVER");
-            ResetBattle();
+            target = actionBar.GetChosenTarget();
+            action = actionBar.GetChousenAction();
+            CheckPlayersChoice();
         }
+    }
 
-        if (enemyUnit.IsDead())
-        {
-            Debug.Log("VICTORY");
-            ResetBattle();
-        }
+    IEnumerator SetupBattle()
+    {
+        yield return null;
+        battleState = BattleState.PlayersTurn;
+        PlayersTurn();
+        actionBar.EnableActionButtons();
+    }
 
-        switch (battleState)
-        {
-            case BattleState.PlayersTurn:
-                HandlePlayerTurn();
-                break;
-
-            case BattleState.EnemysTurn:
-                HandleEnemyTurn();
-                EndRound();
-                break;
-
-            default:
-                Debug.LogError("Unexpected battle state!");
-                break;
-        }
+    private void PlayersTurn()
+    {
+        Debug.Log("Players turn!");
     }
 
     void HandleEnemyTurn()
     {
-        float delay = playerUnit.IsBlocking() ? delayBeforePlayerBlock : delayBeforeEnemyAttack;
+        // float delay = playerUnit.IsBlocking() ? delayBeforePlayerBlock : delayBeforeEnemyAttack;
 
-        StartCoroutine(EnemyAttack(delay));
+        StartCoroutine(EnemyAttack());
     }
 
     void EndRound()
@@ -87,32 +118,26 @@ public class BattleSystem : MonoBehaviour
         battleState = BattleState.PlayersTurn;
     }
 
-    void HandlePlayerTurn()
+    void CheckPlayersChoice()
     {
-        ChosenTarget target = actionBar.GetChosenTarget();
-        ChousenAction action = actionBar.GetChousenAction();
-
         switch (action)
         {
-            case ChousenAction.None:
-                if (!isActionsEnabled)
-                {
-                    actionBar.EnableActionButtons();
-                }
-                break;
-
             case ChousenAction.Attack:
                 if (target == ChosenTarget.None && !isTargetsEnabled)
                 {
                     actionBar.EnableTargetButtons();
+                    actionBar.DisableActionButtons();
                 }
 
                 if (target != ChosenTarget.None)
                 {
-                    enemyUnit.SetTargetPart(target);
-                    StartCoroutine(PlayerAttack(delayBeforePlayerAttack));
-                    enemyUnit.ResetTargetPart();
-                    battleState = BattleState.EnemysTurn;
+                    StartCoroutine(HandleAttackRound());
+
+                    // enemyUnit.SetTargetPart(target);
+
+                    // StartCoroutine(PlayerAttack(delayBeforePlayerAttack));
+                    // enemyUnit.ResetTargetPart();
+                    // battleState = BattleState.EnemysTurn;
                 }
                 break;
 
@@ -128,21 +153,69 @@ public class BattleSystem : MonoBehaviour
                 break;
 
             default:
-                Debug.LogError("Unexpected player action!");
                 break;
         }
     }
 
-    IEnumerator PlayerAttack(float delay)
+    IEnumerator HandleAttackRound()
     {
-        yield return new WaitForSeconds(delay);
+        battleState = BattleState.EnemysTurn;
+        enemyUnit.SetTargetPart(target);
+
+        yield return StartCoroutine(MoveCardToCenter());
+
+        yield return StartCoroutine(PlayerAttack());
+
+        yield return StartCoroutine(EnemyAttack());
+
+        yield return StartCoroutine(MoveCardToRight());
+
+        yield return StartCoroutine(NextRound());
+ 
+    }
+
+    IEnumerator NextRound()
+    {
+        yield return new WaitForSeconds(1f);
+        actionBar.HideActionButtons();
+        actionBar.ResetChosenAction();
+        actionBar.ResetChosenTarget();
+        actionBar.EnableActionButtons();
+        battleState = BattleState.PlayersTurn;
+        PlayersTurn();
+    }
+
+    IEnumerator MoveCardToCenter()
+    {
+        Debug.Log("Card is moving towads center");
+
+        yield return new WaitForSeconds(3f);
+
+        Debug.Log("Card is in the center");
+    }
+    
+    IEnumerator MoveCardToRight()
+    {
+        Debug.Log("Card is moving to right corner");
+
+        yield return new WaitForSeconds(3f);
+
+        Debug.Log("Card is in the right corner");
+    }
+
+    IEnumerator PlayerAttack()
+    {
+        Debug.Log("Player started attack");
+        yield return new WaitForSeconds(3f);
         playerUnit.Attack();
+        Debug.Log("Player finished attack");
     }
 
-    IEnumerator EnemyAttack(float delay)
+    IEnumerator EnemyAttack()
     {
-        yield return new WaitForSeconds(delay);
+        Debug.Log("Enemy started attack");
+        yield return new WaitForSeconds(3f);
         enemyUnit.Attack();
+        Debug.Log("Enemy finished attack");
     }
-
 }

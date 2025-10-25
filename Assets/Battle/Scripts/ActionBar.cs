@@ -113,7 +113,7 @@ public class ActionBar : MonoBehaviour
         runAwayActionBtn.Enable();
     }
 
-    void DisableActionButtons()
+    public void DisableActionButtons()
     {
         attackActionBtn.Disable();
         blockActionBtn.Disable();
