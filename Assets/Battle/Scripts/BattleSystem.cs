@@ -82,13 +82,13 @@ public class BattleSystem : MonoBehaviour
     IEnumerator SetupBattle()
     {
         yield return null;
-        battleState = BattleState.PlayersTurn;
         PlayersTurn();
         actionBar.EnableActionButtons();
     }
 
     private void PlayersTurn()
     {
+        battleState = BattleState.PlayersTurn;
         Debug.Log("Players turn!");
     }
 
@@ -108,7 +108,7 @@ public class BattleSystem : MonoBehaviour
         playerUnit.Ressurect();
         enemyUnit.Ressurect();
         actionBar.Reset();
-        battleState = BattleState.PlayersTurn;
+        PlayersTurn();
     }
 
     void CheckPlayersChoice()
@@ -132,13 +132,17 @@ public class BattleSystem : MonoBehaviour
 
             case ChousenAction.Block:
                 playerUnit.SetBlocking();
+                actionBar.HideAndDisableAll();
+
                 Debug.Log("Player is blocking!");
-                battleState = BattleState.EnemysTurn;
+
+                StartCoroutine(HandleBlockRound());
+
                 break;
 
             case ChousenAction.RunAway:
-                Debug.Log("Player runs away!");
-                battleState = BattleState.EnemysTurn;
+                actionBar.HideAndDisableAll();
+                StartCoroutine(HandleRunAwayRound());
                 break;
 
             default:
@@ -165,10 +169,49 @@ public class BattleSystem : MonoBehaviour
         NextRound();
     }
 
+    IEnumerator HandleBlockRound()
+    {
+        battleState = BattleState.EnemysTurn;
+        enemyUnit.SetTargetPart(target);
+
+        yield return StartCoroutine(playerUnit.MoveCardToCenter());
+
+        yield return StartCoroutine(EnemyAttack());
+
+        yield return StartCoroutine(playerUnit.MoveCardToRight());
+
+        playerUnit.ResetBlocking();
+
+        NextRound();
+    }
+
+    IEnumerator HandleRunAwayRound()
+    {
+        if (playerUnit.CanRunAway())
+        {
+            Debug.Log("Player ran away! Resetting the battle.");
+            ResetBattle();
+        }
+        else
+        {
+            Debug.Log("Player failed to ran away! Now Enemy attacks!");
+
+            battleState = BattleState.EnemysTurn;
+            enemyUnit.SetTargetPart(target);
+
+            yield return StartCoroutine(playerUnit.MoveCardToCenter());
+
+            yield return StartCoroutine(EnemyAttack());
+
+            yield return StartCoroutine(playerUnit.MoveCardToRight());
+
+            NextRound();
+        }
+    }
+
     private void NextRound()
     {
         actionBar.Reset();
-        battleState = BattleState.PlayersTurn;
         PlayersTurn();
     }
 

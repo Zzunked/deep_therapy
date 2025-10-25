@@ -6,12 +6,14 @@ public class BattlePlayer : BattleUnit
 {
     [SerializeField] private float baseAttackDamage = 10f;
     [SerializeField] private float smoothing = 0.1f;
+    [SerializeField] private float runAwayProbability = 0.5f;
     [SerializeField] private Animator tentacleAnimator;
     [SerializeField] private Animator crackAnimator;
     [SerializeField] private Animator shieldAnimator;
     private Vector2 centerPosition;
     private Vector2 rightCornerPosition;
     private Transform cardTransform;
+    
 
 
     private void Start()
@@ -74,6 +76,11 @@ public class BattlePlayer : BattleUnit
         isBlocking = true;
     }
 
+    public void ResetBlocking()
+    {
+        isBlocking = false;
+    }
+
     public IEnumerator MoveCardToCenter()
     {
         Debug.Log("Card is moving towads center");
@@ -104,5 +111,16 @@ public class BattlePlayer : BattleUnit
 
             yield return null;
         }
+    }
+
+    public bool CanRunAway()
+    {
+        float runAwyRate = Random.Range(0f, 1f);
+        bool canRunAway;
+
+        Debug.Log("Players runAwayProbability: " + runAwayProbability + ", runAwyRate: " + runAwyRate);
+        canRunAway = (runAwyRate <= runAwayProbability) ? true : false;
+
+        return canRunAway;
     }
 }
