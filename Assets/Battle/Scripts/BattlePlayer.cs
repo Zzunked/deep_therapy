@@ -5,7 +5,6 @@ using System.Collections;
 public class BattlePlayer : BattleUnit
 {
     [SerializeField] private float baseAttackDamage = 10f;
-    [SerializeField] private float smoothing = 0.1f;
     [SerializeField] private float runAwayProbability = 0.5f;
     [SerializeField] private Animator tentacleAnimator;
     [SerializeField] private Animator crackAnimator;
@@ -13,6 +12,7 @@ public class BattlePlayer : BattleUnit
     private Vector2 centerPosition;
     private Vector2 rightCornerPosition;
     private Transform cardTransform;
+    private float cardSpeed = 5f;
     
 
 
@@ -58,11 +58,7 @@ public class BattlePlayer : BattleUnit
     {
         yield return StartCoroutine(PlayAnimation("Tentacle", tentacleAnimator));
 
-        yield return new WaitForSeconds(0.5f);
-
         yield return StartCoroutine(PlayAnimation("Crack", crackAnimator));
-
-        yield return new WaitForSeconds(2f);
     }
 
     protected override IEnumerator PlayBlockAnimation()
@@ -87,8 +83,6 @@ public class BattlePlayer : BattleUnit
 
         yield return StartCoroutine(MoveCard(centerPosition));
 
-        // yield return new WaitForSeconds(3f);
-
         Debug.Log("Card is in the center");
     }
 
@@ -98,8 +92,6 @@ public class BattlePlayer : BattleUnit
 
         yield return StartCoroutine(MoveCard(rightCornerPosition));
 
-        // yield return new WaitForSeconds(3f);
-
         Debug.Log("Card is in the right corner");
     }
 
@@ -107,10 +99,18 @@ public class BattlePlayer : BattleUnit
     {
         while (Vector2.Distance(cardTransform.position, targetPosition) > 0.05f)
         {
-            cardTransform.position = Vector2.Lerp(transform.position, targetPosition, smoothing * Time.deltaTime);
+            cardTransform.position = Vector2.MoveTowards(cardTransform.position, targetPosition, cardSpeed * Time.deltaTime);
 
             yield return null;
         }
+
+        // Snap to final position to avoid small offset
+        cardTransform.position = targetPosition;
+    }
+
+    public void SetDefaultPosition()
+    {
+        cardTransform.position = rightCornerPosition;
     }
 
     public bool CanRunAway()

@@ -62,24 +62,24 @@ public class BattleUnit : MonoBehaviour
 
         if (IsBlocking())
         {
-            damage = Block(damage);
+            // damage = Block(damage);
             yield return StartCoroutine(PlayBlockAnimation());
         }
         else
         {
             takenDamageMultiplier = CalculateTakenDamgeMultiplier();
             yield return StartCoroutine(PlayTakeDamageAnimation());
-        }
 
-        health -= damage * takenDamageMultiplier;
+            health -= damage * takenDamageMultiplier;
 
-        Debug.Log(gameObject.name + " got damage: " + damage + ", health left: " + health);
+            Debug.Log(gameObject.name + " got damage: " + damage + ", health left: " + health);
 
-        if (health <= 0)
-        {
-            Debug.Log(gameObject.name + " has died!");
-            PlayDieAnimation();
-            SetDead();
+            if (health <= 0)
+            {
+                Debug.Log(gameObject.name + " has died!");
+                // PlayDieAnimation();
+                SetDead();
+            }
         }
     }
 

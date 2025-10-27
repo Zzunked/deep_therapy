@@ -35,6 +35,12 @@ public class ActionBar : MonoBehaviour
 
     private ChousenAction chosenAction = ChousenAction.None;
     private ChosenTarget chosenTarget = ChosenTarget.None;
+    private bool isTargetsEnabled = false;
+
+    public bool IsTargetsEnabled()
+    {
+        return isTargetsEnabled;
+    }
 
     void Start()
     {
@@ -140,6 +146,7 @@ public class ActionBar : MonoBehaviour
         headChoiceBtn.Enable();
         bodyChoiceBtn.Enable();
         eyesChoiceBtn.Enable();
+        isTargetsEnabled = true;
     }
 
     public void DisableTargetButtons()
@@ -147,6 +154,7 @@ public class ActionBar : MonoBehaviour
         headChoiceBtn.Disable();
         bodyChoiceBtn.Disable();
         eyesChoiceBtn.Disable();
+        isTargetsEnabled = false;
     }
 
     public void HideTargetButtons()

@@ -17,59 +17,22 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] private ActionBar actionBar;
     [SerializeField] private BattlePlayer playerUnit;
     [SerializeField] private BattleEyesEnemy enemyUnit;
-    [SerializeField] private float delayBeforePlayerAttack = 1.5f;
-    [SerializeField] private float delayBeforePlayerBlock = 1.5f;
-    [SerializeField] private float delayBeforeEnemyAttack = 4f;
+    [SerializeField] private Animator deadPlayerScreenAnimator;
+    [SerializeField] private SpriteRenderer deadPlayerSpriteRenderer;
 
     private BattleState battleState = BattleState.PlayersTurn;
-    private bool isActionsEnabled = false;
-    private bool isTargetsEnabled = false;
     private int round = 1;
     private ChosenTarget target;
     private ChousenAction action;
 
-
-
-    // Update is called once per frame
-    // void Update()
-    // {
-    //     if (playerUnit.IsDead())
-    //     {
-    //         Debug.Log("GAME OVER");
-    //         ResetBattle();
-    //     }
-
-    //     if (enemyUnit.IsDead())
-    //     {
-    //         Debug.Log("VICTORY");
-    //         ResetBattle();
-    //     }
-
-    //     switch (battleState)
-    //     {
-    //         case BattleState.PlayersTurn:
-    //             HandlePlayerTurn();
-    //             break;
-
-    //         case BattleState.EnemysTurn:
-    //             HandleEnemyTurn();
-    //             EndRound();
-    //             break;
-
-    //         default:
-    //             Debug.LogError("Unexpected battle state!");
-    //             break;
-    //     }
-    // }
-
-    void Start()
+    private void Start()
     {
         playerUnit.SetTargetUnit(enemyUnit);
         enemyUnit.SetTargetUnit(playerUnit);
         StartCoroutine(SetupBattle());
     }
 
-    void Update()
+    private void Update()
     {
         if (battleState == BattleState.PlayersTurn)
         {
@@ -89,34 +52,40 @@ public class BattleSystem : MonoBehaviour
     private void PlayersTurn()
     {
         battleState = BattleState.PlayersTurn;
+        Debug.Log("------------------------- ROUND " + round + " ----------------------------");
         Debug.Log("Players turn!");
     }
 
-    void EndRound()
+    private void EndRound()
     {
-        actionBar.Reset();
-        battleState = BattleState.PlayersTurn;
         Debug.Log("------------------------- END OF ROUND " + round + " ----------------------------");
         Debug.Log("Players health: " + playerUnit.GetHealth());
         Debug.Log("Enemy health: " + enemyUnit.GetHealth());
         Debug.Log("-------------------------------------------------------------------");
-        round++;
-    }
 
-    void ResetBattle()
-    {
-        playerUnit.Ressurect();
-        enemyUnit.Ressurect();
+        round++;
         actionBar.Reset();
+        StopAllCoroutines();
         PlayersTurn();
     }
 
-    void CheckPlayersChoice()
+    private void ResetBattle()
+    {
+        round = 1;
+        playerUnit.Ressurect();
+        enemyUnit.Ressurect();
+        actionBar.Reset();
+        playerUnit.SetDefaultPosition();
+        StopAllCoroutines();
+        PlayersTurn();
+    }
+
+    private void CheckPlayersChoice()
     {
         switch (action)
         {
             case ChousenAction.Attack:
-                if (target == ChosenTarget.None && !isTargetsEnabled)
+                if (target == ChosenTarget.None && !actionBar.IsTargetsEnabled())
                 {
                     actionBar.ShowTargets();
                     actionBar.EnableTargetButtons();
@@ -150,7 +119,7 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    IEnumerator HandleAttackRound()
+    private IEnumerator HandleAttackRound()
     {
         battleState = BattleState.EnemysTurn;
         enemyUnit.SetTargetPart(target);
@@ -159,17 +128,40 @@ public class BattleSystem : MonoBehaviour
 
         yield return StartCoroutine(PlayerAttack());
 
-        if (!enemyUnit.DidBlock())
+        if (enemyUnit.IsDead())
         {
-            yield return StartCoroutine(EnemyAttack());
+            Debug.Log("Enemy is dead");
+            ResetBattle();
         }
+        else
+        {
+            if (!enemyUnit.DidBlock())
+            {
+                yield return StartCoroutine(EnemyAttack());
 
-        yield return StartCoroutine(playerUnit.MoveCardToRight());
+                if (playerUnit.IsDead())
+                {
+                    Debug.Log("Player is dead!");
 
-        NextRound();
+                    yield return StartCoroutine(ShowPlayerDeadScreen());
+
+                    ResetBattle();
+                }
+                else
+                {
+                    yield return StartCoroutine(playerUnit.MoveCardToRight());
+                    EndRound();
+                }
+            }
+            else
+            {
+                yield return StartCoroutine(playerUnit.MoveCardToRight());
+                EndRound();
+            }
+        }
     }
 
-    IEnumerator HandleBlockRound()
+    private IEnumerator HandleBlockRound()
     {
         battleState = BattleState.EnemysTurn;
         enemyUnit.SetTargetPart(target);
@@ -182,10 +174,10 @@ public class BattleSystem : MonoBehaviour
 
         playerUnit.ResetBlocking();
 
-        NextRound();
+        EndRound();
     }
 
-    IEnumerator HandleRunAwayRound()
+    private IEnumerator HandleRunAwayRound()
     {
         if (playerUnit.CanRunAway())
         {
@@ -203,33 +195,82 @@ public class BattleSystem : MonoBehaviour
 
             yield return StartCoroutine(EnemyAttack());
 
-            yield return StartCoroutine(playerUnit.MoveCardToRight());
-
-            NextRound();
+            if (playerUnit.IsDead())
+            {
+                Debug.Log("Player is dead!");
+                ResetBattle();
+            }
+            else
+            {
+                yield return StartCoroutine(playerUnit.MoveCardToRight());
+                EndRound();
+            }
         }
     }
 
-    private void NextRound()
-    {
-        actionBar.Reset();
-        PlayersTurn();
-    }
-
-    IEnumerator PlayerAttack()
+    private IEnumerator PlayerAttack()
     {
         Debug.Log("Player started attack");
         yield return new WaitForSeconds(1.5f);
 
         yield return StartCoroutine(playerUnit.Attack());
+
         Debug.Log("Player finished attack");
     }
 
-    IEnumerator EnemyAttack()
+    private IEnumerator EnemyAttack()
     {
         Debug.Log("Enemy started attack");
         yield return new WaitForSeconds(1.5f);
 
         yield return StartCoroutine(enemyUnit.Attack());
         Debug.Log("Enemy finished attack");
+    }
+
+    private IEnumerator BackgroundFadeIn()
+    {
+        float fadeDuration = 2f;
+        float elapsed = 0f;
+        Color startColor = Color.black;
+        Color endColor = deadPlayerSpriteRenderer.color; // original sprite color
+
+
+        // Temporarily set the sprite color to black
+        deadPlayerSpriteRenderer.color = startColor;
+
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / fadeDuration);
+            deadPlayerSpriteRenderer.color = Color.Lerp(startColor, endColor, t);
+            yield return null;
+        }
+
+        // Ensure exact final color
+        deadPlayerSpriteRenderer.color = endColor;
+    }
+
+    private IEnumerator ShowPlayerDeadScreen()
+    {
+        deadPlayerSpriteRenderer.sortingOrder = 4;
+
+        yield return StartCoroutine(BackgroundFadeIn());
+
+        deadPlayerScreenAnimator.Play("YouDead");
+
+        // Wait until the animation starts
+        yield return null;
+
+        // Get info about the current animation
+        AnimatorStateInfo info = deadPlayerScreenAnimator.GetCurrentAnimatorStateInfo(0);
+
+        Debug.Log("Playing " + deadPlayerScreenAnimator + " animation for " + info.length + "s");
+
+        // Wait for the duration of the animation
+        yield return new WaitForSeconds(info.length);
+
+        yield return new WaitForSeconds(5);
+        deadPlayerScreenAnimator.Play("YouDeadIdle");
+        deadPlayerSpriteRenderer.sortingOrder = -1;
     }
 }
