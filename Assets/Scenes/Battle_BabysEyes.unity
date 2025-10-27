@@ -701,8 +701,8 @@ Transform:
   m_GameObject: {fileID: 282494753}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.21, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.9051, y: 0.054, z: 0}
+  m_LocalScale: {x: 1.4209, y: 1.4209, z: 1.4209}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1582224802}
@@ -965,13 +965,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 421385437}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.22894546, w: 0.9734393}
+  m_LocalPosition: {x: 2.963, y: 0.322, z: 0}
+  m_LocalScale: {x: 1.7936448, y: 1.7936448, z: 1.7936448}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1582224802}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 26.47}
 --- !u!1 &437525445
 GameObject:
   m_ObjectHideFlags: 0
@@ -1006,9 +1006,6 @@ MonoBehaviour:
   enemyUnit: {fileID: 1947515732}
   deadPlayerScreenAnimator: {fileID: 1197991279}
   deadPlayerSpriteRenderer: {fileID: 961579173}
-  delayBeforePlayerAttack: 1.5
-  delayBeforePlayerBlock: 1.5
-  delayBeforeEnemyAttack: 3
 --- !u!4 &437525447
 Transform:
   m_ObjectHideFlags: 0
@@ -1298,7 +1295,7 @@ Transform:
   m_GameObject: {fileID: 858700368}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.87, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2344,7 +2341,6 @@ MonoBehaviour:
   isDead: 0
   isBlocking: 0
   baseAttackDamage: 10
-  smoothing: 1
   runAwayProbability: 0.3
   tentacleAnimator: {fileID: 421385438}
   crackAnimator: {fileID: 282494754}
@@ -2547,7 +2543,7 @@ MonoBehaviour:
   minBlockMultiplier: 0.8
   isDead: 0
   isBlocking: 0
-  baseAttackDamage: 100
+  baseAttackDamage: 10
   blockProbability: 0
   headDamageMultiplier: 1
   bodyDamageMultiplier: 1
