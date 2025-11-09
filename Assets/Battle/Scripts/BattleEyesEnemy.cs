@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-
+using System;
 
 public class BattleEyesEnemy : BattleUnit
 {
@@ -12,12 +12,20 @@ public class BattleEyesEnemy : BattleUnit
     [SerializeField] private Animator _blastAnimator;
     [SerializeField] private Animator _shieldAnimator;
     [SerializeField] private DamageNumberDisplay _damageDisplay;
+    [SerializeField] private Blast _blast;
 
+    public event Action OnBlastDamagePhase;
     private ChosenTarget _targetPart;
+
+
+    public void BlastDamagePhase()
+    {
+        OnBlastDamagePhase?.Invoke();
+    }
 
     protected override int CalculateAttackDamage()
     {
-        float attackMultiplier = Random.Range(_minAttackMultiplier, _maxAttackMultiplier);
+        float attackMultiplier = UnityEngine.Random.Range(_minAttackMultiplier, _maxAttackMultiplier);
         int attackDamage = (int)(_baseAttackDamage * attackMultiplier);
 
         return attackDamage;
@@ -49,7 +57,7 @@ public class BattleEyesEnemy : BattleUnit
 
     protected override float CalculateBlockedDamage(float damage)
     {
-        float blockMultiplier = Random.Range(_minBlockMultiplier, _maxBlockMultiplier);
+        float blockMultiplier = UnityEngine.Random.Range(_minBlockMultiplier, _maxBlockMultiplier);
         float blockedDamage = damage * blockMultiplier;
 
         return blockedDamage;
@@ -57,9 +65,12 @@ public class BattleEyesEnemy : BattleUnit
 
     protected override IEnumerator PlayTakeDamageAnimation(int damage)
     {
-        // play animation
-        _damageDisplay.ShowNumber(damage);
+        _blast.Damage = damage;
+        _blast.BlastDamagePhase += _damageDisplay.ShowNumber;
+
         yield return StartCoroutine(PlayAnimation("Blast", _blastAnimator));
+
+        _blast.BlastDamagePhase -= _damageDisplay.ShowNumber;
     }
 
     protected override IEnumerator PlayBlockAnimation()
@@ -90,7 +101,7 @@ public class BattleEyesEnemy : BattleUnit
 
     public override bool IsBlocking()
     {
-        float blockRate = Random.Range(0f, 1f);
+        float blockRate = UnityEngine.Random.Range(0f, 1f);
         Debug.Log("Enemy blockRate: " + blockRate + ", blockProbability: " + _blockProbability);
         _isBlocking = (blockRate <= _blockProbability) ? true : false;
 

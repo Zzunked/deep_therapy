@@ -17,17 +17,34 @@ public class DamageNumberDisplay : MonoBehaviour
     [SerializeField] private float _startScale = 0.2f;
     [SerializeField] private float _endScale = 0.35f;
     [SerializeField] private float _fadeDuration = 1f;
+    // private int _damageValue = 0;
+
+    // public int DamageValue
+    // {
+    //     get { return _damageValue; }
+    //     set { _damageValue = value; }
+    // } 
 
     private readonly List<GameObject> _spawnedDigits = new List<GameObject>();
 
-    public void ShowNumber(int value)
+    // private void OnEnable()
+    // {
+    //     BattleEyesEnemy.OnBlastDamagePhase += ShowNumber;
+    // }
+
+    // private void OnDisable()
+    // {
+    //     BattleEyesEnemy.OnBlastDamagePhase -= ShowNumber;
+    // }
+
+    public void ShowNumber(int damage)
     {
         // Clean up old digits
         DestroyDigits();
         _spawnedDigits.Clear();
 
         // Convert number to string to extract digits
-        char[] digits = value.ToString().ToCharArray();
+        char[] digits = damage.ToString().ToCharArray();
 
         float startX = -((digits.Length - 1) * _digitSpacing) / 2f; // Center it
         for (int i = 0; i < digits.Length; i++)
