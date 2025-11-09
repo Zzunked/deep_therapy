@@ -5,40 +5,35 @@ using UnityEngine;
 // Base class for battle unit
 public class BattleUnit : MonoBehaviour
 {
-    [SerializeField] protected int level;
-    [SerializeField] protected float health;
-    [SerializeField] protected float maxAttackMultiplier;
-    [SerializeField] protected float minAttackMultiplier;
-    [SerializeField] protected float maxBlockMultiplier;
-    [SerializeField] protected float minBlockMultiplier;
-    // [SerializeField] protected Animator attackAnimator;
-    // [SerializeField] protected Animator takeDamageAnimator;
-    // [SerializeField] protected Animator blockAnimator;
-    // [SerializeField] protected Animator dieAnimator;
-    // [SerializeField] protected Animator winAnimator;
-    [SerializeField] protected bool isDead = false;
-    [SerializeField] protected bool isBlocking = false;
-    protected BattleUnit targetUnit;
+    [SerializeField] protected int _level;
+    [SerializeField] protected float _health;
+    [SerializeField] protected float _maxAttackMultiplier;
+    [SerializeField] protected float _minAttackMultiplier;
+    [SerializeField] protected float _maxBlockMultiplier;
+    [SerializeField] protected float _minBlockMultiplier;
+    [SerializeField] protected bool _isDead = false;
+    [SerializeField] protected bool _isBlocking = false;
+    protected BattleUnit _targetUnit;
 
     public bool IsDead()
     {
-        return isDead;
+        return _isDead;
     }
 
     public void Ressurect()
     {
-        health = 100;
-        isDead = false;
+        _health = 100;
+        _isDead = false;
     }
 
     public float GetHealth()
     {
-        return health;
+        return _health;
     }
 
     public void SetTargetUnit(BattleUnit target)
     {
-        targetUnit = target;
+        _targetUnit = target;
     }
 
     public IEnumerator Attack()
@@ -47,7 +42,7 @@ public class BattleUnit : MonoBehaviour
 
         Debug.Log(gameObject.name + " attacks with damage: " + attackDamage);
 
-        yield return StartCoroutine(targetUnit.TakeDamage(attackDamage));
+        yield return StartCoroutine(_targetUnit.TakeDamage(attackDamage));
     }
 
     public IEnumerator TakeDamage(float damage)
@@ -70,11 +65,11 @@ public class BattleUnit : MonoBehaviour
             takenDamageMultiplier = CalculateTakenDamgeMultiplier();
             yield return StartCoroutine(PlayTakeDamageAnimation());
 
-            health -= damage * takenDamageMultiplier;
+            _health -= damage * takenDamageMultiplier;
 
-            Debug.Log(gameObject.name + " got damage: " + damage + ", health left: " + health);
+            Debug.Log(gameObject.name + " got damage: " + damage + ", health left: " + _health);
 
-            if (health <= 0)
+            if (_health <= 0)
             {
                 Debug.Log(gameObject.name + " has died!");
                 // PlayDieAnimation();
@@ -105,7 +100,7 @@ public class BattleUnit : MonoBehaviour
 
     protected void SetDead()
     {
-        isDead = true;
+        _isDead = true;
     }
 
     protected virtual IEnumerator PlayTakeDamageAnimation()
@@ -170,6 +165,6 @@ public class BattleUnit : MonoBehaviour
 
     public virtual bool IsBlocking()
     {
-        return isBlocking;
+        return _isBlocking;
     }
 }

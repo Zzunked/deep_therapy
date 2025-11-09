@@ -4,29 +4,29 @@ using System.Collections;
 
 public class BattlePlayer : BattleUnit
 {
-    [SerializeField] private float baseAttackDamage = 10f;
-    [SerializeField] private float runAwayProbability = 0.5f;
-    [SerializeField] private Animator tentacleAnimator;
-    [SerializeField] private Animator crackAnimator;
-    [SerializeField] private Animator shieldAnimator;
-    private Vector2 centerPosition;
-    private Vector2 rightCornerPosition;
-    private Transform cardTransform;
-    private float cardSpeed = 5f;
+    [SerializeField] private float _baseAttackDamage = 10f;
+    [SerializeField] private float _runAwayProbability = 0.5f;
+    [SerializeField] private Animator _tentacleAnimator;
+    [SerializeField] private Animator _crackAnimator;
+    [SerializeField] private Animator _shieldAnimator;
+    private Vector2 _centerPosition;
+    private Vector2 _rightCornerPosition;
+    private Transform _cardTransform;
+    private float _cardSpeed = 5f;
     
 
 
     private void Start()
     {
-        cardTransform = GetComponent<Transform>();
-        rightCornerPosition = cardTransform.position;
-        centerPosition = new Vector2(0, cardTransform.position.y);
+        _cardTransform = GetComponent<Transform>();
+        _rightCornerPosition = _cardTransform.position;
+        _centerPosition = new Vector2(0, _cardTransform.position.y);
     }
 
     protected override float CalculateAttackDamage()
     {
-        float attackMultiplier = Random.Range(minAttackMultiplier, maxAttackMultiplier);
-        float attackDamage = baseAttackDamage * attackMultiplier;
+        float attackMultiplier = Random.Range(_minAttackMultiplier, _maxAttackMultiplier);
+        float attackDamage = _baseAttackDamage * attackMultiplier;
 
         return attackDamage;
     }
@@ -41,7 +41,7 @@ public class BattlePlayer : BattleUnit
 
     protected override float CalculateBlockedDamage(float damage)
     {
-        float blockMultiplier = Random.Range(minBlockMultiplier, maxBlockMultiplier);
+        float blockMultiplier = Random.Range(_minBlockMultiplier, _maxBlockMultiplier);
         float blockedDamage = damage * blockMultiplier;
 
         return blockedDamage;
@@ -56,32 +56,32 @@ public class BattlePlayer : BattleUnit
 
     private IEnumerator PlayTentacleAndCrack()
     {
-        yield return StartCoroutine(PlayAnimation("Tentacle", tentacleAnimator));
+        yield return StartCoroutine(PlayAnimation("Tentacle", _tentacleAnimator));
 
-        yield return StartCoroutine(PlayAnimation("Crack", crackAnimator));
+        yield return StartCoroutine(PlayAnimation("Crack", _crackAnimator));
     }
 
     protected override IEnumerator PlayBlockAnimation()
     {
         // play animation
-        yield return StartCoroutine(PlayAnimation("Shield", shieldAnimator));
+        yield return StartCoroutine(PlayAnimation("Shield", _shieldAnimator));
     }
 
     public void SetBlocking()
     {
-        isBlocking = true;
+        _isBlocking = true;
     }
 
     public void ResetBlocking()
     {
-        isBlocking = false;
+        _isBlocking = false;
     }
 
     public IEnumerator MoveCardToCenter()
     {
         Debug.Log("Card is moving towads center");
 
-        yield return StartCoroutine(MoveCard(centerPosition));
+        yield return StartCoroutine(MoveCard(_centerPosition));
 
         Debug.Log("Card is in the center");
     }
@@ -90,27 +90,27 @@ public class BattlePlayer : BattleUnit
     {
         Debug.Log("Card is moving to right corner");
 
-        yield return StartCoroutine(MoveCard(rightCornerPosition));
+        yield return StartCoroutine(MoveCard(_rightCornerPosition));
 
         Debug.Log("Card is in the right corner");
     }
 
     private IEnumerator MoveCard(Vector2 targetPosition)
     {
-        while (Vector2.Distance(cardTransform.position, targetPosition) > 0.05f)
+        while (Vector2.Distance(_cardTransform.position, targetPosition) > 0.05f)
         {
-            cardTransform.position = Vector2.MoveTowards(cardTransform.position, targetPosition, cardSpeed * Time.deltaTime);
+            _cardTransform.position = Vector2.MoveTowards(_cardTransform.position, targetPosition, _cardSpeed * Time.deltaTime);
 
             yield return null;
         }
 
         // Snap to final position to avoid small offset
-        cardTransform.position = targetPosition;
+        _cardTransform.position = targetPosition;
     }
 
     public void SetDefaultPosition()
     {
-        cardTransform.position = rightCornerPosition;
+        _cardTransform.position = _rightCornerPosition;
     }
 
     public bool CanRunAway()
@@ -118,8 +118,8 @@ public class BattlePlayer : BattleUnit
         float runAwyRate = Random.Range(0f, 1f);
         bool canRunAway;
 
-        Debug.Log("Players runAwayProbability: " + runAwayProbability + ", runAwyRate: " + runAwyRate);
-        canRunAway = (runAwyRate <= runAwayProbability) ? true : false;
+        Debug.Log("Players runAwayProbability: " + _runAwayProbability + ", runAwyRate: " + runAwyRate);
+        canRunAway = (runAwyRate <= _runAwayProbability) ? true : false;
 
         return canRunAway;
     }

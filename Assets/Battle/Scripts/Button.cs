@@ -2,61 +2,68 @@ using UnityEngine;
 
 public class Button : MonoBehaviour
 {
-    [SerializeField] public SpriteRenderer frameSpriteRenderer;
-    private bool isMouseEntered = false;
-    public bool isClicked = false;
-    private bool isEnabled = false;
+    private SpriteRenderer _frameSpriteRenderer;
+    private bool _isMouseEntered = false;
+    private bool _isClicked = false;
+    private bool _isEnabled = false;
+
+    public bool IsClicked
+    {
+        get { return _isClicked; }
+        set { _isClicked = value; }
+    }
 
     void Start()
     {
+        _frameSpriteRenderer = GetComponent<SpriteRenderer>();
         SetFrameInvisible();
     }
 
     public void Disable()
     {
-        isEnabled = false;
-        isMouseEntered = false;
+        _isEnabled = false;
+        _isMouseEntered = false;
     }
 
     public void Enable()
     {
-        isEnabled = true;
+        _isEnabled = true;
     }
 
     private void OnMouseEnter()
     {
-        if (isEnabled)
+        if (_isEnabled)
         {
             SetFrameVisible();
-            isMouseEntered = true;
+            _isMouseEntered = true;
         }
     }
 
     private void OnMouseExit()
     {
-        if (isEnabled)
+        if (_isEnabled)
         {
             SetFrameInvisible();
-            isMouseEntered = false;
+            _isMouseEntered = false;
         }
     }
 
     public void SetFrameVisible()
     {
-        frameSpriteRenderer.sortingOrder = 2;
+        _frameSpriteRenderer.sortingOrder = 2;
     }
 
     public void SetFrameInvisible()
     {
-        frameSpriteRenderer.sortingOrder = -1;
+        _frameSpriteRenderer.sortingOrder = -1;
     }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && isMouseEntered && isEnabled)
+        if (Input.GetMouseButtonDown(0) && _isMouseEntered && _isEnabled)
         {
             Debug.Log(gameObject.name + " CLICKED!");
-            isClicked = true;
+            _isClicked = true;
         }
     }
 }

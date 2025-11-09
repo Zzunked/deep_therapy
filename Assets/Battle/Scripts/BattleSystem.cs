@@ -14,30 +14,30 @@ enum BattleState
 
 public class BattleSystem : MonoBehaviour
 {
-    [SerializeField] private ActionBar actionBar;
-    [SerializeField] private BattlePlayer playerUnit;
-    [SerializeField] private BattleEyesEnemy enemyUnit;
-    [SerializeField] private Animator deadPlayerScreenAnimator;
-    [SerializeField] private SpriteRenderer deadPlayerSpriteRenderer;
+    [SerializeField] private ActionBar _actionBar;
+    [SerializeField] private BattlePlayer _playerUnit;
+    [SerializeField] private BattleEyesEnemy _enemyUnit;
+    [SerializeField] private Animator _deadPlayerScreenAnimator;
+    [SerializeField] private SpriteRenderer _deadPlayerSpriteRenderer;
 
-    private BattleState battleState = BattleState.PlayersTurn;
-    private int round = 1;
-    private ChosenTarget target;
-    private ChousenAction action;
+    private BattleState _battleState = BattleState.PlayersTurn;
+    private int _round = 1;
+    private ChosenTarget _target;
+    private ChousenAction _action;
 
     private void Start()
     {
-        playerUnit.SetTargetUnit(enemyUnit);
-        enemyUnit.SetTargetUnit(playerUnit);
+        _playerUnit.SetTargetUnit(_enemyUnit);
+        _enemyUnit.SetTargetUnit(_playerUnit);
         StartCoroutine(SetupBattle());
     }
 
     private void Update()
     {
-        if (battleState == BattleState.PlayersTurn)
+        if (_battleState == BattleState.PlayersTurn)
         {
-            target = actionBar.GetChosenTarget();
-            action = actionBar.GetChousenAction();
+            _target = _actionBar.GetChosenTarget();
+            _action = _actionBar.GetChousenAction();
             CheckPlayersChoice();
         }
     }
@@ -46,62 +46,62 @@ public class BattleSystem : MonoBehaviour
     {
         yield return null;
         PlayersTurn();
-        actionBar.EnableActionButtons();
+        _actionBar.EnableActionButtons();
     }
 
     private void PlayersTurn()
     {
-        battleState = BattleState.PlayersTurn;
-        Debug.Log("------------------------- ROUND " + round + " ----------------------------");
+        _battleState = BattleState.PlayersTurn;
+        Debug.Log("------------------------- ROUND " + _round + " ----------------------------");
         Debug.Log("Players turn!");
     }
 
     private void EndRound()
     {
-        Debug.Log("------------------------- END OF ROUND " + round + " ----------------------------");
-        Debug.Log("Players health: " + playerUnit.GetHealth());
-        Debug.Log("Enemy health: " + enemyUnit.GetHealth());
+        Debug.Log("------------------------- END OF ROUND " + _round + " ----------------------------");
+        Debug.Log("Players health: " + _playerUnit.GetHealth());
+        Debug.Log("Enemy health: " + _enemyUnit.GetHealth());
         Debug.Log("-------------------------------------------------------------------");
 
-        round++;
-        actionBar.Reset();
+        _round++;
+        _actionBar.Reset();
         StopAllCoroutines();
         PlayersTurn();
     }
 
     private void ResetBattle()
     {
-        round = 1;
-        playerUnit.Ressurect();
-        enemyUnit.Ressurect();
-        actionBar.Reset();
-        playerUnit.SetDefaultPosition();
+        _round = 1;
+        _playerUnit.Ressurect();
+        _enemyUnit.Ressurect();
+        _actionBar.Reset();
+        _playerUnit.SetDefaultPosition();
         StopAllCoroutines();
         PlayersTurn();
     }
 
     private void CheckPlayersChoice()
     {
-        switch (action)
+        switch (_action)
         {
             case ChousenAction.Attack:
-                if (target == ChosenTarget.None && !actionBar.IsTargetsEnabled())
+                if (_target == ChosenTarget.None && !_actionBar.IsTargetsEnabled())
                 {
-                    actionBar.ShowTargets();
-                    actionBar.EnableTargetButtons();
-                    actionBar.DisableActionButtons();
+                    _actionBar.ShowTargets();
+                    _actionBar.EnableTargetButtons();
+                    _actionBar.DisableActionButtons();
                 }
 
-                if (target != ChosenTarget.None)
+                if (_target != ChosenTarget.None)
                 {
-                    actionBar.HideAndDisableAll();
+                    _actionBar.HideAndDisableAll();
                     StartCoroutine(HandleAttackRound());
                 }
                 break;
 
             case ChousenAction.Block:
-                playerUnit.SetBlocking();
-                actionBar.HideAndDisableAll();
+                _playerUnit.SetBlocking();
+                _actionBar.HideAndDisableAll();
 
                 Debug.Log("Player is blocking!");
 
@@ -110,7 +110,7 @@ public class BattleSystem : MonoBehaviour
                 break;
 
             case ChousenAction.RunAway:
-                actionBar.HideAndDisableAll();
+                _actionBar.HideAndDisableAll();
                 StartCoroutine(HandleRunAwayRound());
                 break;
 
@@ -121,25 +121,25 @@ public class BattleSystem : MonoBehaviour
 
     private IEnumerator HandleAttackRound()
     {
-        battleState = BattleState.EnemysTurn;
-        enemyUnit.SetTargetPart(target);
+        _battleState = BattleState.EnemysTurn;
+        _enemyUnit.SetTargetPart(_target);
 
-        yield return StartCoroutine(playerUnit.MoveCardToCenter());
+        yield return StartCoroutine(_playerUnit.MoveCardToCenter());
 
         yield return StartCoroutine(PlayerAttack());
 
-        if (enemyUnit.IsDead())
+        if (_enemyUnit.IsDead())
         {
             Debug.Log("Enemy is dead");
             ResetBattle();
         }
         else
         {
-            if (!enemyUnit.DidBlock())
+            if (!_enemyUnit.DidBlock())
             {
                 yield return StartCoroutine(EnemyAttack());
 
-                if (playerUnit.IsDead())
+                if (_playerUnit.IsDead())
                 {
                     Debug.Log("Player is dead!");
 
@@ -149,13 +149,13 @@ public class BattleSystem : MonoBehaviour
                 }
                 else
                 {
-                    yield return StartCoroutine(playerUnit.MoveCardToRight());
+                    yield return StartCoroutine(_playerUnit.MoveCardToRight());
                     EndRound();
                 }
             }
             else
             {
-                yield return StartCoroutine(playerUnit.MoveCardToRight());
+                yield return StartCoroutine(_playerUnit.MoveCardToRight());
                 EndRound();
             }
         }
@@ -163,23 +163,23 @@ public class BattleSystem : MonoBehaviour
 
     private IEnumerator HandleBlockRound()
     {
-        battleState = BattleState.EnemysTurn;
-        enemyUnit.SetTargetPart(target);
+        _battleState = BattleState.EnemysTurn;
+        _enemyUnit.SetTargetPart(_target);
 
-        yield return StartCoroutine(playerUnit.MoveCardToCenter());
+        yield return StartCoroutine(_playerUnit.MoveCardToCenter());
 
         yield return StartCoroutine(EnemyAttack());
 
-        yield return StartCoroutine(playerUnit.MoveCardToRight());
+        yield return StartCoroutine(_playerUnit.MoveCardToRight());
 
-        playerUnit.ResetBlocking();
+        _playerUnit.ResetBlocking();
 
         EndRound();
     }
 
     private IEnumerator HandleRunAwayRound()
     {
-        if (playerUnit.CanRunAway())
+        if (_playerUnit.CanRunAway())
         {
             Debug.Log("Player ran away! Resetting the battle.");
             ResetBattle();
@@ -188,21 +188,21 @@ public class BattleSystem : MonoBehaviour
         {
             Debug.Log("Player failed to ran away! Now Enemy attacks!");
 
-            battleState = BattleState.EnemysTurn;
-            enemyUnit.SetTargetPart(target);
+            _battleState = BattleState.EnemysTurn;
+            _enemyUnit.SetTargetPart(_target);
 
-            yield return StartCoroutine(playerUnit.MoveCardToCenter());
+            yield return StartCoroutine(_playerUnit.MoveCardToCenter());
 
             yield return StartCoroutine(EnemyAttack());
 
-            if (playerUnit.IsDead())
+            if (_playerUnit.IsDead())
             {
                 Debug.Log("Player is dead!");
                 ResetBattle();
             }
             else
             {
-                yield return StartCoroutine(playerUnit.MoveCardToRight());
+                yield return StartCoroutine(_playerUnit.MoveCardToRight());
                 EndRound();
             }
         }
@@ -213,7 +213,7 @@ public class BattleSystem : MonoBehaviour
         Debug.Log("Player started attack");
         yield return new WaitForSeconds(1.5f);
 
-        yield return StartCoroutine(playerUnit.Attack());
+        yield return StartCoroutine(_playerUnit.Attack());
 
         Debug.Log("Player finished attack");
     }
@@ -223,7 +223,7 @@ public class BattleSystem : MonoBehaviour
         Debug.Log("Enemy started attack");
         yield return new WaitForSeconds(1.5f);
 
-        yield return StartCoroutine(enemyUnit.Attack());
+        yield return StartCoroutine(_enemyUnit.Attack());
         Debug.Log("Enemy finished attack");
     }
 
@@ -232,45 +232,45 @@ public class BattleSystem : MonoBehaviour
         float fadeDuration = 2f;
         float elapsed = 0f;
         Color startColor = Color.black;
-        Color endColor = deadPlayerSpriteRenderer.color; // original sprite color
+        Color endColor = _deadPlayerSpriteRenderer.color; // original sprite color
 
 
         // Temporarily set the sprite color to black
-        deadPlayerSpriteRenderer.color = startColor;
+        _deadPlayerSpriteRenderer.color = startColor;
 
         while (elapsed < fadeDuration)
         {
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / fadeDuration);
-            deadPlayerSpriteRenderer.color = Color.Lerp(startColor, endColor, t);
+            _deadPlayerSpriteRenderer.color = Color.Lerp(startColor, endColor, t);
             yield return null;
         }
 
         // Ensure exact final color
-        deadPlayerSpriteRenderer.color = endColor;
+        _deadPlayerSpriteRenderer.color = endColor;
     }
 
     private IEnumerator ShowPlayerDeadScreen()
     {
-        deadPlayerSpriteRenderer.sortingOrder = 4;
+        _deadPlayerSpriteRenderer.sortingOrder = 4;
 
         yield return StartCoroutine(BackgroundFadeIn());
 
-        deadPlayerScreenAnimator.Play("YouDead");
+        _deadPlayerScreenAnimator.Play("YouDead");
 
         // Wait until the animation starts
         yield return null;
 
         // Get info about the current animation
-        AnimatorStateInfo info = deadPlayerScreenAnimator.GetCurrentAnimatorStateInfo(0);
+        AnimatorStateInfo info = _deadPlayerScreenAnimator.GetCurrentAnimatorStateInfo(0);
 
-        Debug.Log("Playing " + deadPlayerScreenAnimator + " animation for " + info.length + "s");
+        Debug.Log("Playing " + _deadPlayerScreenAnimator + " animation for " + info.length + "s");
 
         // Wait for the duration of the animation
         yield return new WaitForSeconds(info.length);
 
         yield return new WaitForSeconds(5);
-        deadPlayerScreenAnimator.Play("YouDeadIdle");
-        deadPlayerSpriteRenderer.sortingOrder = -1;
+        _deadPlayerScreenAnimator.Play("YouDeadIdle");
+        _deadPlayerSpriteRenderer.sortingOrder = -1;
     }
 }

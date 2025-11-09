@@ -499,8 +499,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d193c0ded21242bba1ada03b429f0b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ActionButton
-  frameSpriteRenderer: {fileID: 125299188}
-  isClicked: 0
 --- !u!1 &270283986
 GameObject:
   m_ObjectHideFlags: 0
@@ -857,8 +855,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d193c0ded21242bba1ada03b429f0b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ActionButton
-  frameSpriteRenderer: {fileID: 417104385}
-  isClicked: 0
 --- !u!1 &421385437
 GameObject:
   m_ObjectHideFlags: 0
@@ -1001,11 +997,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a114d33f65b3d46fb8505614f9bed87b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  actionBar: {fileID: 579521160}
-  playerUnit: {fileID: 1582224804}
-  enemyUnit: {fileID: 1947515732}
-  deadPlayerScreenAnimator: {fileID: 1197991279}
-  deadPlayerSpriteRenderer: {fileID: 961579173}
+  _actionBar: {fileID: 579521160}
+  _playerUnit: {fileID: 1582224804}
+  _enemyUnit: {fileID: 1947515732}
+  _deadPlayerScreenAnimator: {fileID: 1197991279}
+  _deadPlayerSpriteRenderer: {fileID: 961579173}
 --- !u!4 &437525447
 Transform:
   m_ObjectHideFlags: 0
@@ -1163,14 +1159,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d720c5bac95f141d5a5fbb3691bb2015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ActionsBar
-  attackActionBtn: {fileID: 1519973496}
-  blockActionBtn: {fileID: 125299190}
-  runAwayActionBtn: {fileID: 1370264668}
-  headChoiceBtn: {fileID: 1180697971}
-  bodyChoiceBtn: {fileID: 417104387}
-  eyesChoiceBtn: {fileID: 1485067733}
-  targetsSpriteRenderer: {fileID: 270283988}
-  actionsSpriteRenderer: {fileID: 90154383}
+  _attackActionBtn: {fileID: 1519973496}
+  _blockActionBtn: {fileID: 125299190}
+  _runAwayActionBtn: {fileID: 1370264668}
+  _headChoiceBtn: {fileID: 1180697971}
+  _bodyChoiceBtn: {fileID: 417104387}
+  _eyesChoiceBtn: {fileID: 1485067733}
+  _targetsSpriteRenderer: {fileID: 270283988}
+  _actionsSpriteRenderer: {fileID: 90154383}
 --- !u!4 &579521161
 Transform:
   m_ObjectHideFlags: 0
@@ -1655,8 +1651,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d193c0ded21242bba1ada03b429f0b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ActionButton
-  frameSpriteRenderer: {fileID: 1180697969}
-  isClicked: 0
 --- !u!1 &1197991277
 GameObject:
   m_ObjectHideFlags: 0
@@ -1920,8 +1914,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d193c0ded21242bba1ada03b429f0b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ActionButton
-  frameSpriteRenderer: {fileID: 1370264666}
-  isClicked: 0
 --- !u!1 &1485067728
 GameObject:
   m_ObjectHideFlags: 0
@@ -2072,8 +2064,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d193c0ded21242bba1ada03b429f0b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ActionButton
-  frameSpriteRenderer: {fileID: 1485067731}
-  isClicked: 0
 --- !u!1 &1519973491
 GameObject:
   m_ObjectHideFlags: 0
@@ -2224,8 +2214,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d193c0ded21242bba1ada03b429f0b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ActionButton
-  frameSpriteRenderer: {fileID: 1519973494}
-  isClicked: 0
 --- !u!1 &1582224801
 GameObject:
   m_ObjectHideFlags: 0
@@ -2332,19 +2320,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d27acc0e48804464daaa9315b11fb163, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattlePlayer
-  level: 0
-  health: 100
-  maxAttackMultiplier: 1.2
-  minAttackMultiplier: 1
-  maxBlockMultiplier: 1
-  minBlockMultiplier: 0.6
-  isDead: 0
-  isBlocking: 0
-  baseAttackDamage: 10
-  runAwayProbability: 0.3
-  tentacleAnimator: {fileID: 421385438}
-  crackAnimator: {fileID: 282494754}
-  shieldAnimator: {fileID: 858700369}
+  _level: 0
+  _health: 0
+  _maxAttackMultiplier: 0
+  _minAttackMultiplier: 0
+  _maxBlockMultiplier: 0
+  _minBlockMultiplier: 0
+  _isDead: 0
+  _isBlocking: 0
+  _baseAttackDamage: 10
+  _runAwayProbability: 0.5
+  _tentacleAnimator: {fileID: 421385438}
+  _crackAnimator: {fileID: 282494754}
+  _shieldAnimator: {fileID: 858700369}
 --- !u!1 &1863355054
 GameObject:
   m_ObjectHideFlags: 0
@@ -2535,21 +2523,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8735a75e218734cbe9c736ea5d0f28f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattleEyesEnemy
-  level: 0
-  health: 100
-  maxAttackMultiplier: 1.2
-  minAttackMultiplier: 1
-  maxBlockMultiplier: 1
-  minBlockMultiplier: 0.8
-  isDead: 0
-  isBlocking: 0
-  baseAttackDamage: 10
-  blockProbability: 0
-  headDamageMultiplier: 1
-  bodyDamageMultiplier: 1
-  eyesDamageMultiplier: 1
-  blastAnimator: {fileID: 481242144}
-  shieldAnimator: {fileID: 1099438197}
+  _level: 0
+  _health: 0
+  _maxAttackMultiplier: 0
+  _minAttackMultiplier: 0
+  _maxBlockMultiplier: 0
+  _minBlockMultiplier: 0
+  _isDead: 0
+  _isBlocking: 0
+  _baseAttackDamage: 10
+  _blockProbability: 0.5
+  _headDamageMultiplier: 1
+  _bodyDamageMultiplier: 1
+  _eyesDamageMultiplier: 1
+  _blastAnimator: {fileID: 481242144}
+  _shieldAnimator: {fileID: 1099438197}
 --- !u!95 &1947515733
 Animator:
   serializedVersion: 7

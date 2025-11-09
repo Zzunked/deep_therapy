@@ -22,24 +22,24 @@ public enum ChosenTarget
 
 public class ActionBar : MonoBehaviour
 {
-    [SerializeField] private Button attackActionBtn;
-    [SerializeField] private Button blockActionBtn;
-    [SerializeField] private Button runAwayActionBtn;
+    [SerializeField] private Button _attackActionBtn;
+    [SerializeField] private Button _blockActionBtn;
+    [SerializeField] private Button _runAwayActionBtn;
 
-    [SerializeField] private Button headChoiceBtn;
-    [SerializeField] private Button bodyChoiceBtn;
-    [SerializeField] private Button eyesChoiceBtn;
+    [SerializeField] private Button _headChoiceBtn;
+    [SerializeField] private Button _bodyChoiceBtn;
+    [SerializeField] private Button _eyesChoiceBtn;
 
-    [SerializeField] private SpriteRenderer targetsSpriteRenderer;
-    [SerializeField] private SpriteRenderer actionsSpriteRenderer;
+    [SerializeField] private SpriteRenderer _targetsSpriteRenderer;
+    [SerializeField] private SpriteRenderer _actionsSpriteRenderer;
 
-    private ChousenAction chosenAction = ChousenAction.None;
-    private ChosenTarget chosenTarget = ChosenTarget.None;
-    private bool isTargetsEnabled = false;
+    private ChousenAction _chosenAction = ChousenAction.None;
+    private ChosenTarget _chosenTarget = ChosenTarget.None;
+    private bool _isTargetsEnabled = false;
 
     public bool IsTargetsEnabled()
     {
-        return isTargetsEnabled;
+        return _isTargetsEnabled;
     }
 
     void Start()
@@ -51,7 +51,7 @@ public class ActionBar : MonoBehaviour
     {
         HandleActions();
 
-        if (chosenAction == ChousenAction.Attack)
+        if (_chosenAction == ChousenAction.Attack)
         {
             HandleTargets();
         }
@@ -59,119 +59,119 @@ public class ActionBar : MonoBehaviour
 
     public ChousenAction GetChousenAction()
     {
-        return chosenAction;
+        return _chosenAction;
     }
 
     public ChosenTarget GetChosenTarget()
     {
-        return chosenTarget;
+        return _chosenTarget;
     }
 
     void HandleActions()
     {
-        if (attackActionBtn.isClicked)
+        if (_attackActionBtn.IsClicked)
         {
-            chosenAction = ChousenAction.Attack;
+            _chosenAction = ChousenAction.Attack;
             DisableActionButtons();
             ShowTargets();
             EnableTargetButtons();
-            attackActionBtn.isClicked = false;
+            _attackActionBtn.IsClicked = false;
         }
-        else if (blockActionBtn.isClicked)
+        else if (_blockActionBtn.IsClicked)
         {
-            chosenAction = ChousenAction.Block;
+            _chosenAction = ChousenAction.Block;
             DisableActionButtons();
-            blockActionBtn.isClicked = false;
+            _blockActionBtn.IsClicked = false;
         }
-        else if (runAwayActionBtn.isClicked)
+        else if (_runAwayActionBtn.IsClicked)
         {
-            chosenAction = ChousenAction.RunAway;
+            _chosenAction = ChousenAction.RunAway;
             DisableActionButtons();
-            runAwayActionBtn.isClicked = false;
+            _runAwayActionBtn.IsClicked = false;
         }
     }
 
     void HandleTargets()
     {
-        if (headChoiceBtn.isClicked)
+        if (_headChoiceBtn.IsClicked)
         {
-            chosenTarget = ChosenTarget.Head;
-            headChoiceBtn.isClicked = false;
+            _chosenTarget = ChosenTarget.Head;
+            _headChoiceBtn.IsClicked = false;
         }
-        else if (bodyChoiceBtn.isClicked)
+        else if (_bodyChoiceBtn.IsClicked)
         {
-            chosenTarget = ChosenTarget.Body;
-            bodyChoiceBtn.isClicked = false;
+            _chosenTarget = ChosenTarget.Body;
+            _bodyChoiceBtn.IsClicked = false;
         }
-        else if (eyesChoiceBtn.isClicked)
+        else if (_eyesChoiceBtn.IsClicked)
         {
-            chosenTarget = ChosenTarget.Eyes;
-            eyesChoiceBtn.isClicked = false;
+            _chosenTarget = ChosenTarget.Eyes;
+            _eyesChoiceBtn.IsClicked = false;
         }
     }
 
     public void EnableActionButtons()
     {
-        attackActionBtn.Enable();
-        blockActionBtn.Enable();
-        runAwayActionBtn.Enable();
+        _attackActionBtn.Enable();
+        _blockActionBtn.Enable();
+        _runAwayActionBtn.Enable();
     }
 
     public void DisableActionButtons()
     {
-        attackActionBtn.Disable();
-        blockActionBtn.Disable();
-        runAwayActionBtn.Disable();
+        _attackActionBtn.Disable();
+        _blockActionBtn.Disable();
+        _runAwayActionBtn.Disable();
     }
 
     public void ShowActions()
     {
-        actionsSpriteRenderer.sortingOrder = 1;
+        _actionsSpriteRenderer.sortingOrder = 1;
     }
     
     public void HideActions()
     {
-        actionsSpriteRenderer.sortingOrder = -1;
+        _actionsSpriteRenderer.sortingOrder = -1;
     }
 
     public void HideActionButtons()
     {
-        attackActionBtn.SetFrameInvisible();
-        blockActionBtn.SetFrameInvisible();
-        runAwayActionBtn.SetFrameInvisible();
+        _attackActionBtn.SetFrameInvisible();
+        _blockActionBtn.SetFrameInvisible();
+        _runAwayActionBtn.SetFrameInvisible();
     }
 
     public void EnableTargetButtons()
     {
-        headChoiceBtn.Enable();
-        bodyChoiceBtn.Enable();
-        eyesChoiceBtn.Enable();
-        isTargetsEnabled = true;
+        _headChoiceBtn.Enable();
+        _bodyChoiceBtn.Enable();
+        _eyesChoiceBtn.Enable();
+        _isTargetsEnabled = true;
     }
 
     public void DisableTargetButtons()
     {
-        headChoiceBtn.Disable();
-        bodyChoiceBtn.Disable();
-        eyesChoiceBtn.Disable();
-        isTargetsEnabled = false;
+        _headChoiceBtn.Disable();
+        _bodyChoiceBtn.Disable();
+        _eyesChoiceBtn.Disable();
+        _isTargetsEnabled = false;
     }
 
     public void HideTargetButtons()
     {
-        headChoiceBtn.SetFrameInvisible();
-        bodyChoiceBtn.SetFrameInvisible();
-        eyesChoiceBtn.SetFrameInvisible();
+        _headChoiceBtn.SetFrameInvisible();
+        _bodyChoiceBtn.SetFrameInvisible();
+        _eyesChoiceBtn.SetFrameInvisible();
     }
 
     public void ShowTargets()
     {
-        targetsSpriteRenderer.sortingOrder = 1;
+        _targetsSpriteRenderer.sortingOrder = 1;
     }
 
     public void HideTargets()
     {
-        targetsSpriteRenderer.sortingOrder = -1;
+        _targetsSpriteRenderer.sortingOrder = -1;
     }
 
     public void HideAndDisableAll()
@@ -187,12 +187,12 @@ public class ActionBar : MonoBehaviour
 
     public void ResetChosenAction()
     {
-        chosenAction = ChousenAction.None;
+        _chosenAction = ChousenAction.None;
     }
 
     public void ResetChosenTarget()
     {
-        chosenTarget = ChosenTarget.None;
+        _chosenTarget = ChosenTarget.None;
     }
 
     public void Reset()
