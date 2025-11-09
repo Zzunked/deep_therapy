@@ -38,14 +38,14 @@ public class BattleUnit : MonoBehaviour
 
     public IEnumerator Attack()
     {
-        float attackDamage = CalculateAttackDamage();
+        int attackDamage = CalculateAttackDamage();
 
         Debug.Log(gameObject.name + " attacks with damage: " + attackDamage);
 
         yield return StartCoroutine(_targetUnit.TakeDamage(attackDamage));
     }
 
-    public IEnumerator TakeDamage(float damage)
+    public IEnumerator TakeDamage(int damage)
     {
         float takenDamageMultiplier = 1f;
 
@@ -57,13 +57,12 @@ public class BattleUnit : MonoBehaviour
 
         if (IsBlocking())
         {
-            // damage = Block(damage);
             yield return StartCoroutine(PlayBlockAnimation());
         }
         else
         {
             takenDamageMultiplier = CalculateTakenDamgeMultiplier();
-            yield return StartCoroutine(PlayTakeDamageAnimation());
+            yield return StartCoroutine(PlayTakeDamageAnimation(damage));
 
             _health -= damage * takenDamageMultiplier;
 
@@ -103,7 +102,7 @@ public class BattleUnit : MonoBehaviour
         _isDead = true;
     }
 
-    protected virtual IEnumerator PlayTakeDamageAnimation()
+    protected virtual IEnumerator PlayTakeDamageAnimation(int damage)
     {
         yield return null;
         // play animation
@@ -141,9 +140,9 @@ public class BattleUnit : MonoBehaviour
         yield return new WaitForSeconds(info.length);
     }
 
-    protected virtual float CalculateAttackDamage()
+    protected virtual int CalculateAttackDamage()
     {
-        float attackDamage = 0;
+        int attackDamage = 0;
         Debug.LogError("Base CalculateAttackDamage method has been called!");
         return attackDamage;
     }

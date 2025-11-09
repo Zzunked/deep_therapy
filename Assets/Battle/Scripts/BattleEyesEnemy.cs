@@ -11,13 +11,14 @@ public class BattleEyesEnemy : BattleUnit
     [SerializeField] private float _eyesDamageMultiplier = 1f;
     [SerializeField] private Animator _blastAnimator;
     [SerializeField] private Animator _shieldAnimator;
+    [SerializeField] private DamageNumberDisplay _damageDisplay;
 
     private ChosenTarget _targetPart;
 
-    protected override float CalculateAttackDamage()
+    protected override int CalculateAttackDamage()
     {
         float attackMultiplier = Random.Range(_minAttackMultiplier, _maxAttackMultiplier);
-        float attackDamage = _baseAttackDamage * attackMultiplier;
+        int attackDamage = (int)(_baseAttackDamage * attackMultiplier);
 
         return attackDamage;
     }
@@ -54,9 +55,10 @@ public class BattleEyesEnemy : BattleUnit
         return blockedDamage;
     }
 
-    protected override IEnumerator PlayTakeDamageAnimation()
+    protected override IEnumerator PlayTakeDamageAnimation(int damage)
     {
         // play animation
+        _damageDisplay.ShowNumber(damage);
         yield return StartCoroutine(PlayAnimation("Blast", _blastAnimator));
     }
 

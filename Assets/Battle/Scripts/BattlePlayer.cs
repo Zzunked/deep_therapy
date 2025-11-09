@@ -23,10 +23,10 @@ public class BattlePlayer : BattleUnit
         _centerPosition = new Vector2(0, _cardTransform.position.y);
     }
 
-    protected override float CalculateAttackDamage()
+    protected override int CalculateAttackDamage()
     {
         float attackMultiplier = Random.Range(_minAttackMultiplier, _maxAttackMultiplier);
-        float attackDamage = _baseAttackDamage * attackMultiplier;
+        int attackDamage = (int)(_baseAttackDamage * attackMultiplier);
 
         return attackDamage;
     }
@@ -47,7 +47,7 @@ public class BattlePlayer : BattleUnit
         return blockedDamage;
     }
 
-    protected override IEnumerator PlayTakeDamageAnimation()
+    protected override IEnumerator PlayTakeDamageAnimation(int damage)
     {
         // play animation
         yield return StartCoroutine(PlayTentacleAndCrack());
