@@ -885,7 +885,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 2c3e95952984e4c04a6fd1dcdb51f9ba, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 1
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -920,7 +920,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -962,7 +962,7 @@ Transform:
   m_GameObject: {fileID: 421385437}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.22894546, w: 0.9734393}
-  m_LocalPosition: {x: 2.963, y: 0.322, z: 0}
+  m_LocalPosition: {x: 3.26, y: 0.56, z: 0}
   m_LocalScale: {x: 1.7936448, y: 1.7936448, z: 1.7936448}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2321,14 +2321,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattlePlayer
   _level: 0
-  _health: 0
-  _maxAttackMultiplier: 0
-  _minAttackMultiplier: 0
+  _health: 1000
+  _maxAttackMultiplier: 1
+  _minAttackMultiplier: 1
   _maxBlockMultiplier: 0
   _minBlockMultiplier: 0
   _isDead: 0
   _isBlocking: 0
-  _baseAttackDamage: 10
+  _baseAttackDamage: 100
   _runAwayProbability: 0.5
   _tentacleAnimator: {fileID: 421385438}
   _crackAnimator: {fileID: 282494754}
@@ -2524,15 +2524,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattleEyesEnemy
   _level: 0
-  _health: 0
-  _maxAttackMultiplier: 0
-  _minAttackMultiplier: 0
+  _health: 1000
+  _maxAttackMultiplier: 1
+  _minAttackMultiplier: 1
   _maxBlockMultiplier: 0
   _minBlockMultiplier: 0
   _isDead: 0
   _isBlocking: 0
-  _baseAttackDamage: 10
-  _blockProbability: 0.5
+  _baseAttackDamage: 100
+  _blockProbability: 0
   _headDamageMultiplier: 1
   _bodyDamageMultiplier: 1
   _eyesDamageMultiplier: 1
