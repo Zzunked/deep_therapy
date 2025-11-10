@@ -11,6 +11,8 @@ public class BattleEyesEnemy : BattleUnit
     [SerializeField] private float _eyesDamageMultiplier = 1f;
     [SerializeField] private Animator _blastAnimator;
     [SerializeField] private Animator _shieldAnimator;
+    [SerializeField] private Animator _boomAnimator;
+    [SerializeField] private Animator _skdshhhAnimator;
     [SerializeField] private DamageNumberDisplay _damageDisplay;
     [SerializeField] private Blast _blast;
 
@@ -67,10 +69,22 @@ public class BattleEyesEnemy : BattleUnit
     {
         _blast.Damage = damage;
         _blast.BlastDamagePhase += _damageDisplay.ShowNumber;
+        _blast.BlastSignPhase += PlaySignAnimation;
 
         yield return StartCoroutine(PlayAnimation("Blast", _blastAnimator));
 
         _blast.BlastDamagePhase -= _damageDisplay.ShowNumber;
+        _blast.BlastSignPhase -= PlaySignAnimation;
+    }
+
+    public void PlaySignAnimation()
+    {
+        // int index = UnityEngine.Random.Range(0, animationNames.Length);
+        // string chosenAnimation = animationNames[index];
+        // animator.Play(chosenAnimation);
+
+        // _boomAnimator.Play("Boom");
+        _skdshhhAnimator.Play("Skdshhh");
     }
 
     protected override IEnumerator PlayBlockAnimation()
