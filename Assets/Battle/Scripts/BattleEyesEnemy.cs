@@ -13,6 +13,8 @@ public class BattleEyesEnemy : BattleUnit
     [SerializeField] private Animator _shieldAnimator;
     [SerializeField] private Animator _boomAnimator;
     [SerializeField] private Animator _skdshhhAnimator;
+    [SerializeField] private Transform _skdshhhTransform;
+    [SerializeField] private Transform _boomTransform;
     [SerializeField] private DamageNumberDisplay _damageDisplay;
     [SerializeField] private Blast _blast;
 
@@ -79,12 +81,35 @@ public class BattleEyesEnemy : BattleUnit
 
     public void PlaySignAnimation()
     {
-        // int index = UnityEngine.Random.Range(0, animationNames.Length);
-        // string chosenAnimation = animationNames[index];
-        // animator.Play(chosenAnimation);
+        string clip;
+        Animator animator;
+        Transform transform;
 
-        // _boomAnimator.Play("Boom");
-        _skdshhhAnimator.Play("Skdshhh");
+        int[] positionCoef = { 1, -1 };
+        string[] animationClip = { "Boom", "Skdshhh" };
+
+        int posIdx = UnityEngine.Random.Range(0, positionCoef.Length);
+        int clipIdx = UnityEngine.Random.Range(0, animationClip.Length);
+
+        clip = animationClip[clipIdx];
+
+        if (clip == "Boom")
+        {
+            animator = _boomAnimator;
+            transform = _boomTransform;
+            Vector3 rot = transform.eulerAngles;
+            rot.z *= (float)positionCoef[posIdx];
+            transform.eulerAngles = rot;
+        }
+        else
+        {
+            animator = _skdshhhAnimator;
+            transform = _skdshhhTransform;
+        }
+
+        transform.position = new Vector2(transform.position.x * positionCoef[posIdx], transform.position.y);
+
+        animator.Play(animationClip[clipIdx]);
     }
 
     protected override IEnumerator PlayBlockAnimation()

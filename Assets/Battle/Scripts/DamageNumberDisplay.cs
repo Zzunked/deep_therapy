@@ -5,37 +5,15 @@ using System.Collections;
 
 public class DamageNumberDisplay : MonoBehaviour
 {
-    [Header("Digit Sprites 0–9 in order")]
     [SerializeField] private Sprite[] _digitSprites;
-
-    [Header("Digit Prefab (with SpriteRenderer)")]
     [SerializeField] private GameObject _digitPrefab;
-
-    [Header("Settings")]
     [SerializeField] private float _digitSpacing = 0.5f;
-    // [SerializeField] private float _digitScale = 0.2f;
     [SerializeField] private float _startScale = 0.2f;
     [SerializeField] private float _endScale = 0.35f;
     [SerializeField] private float _fadeDuration = 1f;
-    // private int _damageValue = 0;
-
-    // public int DamageValue
-    // {
-    //     get { return _damageValue; }
-    //     set { _damageValue = value; }
-    // } 
 
     private readonly List<GameObject> _spawnedDigits = new List<GameObject>();
 
-    // private void OnEnable()
-    // {
-    //     BattleEyesEnemy.OnBlastDamagePhase += ShowNumber;
-    // }
-
-    // private void OnDisable()
-    // {
-    //     BattleEyesEnemy.OnBlastDamagePhase -= ShowNumber;
-    // }
 
     public void ShowNumber(int damage)
     {
