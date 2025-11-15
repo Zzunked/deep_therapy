@@ -5,58 +5,69 @@ using System.Collections.Generic;
 
 public class ActionDisplayer : MonoBehaviour
 {
-    [SerializeField] private Blast _blastPrefab;
-    [SerializeField] private GameObject[] _signsPrefabs;
+    [SerializeField] private GameObject _blastPrefab;
     [SerializeField] private GameObject _shieldPrefab;
+    [SerializeField] private GameObject _boomPrefab;
+    [SerializeField] private GameObject _skdshhhPrefab;
     [SerializeField] private GameObject _tentaclePrefab;
     [SerializeField] private GameObject _crackPrefab;
     [SerializeField] private GameObject _digitPrefab;
-    [SerializeField] private Transform _playerCardTransform;
     [SerializeField] private Sprite[] _digitSprites;
     [SerializeField] private float _digitSpacing = 0.47f;
     [SerializeField] private float _scaleMultiplier = 1.7f;
     [SerializeField] private float _fadeDuration = 1.5f;
 
-    private Vector3 _crackPos = new Vector3(0.92f, -3.44f, 0);
-    private Vector3 _tentaclePos = new Vector3(2.89f, -3.44f, 0);
-    private Vector3 _enemyShieldPos = new Vector3(0f, 1.65f, 0);
-    private Vector3 _playerShieldPos = new Vector3(0f, -3.47f, 0);
-    private List<(float x, float y)> _playerDamageNumPos = new(){ (-0.96f, -3.29f), (0.3f, -1.88f), (2.21f, -1.69f) };
-    private List<(float x, float y)> _enemyDamageNumPos = new(){ (-2f, 0f), (0f, 0f), (2f, 0f) };
-
     public int Damage { get; set ; }
     private readonly List<GameObject> _spawnedDigits = new List<GameObject>();
 
-    private void OnDrawGizmos()
+    // Animations positions
+    // Crack
+    private Vector3 _crackPos = new Vector3(0.92f, -3.44f, 0);
+
+    // Tentacle
+    private Vector3 _tentaclePos = new Vector3(2.89f, -3.44f, 0);
+
+    // Shield
+    private Vector3 _enemyShieldPos = new Vector3(0f, 1.65f, 0);
+    private Vector3 _playerShieldPos = new Vector3(0f, -3.47f, 0);
+
+    // Blast
+    private Vector3 _blastPos = new Vector3(-0.04f, 1.54f, 0);
+
+    // Skdshhh sign
+    private Vector3 _skdshhhRightPos = new Vector3(2.91f, 2.45f, 0);
+    private float _skdshhhRightRotZ = 11f;
+    private Vector3 _skdshhhLeftPos = new Vector3(-3.54f, 2.29f, 0);
+    private float _skdshhhLeftRotZ = 46.303f;
+
+    // Boom sign
+    private Vector3 _boomRightPos = new Vector3(2.8f, 1.97f, 0);
+    private float _boomRightRotZ = -20.362f;
+    private Vector3 _boomLeftPos = new Vector3(-3.1f, 1.75f, 0);
+    private float _boomLeftRotZ = 33.5f;
+
+    // Damage numbers
+    private List<(float x, float y)> _playerDamageNumPos = new(){ (-0.96f, -3.29f), (0.3f, -1.88f), (2.21f, -1.69f) };
+    private List<(float x, float y)> _enemyDamageNumPos = new() { (-2f, 0f), (0f, 0f), (2f, 0f) };
+    private List<(GameObject prefab, Vector3 pos, float rotZ)> _signPrefabs;
+
+    private void Awake()
     {
-        // Gizmos.color = Color.red;
-        // Gizmos.DrawSphere(_blastOffset, 0.1f);
-
-        // Gizmos.color = Color.blue;
-        // Gizmos.DrawSphere(_signOffsetLeft, 0.1f);
-
-        // Gizmos.color = Color.blueViolet;
-        // Gizmos.DrawSphere(_signOffsetRight, 0.1f);
-    }
-
-
-    private IEnumerator PlayAnimation(string animation, Animator animator)
-    {
-        animator.Play(animation);
-
-        yield return null;
-
-        AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
-
-        Debug.Log("Playing " + animation + " animation for " + info.length + "s");
-
-        yield return new WaitForSeconds(info.length);
+        List<(GameObject prefab, Vector3 pos, float rotZ)> signPrefabs = new()
+        {
+            (_boomPrefab, _boomRightPos, _boomRightRotZ),
+            (_boomPrefab, _boomLeftPos, _boomLeftRotZ),
+            (_skdshhhPrefab, _skdshhhRightPos, _skdshhhRightRotZ),
+            (_skdshhhPrefab, _skdshhhLeftPos, _skdshhhLeftRotZ)
+        };
+        _signPrefabs = signPrefabs;
     }
 
     public IEnumerator ShowDamageOnEnemy()
     {
-
-        Blast blast = Instantiate(_blastPrefab);
+        GameObject blastGO = Instantiate(_blastPrefab);
+        Blast blast = blastGO.GetComponent<Blast>();
+        blastGO.transform.position = _blastPos;
 
         blast.BlastDamagePhase += ShowDamageNumberOnEnemy;
         blast.BlastSignPhase += ShowDamageSignOnEnemy;
@@ -81,17 +92,18 @@ public class ActionDisplayer : MonoBehaviour
 
     private void ShowDamageSignOnEnemy()
     {
-        GameObject actionAnimationPrefab = GetSignToShow();
+        int randIdx = Random.Range(0, _signPrefabs.Count);
+
+        GameObject actionAnimationPrefab = _signPrefabs[randIdx].prefab;
+        Vector3 pos = _signPrefabs[randIdx].pos;
+        float rotZ = _signPrefabs[randIdx].rotZ;
+
         GameObject actionAnimationGO = Instantiate(actionAnimationPrefab);
         ActionAnimation actionAnimation = actionAnimationGO.GetComponent<ActionAnimation>();
+
+        actionAnimationGO.transform.position = pos;
+        actionAnimationGO.transform.rotation = Quaternion.Euler(0, 0, rotZ);
         actionAnimation.PlayAnimation();
-    }
-
-    private GameObject GetSignToShow()
-    {
-        int idx = Random.Range(0, _signsPrefabs.Length);
-
-        return _signsPrefabs[idx];
     }
 
     public IEnumerator ShowDamageOnPlayer()
@@ -129,8 +141,6 @@ public class ActionDisplayer : MonoBehaviour
         int randIdx = Random.Range(0, _playerDamageNumPos.Count);
         ShowDamageNumber(_playerDamageNumPos[randIdx].x, _playerDamageNumPos[randIdx].y);
     }
-    
-    
 
     private void ShowDamageNumber(float xPos, float yPos)
     {

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2513846475989324059}
   - component: {fileID: 5720068779472043345}
   - component: {fileID: 2178625842274331836}
+  - component: {fileID: 3483339863924789474}
   m_Layer: 0
   m_Name: Boom
   m_TagString: Untagged
@@ -113,3 +114,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3483339863924789474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1755095174411239132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2683671a2faff46b2943089d32ecaff8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Boom

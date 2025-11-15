@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2348282704127264992}
   - component: {fileID: 7461878374104072519}
   - component: {fileID: 2563000021763383914}
+  - component: {fileID: 4728150821120899298}
   m_Layer: 0
   m_Name: Skdshhh
   m_TagString: Untagged
@@ -88,7 +89,7 @@ SpriteRenderer:
   m_Size: {x: 5.91, y: 4.74}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &2563000021763383914
@@ -113,3 +114,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4728150821120899298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7646768575035477234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4bd1bc51afc540aca8f6ed116ff027f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Skdshhh
