@@ -2064,7 +2064,7 @@ MonoBehaviour:
   _bodyDamageMultiplier: 1
   _eyesDamageMultiplier: 1
   _actionDisplayer: {fileID: 710300396}
-  _blinkingDuration: 3
+  _blinkingDuration: 2.5
   _blinkingSpeed: 0.1
 --- !u!95 &1947515733
 Animator:
