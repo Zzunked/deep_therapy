@@ -11,14 +11,8 @@ public class BattleEyesEnemy : BattleUnit
     [SerializeField] private float _eyesDamageMultiplier = 1f;
     [SerializeField] private ActionDisplayer _actionDisplayer;
 
-    public event Action OnBlastDamagePhase;
     private ChosenTarget _targetPart;
 
-
-    public void BlastDamagePhase()
-    {
-        OnBlastDamagePhase?.Invoke();
-    }
 
     protected override int CalculateAttackDamage()
     {
@@ -73,7 +67,9 @@ public class BattleEyesEnemy : BattleUnit
     {
         // play animation
         // yield return StartCoroutine(PlayAnimation("Shield", _shieldAnimator));
-        yield return new WaitForSeconds(0.1f);
+        yield return StartCoroutine(_actionDisplayer.ShowShieldOnEnemy());
+        
+        // yield return new WaitForSeconds(0.1f);
     }
 
     protected override void PlayDieAnimation()

@@ -220,7 +220,7 @@ public class BattleSystem : MonoBehaviour
     private IEnumerator EnemyAttack()
     {
         Debug.Log("Enemy started attack");
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(0.5f);
 
         yield return StartCoroutine(_enemyUnit.Attack());
         Debug.Log("Enemy finished attack");

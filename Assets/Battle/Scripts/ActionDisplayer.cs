@@ -19,6 +19,8 @@ public class ActionDisplayer : MonoBehaviour
 
     private Vector3 _crackPos = new Vector3(0.92f, -3.44f, 0);
     private Vector3 _tentaclePos = new Vector3(2.89f, -3.44f, 0);
+    private Vector3 _enemyShieldPos = new Vector3(0f, 1.65f, 0);
+    private Vector3 _playerShieldPos = new Vector3(0f, -3.47f, 0);
     private List<(float x, float y)> _playerDamageNumPos = new(){ (-0.96f, -3.29f), (0.3f, -1.88f), (2.21f, -1.69f) };
     private List<(float x, float y)> _enemyDamageNumPos = new(){ (-2f, 0f), (0f, 0f), (2f, 0f) };
 
@@ -68,9 +70,13 @@ public class ActionDisplayer : MonoBehaviour
         ShowDamageNumber(_enemyDamageNumPos[randInx].x, _enemyDamageNumPos[randInx].y);
     }
 
-    public void ShowShieldOnEnemy()
+    public IEnumerator ShowShieldOnEnemy()
     {
+        GameObject shieldGO = Instantiate(_shieldPrefab);
+        Shield shield = shieldGO.GetComponent<Shield>();
+        shieldGO.transform.position = _enemyShieldPos;
 
+        yield return StartCoroutine(shield.PlayAnimationEnum());
     }
 
     private void ShowDamageSignOnEnemy()
@@ -109,9 +115,13 @@ public class ActionDisplayer : MonoBehaviour
         yield return StartCoroutine(crack.PlayAnimationEnum());
     }
 
-    private void ShowShieldOnPlayer()
+    public IEnumerator ShowShieldOnPlayer()
     {
+        GameObject shieldGO = Instantiate(_shieldPrefab);
+        Shield shield = shieldGO.GetComponent<Shield>();
+        shieldGO.transform.position = _playerShieldPos;
 
+        yield return StartCoroutine(shield.PlayAnimationEnum());
     }
     
     private void ShowDamageNumberOnPlayer()

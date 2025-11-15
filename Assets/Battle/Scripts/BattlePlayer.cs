@@ -6,9 +6,6 @@ public class BattlePlayer : BattleUnit
 {
     [SerializeField] private float _baseAttackDamage = 10f;
     [SerializeField] private float _runAwayProbability = 0.5f;
-    [SerializeField] private Animator _tentacleAnimator;
-    [SerializeField] private Animator _crackAnimator;
-    [SerializeField] private Animator _shieldAnimator;
     [SerializeField] private ActionDisplayer _actionDisplayer;
     [SerializeField] private float _cardSpeed = 10f;
 
@@ -57,17 +54,17 @@ public class BattlePlayer : BattleUnit
 
     }
 
-    private IEnumerator PlayTentacleAndCrack()
-    {
-        yield return StartCoroutine(PlayAnimation("Tentacle", _tentacleAnimator));
+    // private IEnumerator PlayTentacleAndCrack()
+    // {
+    //     // yield return StartCoroutine(PlayAnimation("Tentacle", _tentacleAnimator));
 
-        yield return StartCoroutine(PlayAnimation("Crack", _crackAnimator));
-    }
+    //     // yield return StartCoroutine(PlayAnimation("Crack", _crackAnimator));
+    // }
 
     protected override IEnumerator PlayBlockAnimation()
     {
         // play animation
-        yield return StartCoroutine(PlayAnimation("Shield", _shieldAnimator));
+        yield return StartCoroutine(_actionDisplayer.ShowShieldOnPlayer());
     }
 
     public void SetBlocking()
