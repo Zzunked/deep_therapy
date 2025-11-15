@@ -4,19 +4,23 @@ using UnityEngine;
 
 public class Blast : MonoBehaviour
 {
-    public event Action<int> BlastDamagePhase;
+    public event Action BlastDamagePhase;
     public event Action BlastSignPhase;
-    private int _damage;
+    private Animator _animator;
 
-    public int Damage
+    private void Awake()
     {
-        get { return _damage; }
-        set { _damage = value; }
+        _animator = GetComponent<Animator>();
+    }
+
+    public void OnBlastAnimationEnd()
+    {
+        Destroy(gameObject);
     }
 
     public void OnBlastDamagePhase()
     {
-        BlastDamagePhase?.Invoke(_damage);
+        BlastDamagePhase?.Invoke();
     }
 
     public void OnBlastSignPhase()

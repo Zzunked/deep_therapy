@@ -9,14 +9,15 @@ public class BattleEyesEnemy : BattleUnit
     [SerializeField] private float _headDamageMultiplier = 1f;
     [SerializeField] private float _bodyDamageMultiplier = 1f;
     [SerializeField] private float _eyesDamageMultiplier = 1f;
-    [SerializeField] private Animator _blastAnimator;
-    [SerializeField] private Animator _shieldAnimator;
-    [SerializeField] private Animator _boomAnimator;
-    [SerializeField] private Animator _skdshhhAnimator;
-    [SerializeField] private Transform _skdshhhTransform;
-    [SerializeField] private Transform _boomTransform;
-    [SerializeField] private DamageNumberDisplay _damageDisplay;
-    [SerializeField] private Blast _blast;
+    [SerializeField] private ActionDisplayer _actionDisplayer;
+    // [SerializeField] private Animator _blastAnimator;
+    // [SerializeField] private Animator _shieldAnimator;
+    // [SerializeField] private Animator _boomAnimator;
+    // [SerializeField] private Animator _skdshhhAnimator;
+    // [SerializeField] private Transform _skdshhhTransform;
+    // [SerializeField] private Transform _boomTransform;
+    // [SerializeField] private DamageNumberDisplay _damageDisplay;
+    // [SerializeField] private Blast _blast;
 
     public event Action OnBlastDamagePhase;
     private ChosenTarget _targetPart;
@@ -69,53 +70,26 @@ public class BattleEyesEnemy : BattleUnit
 
     protected override IEnumerator PlayTakeDamageAnimation(int damage)
     {
-        _blast.Damage = damage;
-        _blast.BlastDamagePhase += _damageDisplay.ShowNumber;
-        _blast.BlastSignPhase += PlaySignAnimation;
+        // _blast.Damage = damage;
+        // _blast.BlastDamagePhase += _damageDisplay.ShowNumber;
+        // _blast.BlastSignPhase += PlaySignAnimation;
 
-        yield return StartCoroutine(PlayAnimation("Blast", _blastAnimator));
+        // yield return StartCoroutine(PlayAnimation("Blast", _blastAnimator));
 
-        _blast.BlastDamagePhase -= _damageDisplay.ShowNumber;
-        _blast.BlastSignPhase -= PlaySignAnimation;
+        // _blast.BlastDamagePhase -= _damageDisplay.ShowNumber;
+        // _blast.BlastSignPhase -= PlaySignAnimation;
+
+        yield return StartCoroutine(_actionDisplayer.ShowDamageOnEnemy(damage));
+
     }
 
-    public void PlaySignAnimation()
-    {
-        string clip;
-        Animator animator;
-        Transform transform;
 
-        int[] positionCoef = { 1, -1 };
-        string[] animationClip = { "Boom", "Skdshhh" };
-
-        int posIdx = UnityEngine.Random.Range(0, positionCoef.Length);
-        int clipIdx = UnityEngine.Random.Range(0, animationClip.Length);
-
-        clip = animationClip[clipIdx];
-
-        if (clip == "Boom")
-        {
-            animator = _boomAnimator;
-            transform = _boomTransform;
-            Vector3 rot = transform.eulerAngles;
-            rot.z *= (float)positionCoef[posIdx];
-            transform.eulerAngles = rot;
-        }
-        else
-        {
-            animator = _skdshhhAnimator;
-            transform = _skdshhhTransform;
-        }
-
-        transform.position = new Vector2(transform.position.x * positionCoef[posIdx], transform.position.y);
-
-        animator.Play(animationClip[clipIdx]);
-    }
 
     protected override IEnumerator PlayBlockAnimation()
     {
         // play animation
-        yield return StartCoroutine(PlayAnimation("Shield", _shieldAnimator));
+        // yield return StartCoroutine(PlayAnimation("Shield", _shieldAnimator));
+        yield return new WaitForSeconds(0.1f);
     }
 
     protected override void PlayDieAnimation()
