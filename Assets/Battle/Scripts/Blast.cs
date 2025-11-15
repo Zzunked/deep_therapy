@@ -1,17 +1,15 @@
 using System;
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
-public class Blast : MonoBehaviour
+public class Blast : ActionAnimation
 {
     public event Action BlastDamagePhase;
     public event Action BlastSignPhase;
-    private Animator _animator;
+    protected override string _animationName => "Blast";
 
-    private void Awake()
-    {
-        _animator = GetComponent<Animator>();
-    }
 
     public void OnBlastAnimationEnd()
     {
@@ -26,5 +24,18 @@ public class Blast : MonoBehaviour
     public void OnBlastSignPhase()
     {
         BlastSignPhase?.Invoke();
+    }
+
+    public IEnumerator PlayAnimationEnum()
+    {
+        _animator.Play(_animationName);
+
+        yield return null;
+
+        AnimatorStateInfo info = _animator.GetCurrentAnimatorStateInfo(0);
+
+        Debug.Log("Playing " + _animator + " animation for " + info.length + "s");
+
+        yield return new WaitForSeconds(info.length);
     }
 }

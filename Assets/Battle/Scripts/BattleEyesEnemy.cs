@@ -10,14 +10,6 @@ public class BattleEyesEnemy : BattleUnit
     [SerializeField] private float _bodyDamageMultiplier = 1f;
     [SerializeField] private float _eyesDamageMultiplier = 1f;
     [SerializeField] private ActionDisplayer _actionDisplayer;
-    // [SerializeField] private Animator _blastAnimator;
-    // [SerializeField] private Animator _shieldAnimator;
-    // [SerializeField] private Animator _boomAnimator;
-    // [SerializeField] private Animator _skdshhhAnimator;
-    // [SerializeField] private Transform _skdshhhTransform;
-    // [SerializeField] private Transform _boomTransform;
-    // [SerializeField] private DamageNumberDisplay _damageDisplay;
-    // [SerializeField] private Blast _blast;
 
     public event Action OnBlastDamagePhase;
     private ChosenTarget _targetPart;
@@ -70,16 +62,8 @@ public class BattleEyesEnemy : BattleUnit
 
     protected override IEnumerator PlayTakeDamageAnimation(int damage)
     {
-        // _blast.Damage = damage;
-        // _blast.BlastDamagePhase += _damageDisplay.ShowNumber;
-        // _blast.BlastSignPhase += PlaySignAnimation;
-
-        // yield return StartCoroutine(PlayAnimation("Blast", _blastAnimator));
-
-        // _blast.BlastDamagePhase -= _damageDisplay.ShowNumber;
-        // _blast.BlastSignPhase -= PlaySignAnimation;
-
-        yield return StartCoroutine(_actionDisplayer.ShowDamageOnEnemy(damage));
+        _actionDisplayer.Damage = damage;
+        yield return StartCoroutine(_actionDisplayer.ShowDamageOnEnemy());
 
     }
 
