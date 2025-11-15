@@ -16,6 +16,11 @@ public class ActionDisplayer : MonoBehaviour
     [SerializeField] private float _digitSpacing = 0.47f;
     [SerializeField] private float _scaleMultiplier = 1.7f;
     [SerializeField] private float _fadeDuration = 1.5f;
+
+    private Vector3 _crackPos = new Vector3(0.92f, -3.44f, 0);
+    private Vector3 _tentaclePos = new Vector3(2.89f, -3.44f, 0);
+
+
     public int Damage { get; set ; }
 
     private readonly List<GameObject> _spawnedDigits = new List<GameObject>();
@@ -77,6 +82,32 @@ public class ActionDisplayer : MonoBehaviour
 
         return _signsPrefabs[idx];
     }
+
+    public IEnumerator ShowDamageOnPlayer()
+    {
+        GameObject tentacleGO = Instantiate(_tentaclePrefab);
+        Tentacle tentacle = tentacleGO.GetComponent<Tentacle>();
+
+        tentacleGO.transform.position = _tentaclePos;
+        // tentacle.TentacleCrackPhase += ShowCrackOnPlayer;
+
+        yield return StartCoroutine(tentacle.PlayAnimationEnum());
+        yield return StartCoroutine(ShowCrackOnPlayer());
+    }
+
+    private IEnumerator ShowCrackOnPlayer()
+    {
+        GameObject crackGO = Instantiate(_crackPrefab);
+        Crack crack = crackGO.GetComponent<Crack>();
+        crackGO.transform.position = _crackPos;
+        yield return StartCoroutine(crack.PlayAnimationEnum());
+    }
+
+    private  void ShowShieldOnPlayer()
+    {
+
+    }
+    
 
     private void ShowDamageNumber()
     {
@@ -179,21 +210,5 @@ public class ActionDisplayer : MonoBehaviour
 
         // Clean up digits after fade
         DestroyDigits();
-    }
-
-
-    public void ShowTentacleOnPlayer()
-    {
-
-    }
-
-    public void ShowShieldOnPlayer()
-    {
-
-    }
-    
-    public void ShowCrackOnPlayer()
-    {
-        
     }
 }

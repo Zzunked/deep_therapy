@@ -211,7 +211,6 @@ public class BattleSystem : MonoBehaviour
     private IEnumerator PlayerAttack()
     {
         Debug.Log("Player started attack");
-        yield return new WaitForSeconds(1f);
 
         yield return StartCoroutine(_playerUnit.Attack());
 

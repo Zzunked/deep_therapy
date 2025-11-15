@@ -9,10 +9,12 @@ public class BattlePlayer : BattleUnit
     [SerializeField] private Animator _tentacleAnimator;
     [SerializeField] private Animator _crackAnimator;
     [SerializeField] private Animator _shieldAnimator;
+    [SerializeField] private ActionDisplayer _actionDisplayer;
+    [SerializeField] private float _cardSpeed = 10f;
+
     private Vector2 _centerPosition;
     private Vector2 _rightCornerPosition;
     private Transform _cardTransform;
-    private float _cardSpeed = 5f;
     
 
 
@@ -50,7 +52,8 @@ public class BattlePlayer : BattleUnit
     protected override IEnumerator PlayTakeDamageAnimation(int damage)
     {
         // play animation
-        yield return StartCoroutine(PlayTentacleAndCrack());
+        _actionDisplayer.Damage = damage;
+        yield return StartCoroutine(_actionDisplayer.ShowDamageOnPlayer());
 
     }
 

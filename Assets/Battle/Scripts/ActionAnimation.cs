@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+
 
 public class ActionAnimation : MonoBehaviour
 {
@@ -14,6 +16,20 @@ public class ActionAnimation : MonoBehaviour
 
     public void PlayAnimation()
     {
+        Debug.Log("Playing " + _animationName + " animation");
         _animator.Play(_animationName);
+    }
+
+    public IEnumerator PlayAnimationEnum()
+    {
+        _animator.Play(_animationName);
+
+        yield return null;
+
+        AnimatorStateInfo info = _animator.GetCurrentAnimatorStateInfo(0);
+
+        Debug.Log("Playing " + _animator + " animation for " + info.length + "s");
+
+        yield return new WaitForSeconds(info.length);
     }
 }

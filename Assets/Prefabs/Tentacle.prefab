@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5677636814286910388}
   - component: {fileID: 8372606628083613576}
   - component: {fileID: 5870464367396454517}
+  - component: {fileID: 6774311065392571387}
   m_Layer: 0
   m_Name: Tentacle
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 2108182113007141771}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.22894546, w: 0.9734393}
-  m_LocalPosition: {x: 3.26, y: 0.56, z: 0}
+  m_LocalPosition: {x: 2.89, y: -3.44, z: 0}
   m_LocalScale: {x: 1.7936448, y: 1.7936448, z: 1.7936448}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -102,7 +103,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 4
-  m_Sprite: {fileID: 21300000, guid: f353aff47da31471d9332d3e29fe2103, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -110,6 +111,18 @@ SpriteRenderer:
   m_Size: {x: 2.12, y: 2.2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6774311065392571387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2108182113007141771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c711cc92b75846abb63bda4f733765f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Tentacle

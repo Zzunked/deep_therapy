@@ -1,8 +1,4 @@
 using System;
-using System.Collections;
-using Unity.VisualScripting;
-using UnityEngine;
-
 
 public class Blast : ActionAnimation
 {
@@ -24,18 +20,5 @@ public class Blast : ActionAnimation
     public void OnBlastSignPhase()
     {
         BlastSignPhase?.Invoke();
-    }
-
-    public IEnumerator PlayAnimationEnum()
-    {
-        _animator.Play(_animationName);
-
-        yield return null;
-
-        AnimatorStateInfo info = _animator.GetCurrentAnimatorStateInfo(0);
-
-        Debug.Log("Playing " + _animator + " animation for " + info.length + "s");
-
-        yield return new WaitForSeconds(info.length);
     }
 }
