@@ -23,6 +23,3 @@ public class Tentacle : ActionAnimation
         TentacleCrackPhase?.Invoke();
     }
 }
-
-// Vector3(0.940999985,-3.45700002,0) - crack
-// Vector3(2.93000007,-3.42000008,0) - tentackle

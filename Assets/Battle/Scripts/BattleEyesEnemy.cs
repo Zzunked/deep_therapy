@@ -10,8 +10,17 @@ public class BattleEyesEnemy : BattleUnit
     [SerializeField] private float _bodyDamageMultiplier = 1f;
     [SerializeField] private float _eyesDamageMultiplier = 1f;
     [SerializeField] private ActionDisplayer _actionDisplayer;
+    [SerializeField] private float _blinkingDuration = 3f;
+    [SerializeField] private float _blinkingSpeed = 0.1f;
+    private SpriteRenderer _renderer;
 
     private ChosenTarget _targetPart;
+
+
+    private void Awake()
+    {
+        _renderer = gameObject.GetComponent<SpriteRenderer>();
+    }
 
 
     protected override int CalculateAttackDamage()
@@ -57,6 +66,7 @@ public class BattleEyesEnemy : BattleUnit
     protected override IEnumerator PlayTakeDamageAnimation(int damage)
     {
         _actionDisplayer.Damage = damage;
+        _actionDisplayer.Blink = Blink;
         yield return StartCoroutine(_actionDisplayer.ShowDamageOnEnemy());
 
     }
@@ -104,5 +114,33 @@ public class BattleEyesEnemy : BattleUnit
     public bool DidBlock()
     {
         return _isBlocking;
+    }
+
+    public void Blink()
+    {
+        StartCoroutine(BlinkAlpha());
+    }
+
+    public IEnumerator BlinkAlpha()
+    {
+        float elapsed = 0f;
+        bool visible = true;
+
+        while (elapsed < _blinkingDuration)
+        {
+            Color c = _renderer.color;
+            c.a = visible ? 0f : 1f;
+            _renderer.color = c;
+
+            visible = !visible;
+
+            yield return new WaitForSeconds(_blinkingSpeed);
+            elapsed += _blinkingSpeed;
+        }
+
+        // restore alpha
+        Color final = _renderer.color;
+        final.a = 1f;
+        _renderer.color = final;
     }
 }

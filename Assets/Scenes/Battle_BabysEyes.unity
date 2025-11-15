@@ -894,7 +894,7 @@ MonoBehaviour:
   _boomPrefab: {fileID: 1755095174411239132, guid: f2e832da82d2d487ba989a7aff7392f7, type: 3}
   _skdshhhPrefab: {fileID: 7646768575035477234, guid: ca8c94a25eb1c451bbfb43d74420bb3b, type: 3}
   _tentaclePrefab: {fileID: 2108182113007141771, guid: 7bc6af2ace9604f6a84cdbdfc56c3990, type: 3}
-  _crackPrefab: {fileID: 2459323799369282811, guid: ea8ee4c0dface45cbbbbbf000a1084db, type: 3}
+  _crackPrefab: {fileID: 2851501333652466955, guid: ea8ee4c0dface45cbbbbbf000a1084db, type: 3}
   _digitPrefab: {fileID: 1566930419612463744, guid: a5c9449ecd6cb482a8cc98538dbede62, type: 3}
   _digitSprites:
   - {fileID: 21300000, guid: 6261d125183a14148b50c788ef0b5564, type: 3}
@@ -2059,11 +2059,13 @@ MonoBehaviour:
   _isDead: 0
   _isBlocking: 0
   _baseAttackDamage: 1000
-  _blockProbability: 0.2
+  _blockProbability: 0
   _headDamageMultiplier: 1
   _bodyDamageMultiplier: 1
   _eyesDamageMultiplier: 1
   _actionDisplayer: {fileID: 710300396}
+  _blinkingDuration: 3
+  _blinkingSpeed: 0.1
 --- !u!95 &1947515733
 Animator:
   serializedVersion: 7

@@ -10,12 +10,16 @@ public class ActionDisplayer : MonoBehaviour
     [SerializeField] private GameObject _boomPrefab;
     [SerializeField] private GameObject _skdshhhPrefab;
     [SerializeField] private GameObject _tentaclePrefab;
-    [SerializeField] private GameObject _crackPrefab;
+    [SerializeField] private GameObject _crackPrefab; 
     [SerializeField] private GameObject _digitPrefab;
     [SerializeField] private Sprite[] _digitSprites;
     [SerializeField] private float _digitSpacing = 0.47f;
     [SerializeField] private float _scaleMultiplier = 1.7f;
     [SerializeField] private float _fadeDuration = 1.5f;
+
+    public delegate void StartBlinking();
+
+    public StartBlinking Blink;
 
     public int Damage { get; set ; }
     private readonly List<GameObject> _spawnedDigits = new List<GameObject>();
@@ -70,6 +74,7 @@ public class ActionDisplayer : MonoBehaviour
         blastGO.transform.position = _blastPos;
 
         blast.BlastDamagePhase += ShowDamageNumberOnEnemy;
+        blast.BlastDamagePhase += BlinkFromDamage;
         blast.BlastSignPhase += ShowDamageSignOnEnemy;
 
         yield return StartCoroutine(blast.PlayAnimationEnum());
@@ -123,7 +128,9 @@ public class ActionDisplayer : MonoBehaviour
     {
         GameObject crackGO = Instantiate(_crackPrefab);
         Crack crack = crackGO.GetComponent<Crack>();
+        Debug.Log("AAAAAAAAAAAAAAAAAAA");
         crackGO.transform.position = _crackPos;
+        
         yield return StartCoroutine(crack.PlayAnimationEnum());
     }
 
@@ -240,5 +247,10 @@ public class ActionDisplayer : MonoBehaviour
 
         // Clean up digits after fade
         DestroyDigits();
+    }
+
+    private void BlinkFromDamage()
+    {
+        Blink?.Invoke();
     }
 }
