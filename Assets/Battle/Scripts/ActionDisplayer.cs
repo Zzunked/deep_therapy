@@ -19,12 +19,11 @@ public class ActionDisplayer : MonoBehaviour
 
     private Vector3 _crackPos = new Vector3(0.92f, -3.44f, 0);
     private Vector3 _tentaclePos = new Vector3(2.89f, -3.44f, 0);
-
+    private List<(float x, float y)> _playerDamageNumPos = new(){ (-0.96f, -3.29f), (0.3f, -1.88f), (2.21f, -1.69f) };
+    private List<(float x, float y)> _enemyDamageNumPos = new(){ (-2f, 0f), (0f, 0f), (2f, 0f) };
 
     public int Damage { get; set ; }
-
     private readonly List<GameObject> _spawnedDigits = new List<GameObject>();
-
 
     private void OnDrawGizmos()
     {
@@ -57,10 +56,16 @@ public class ActionDisplayer : MonoBehaviour
 
         Blast blast = Instantiate(_blastPrefab);
 
-        blast.BlastDamagePhase += ShowDamageNumber;
+        blast.BlastDamagePhase += ShowDamageNumberOnEnemy;
         blast.BlastSignPhase += ShowDamageSignOnEnemy;
 
         yield return StartCoroutine(blast.PlayAnimationEnum());
+    }
+
+    private void ShowDamageNumberOnEnemy()
+    {
+        int randInx = Random.Range(0, _enemyDamageNumPos.Count);
+        ShowDamageNumber(_enemyDamageNumPos[randInx].x, _enemyDamageNumPos[randInx].y);
     }
 
     public void ShowShieldOnEnemy()
@@ -90,6 +95,7 @@ public class ActionDisplayer : MonoBehaviour
 
         tentacleGO.transform.position = _tentaclePos;
         // tentacle.TentacleCrackPhase += ShowCrackOnPlayer;
+        tentacle.TentacleDamagePhase += ShowDamageNumberOnPlayer;
 
         yield return StartCoroutine(tentacle.PlayAnimationEnum());
         yield return StartCoroutine(ShowCrackOnPlayer());
@@ -103,17 +109,21 @@ public class ActionDisplayer : MonoBehaviour
         yield return StartCoroutine(crack.PlayAnimationEnum());
     }
 
-    private  void ShowShieldOnPlayer()
+    private void ShowShieldOnPlayer()
     {
 
     }
     
-
-    private void ShowDamageNumber()
+    private void ShowDamageNumberOnPlayer()
     {
-        int[] numberPosX = { -2, 0, 2 };
-        int xPosInx = Random.Range(0, numberPosX.Length);
+        int randIdx = Random.Range(0, _playerDamageNumPos.Count);
+        ShowDamageNumber(_playerDamageNumPos[randIdx].x, _playerDamageNumPos[randIdx].y);
+    }
+    
+    
 
+    private void ShowDamageNumber(float xPos, float yPos)
+    {
         // Clean up old digits
         DestroyDigits();
         _spawnedDigits.Clear();
@@ -130,7 +140,7 @@ public class ActionDisplayer : MonoBehaviour
             GameObject digitGO = Instantiate(_digitPrefab);
             digitGO.GetComponent<SpriteRenderer>().sprite = sprite;
 
-            digitGO.transform.localPosition = new Vector2(numberPosX[xPosInx] + startX + i * _digitSpacing, 0f);
+            digitGO.transform.localPosition = new Vector2(xPos + startX + i * _digitSpacing, yPos);
 
             _spawnedDigits.Add(digitGO);
         }
