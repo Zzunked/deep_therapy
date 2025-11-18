@@ -29,7 +29,7 @@ public class BattleSystem : MonoBehaviour
     {
         _playerUnit.SetTargetUnit(_enemyUnit);
         _enemyUnit.SetTargetUnit(_playerUnit);
-        StartCoroutine(SetupBattle());
+        SetupBattle();
     }
 
     private void Update()
@@ -42,9 +42,8 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    IEnumerator SetupBattle()
+    void SetupBattle()
     {
-        yield return null;
         PlayersTurn();
         _actionBar.EnableActionButtons();
     }
