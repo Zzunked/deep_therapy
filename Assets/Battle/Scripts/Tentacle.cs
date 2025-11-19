@@ -1,12 +1,14 @@
 using System;
-using UnityEngine;
+using System.Threading.Tasks;
 
 
 public class Tentacle : ActionAnimation
 {
     protected override string _animationName => "Tentacle";
     public event Action TentacleDamagePhase;
-    public event Action TentacleCrackPhase;
+    // public event Action TentacleCrackPhase;
+    public TaskCompletionSource<bool> CrackTcs;
+
 
     public void OnTentacleAnimationEnd()
     {
@@ -20,6 +22,6 @@ public class Tentacle : ActionAnimation
 
     public void OnTentacleCrackPhase()
     {
-        TentacleCrackPhase?.Invoke();
+        CrackTcs?.TrySetResult(true);
     }
 }

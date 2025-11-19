@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Threading.Tasks;
 
 
 public class ActionAnimation : MonoBehaviour
@@ -31,5 +32,18 @@ public class ActionAnimation : MonoBehaviour
         Debug.Log("Playing " + _animator + " animation for " + info.length + "s");
 
         yield return new WaitForSeconds(info.length);
+    }
+
+    public async Task PlayAnimationAndWait()
+    {
+        _animator.Play(_animationName);
+
+        await Task.Yield();
+
+        AnimatorStateInfo info = _animator.GetCurrentAnimatorStateInfo(0);
+
+        Debug.Log("Playing " + _animator + " animation for " + info.length + "s");
+
+        await Awaitable.WaitForSecondsAsync(info.length);
     }
 }

@@ -1,10 +1,13 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 
 public class ActionDisplayer : MonoBehaviour
 {
+    [SerializeField] private GameObject _youDeadPrefab;
+    [SerializeField] private SpriteRenderer _youDeadBackgroundRenderer;
     [SerializeField] private GameObject _blastPrefab;
     [SerializeField] private GameObject _shieldPrefab;
     [SerializeField] private GameObject _boomPrefab;
@@ -38,6 +41,9 @@ public class ActionDisplayer : MonoBehaviour
     // Blast
     private Vector3 _blastPos = new Vector3(-0.04f, 1.54f, 0);
 
+    // YouDead
+    private Vector3 _youDeadPos = new Vector3(0, 0, 0);
+
     // Skdshhh sign
     private Vector3 _skdshhhRightPos = new Vector3(2.91f, 2.45f, 0);
     private float _skdshhhRightRotZ = 11f;
@@ -67,7 +73,7 @@ public class ActionDisplayer : MonoBehaviour
         _signPrefabs = signPrefabs;
     }
 
-    public IEnumerator ShowDamageOnEnemy()
+    public async Task ShowDamageOnEnemy()
     {
         GameObject blastGO = Instantiate(_blastPrefab);
         Blast blast = blastGO.GetComponent<Blast>();
@@ -77,22 +83,22 @@ public class ActionDisplayer : MonoBehaviour
         blast.BlastDamagePhase += BlinkFromDamage;
         blast.BlastSignPhase += ShowDamageSignOnEnemy;
 
-        yield return StartCoroutine(blast.PlayAnimationEnum());
+        await blast.PlayAnimationAndWait();
     }
 
-    private void ShowDamageNumberOnEnemy()
+    private async void ShowDamageNumberOnEnemy()
     {
         int randInx = Random.Range(0, _enemyDamageNumPos.Count);
-        ShowDamageNumber(_enemyDamageNumPos[randInx].x, _enemyDamageNumPos[randInx].y);
+        await ShowDamageNumber(_enemyDamageNumPos[randInx].x, _enemyDamageNumPos[randInx].y);
     }
 
-    public IEnumerator ShowShieldOnEnemy()
+    public async Task ShowShieldOnEnemy()
     {
         GameObject shieldGO = Instantiate(_shieldPrefab);
         Shield shield = shieldGO.GetComponent<Shield>();
         shieldGO.transform.position = _enemyShieldPos;
 
-        yield return StartCoroutine(shield.PlayAnimationEnum());
+        await shield.PlayAnimationAndWait();
     }
 
     private void ShowDamageSignOnEnemy()
@@ -111,27 +117,29 @@ public class ActionDisplayer : MonoBehaviour
         actionAnimation.PlayAnimation();
     }
 
-    public IEnumerator ShowDamageOnPlayer()
+    public async Task ShowDamageOnPlayer()
     {
         GameObject tentacleGO = Instantiate(_tentaclePrefab);
         Tentacle tentacle = tentacleGO.GetComponent<Tentacle>();
+        tentacle.CrackTcs = new TaskCompletionSource<bool>();
 
         tentacleGO.transform.position = _tentaclePos;
-        // tentacle.TentacleCrackPhase += ShowCrackOnPlayer;
         tentacle.TentacleDamagePhase += ShowDamageNumberOnPlayer;
 
-        yield return StartCoroutine(tentacle.PlayAnimationEnum());
-        yield return StartCoroutine(ShowCrackOnPlayer());
+
+        tentacle.PlayAnimation();
+        await tentacle.CrackTcs.Task;
+
+        await ShowCrackOnPlayer();
     }
 
-    private IEnumerator ShowCrackOnPlayer()
+    private async Task ShowCrackOnPlayer()
     {
         GameObject crackGO = Instantiate(_crackPrefab);
         Crack crack = crackGO.GetComponent<Crack>();
-        Debug.Log("AAAAAAAAAAAAAAAAAAA");
         crackGO.transform.position = _crackPos;
         
-        yield return StartCoroutine(crack.PlayAnimationEnum());
+        await crack.PlayAnimationAndWait();
     }
 
     public IEnumerator ShowShieldOnPlayer()
@@ -143,13 +151,13 @@ public class ActionDisplayer : MonoBehaviour
         yield return StartCoroutine(shield.PlayAnimationEnum());
     }
     
-    private void ShowDamageNumberOnPlayer()
+    private async void ShowDamageNumberOnPlayer()
     {
         int randIdx = Random.Range(0, _playerDamageNumPos.Count);
-        ShowDamageNumber(_playerDamageNumPos[randIdx].x, _playerDamageNumPos[randIdx].y);
+        await ShowDamageNumber(_playerDamageNumPos[randIdx].x, _playerDamageNumPos[randIdx].y);
     }
 
-    private void ShowDamageNumber(float xPos, float yPos)
+    private async Task ShowDamageNumber(float xPos, float yPos)
     {
         // Clean up old digits
         DestroyDigits();
@@ -171,7 +179,54 @@ public class ActionDisplayer : MonoBehaviour
 
             _spawnedDigits.Add(digitGO);
         }
-        StartCoroutine(ScaleAndFade());
+        await ScaleAndFade();
+    }
+
+    public async Task ShowWinScreen()
+    {
+        Debug.Log("YOU WIN");
+        await Awaitable.WaitForSecondsAsync(1);
+    }
+
+    public async Task ShowPlayerDeadScreen()
+    {
+        GameObject youDeadGO = Instantiate(_youDeadPrefab);
+        // Crack crack = crackGO.GetComponent<Crack>();
+        YouDead youDead = youDeadGO.GetComponent<YouDead>();
+        youDeadGO.transform.position = _youDeadPos;
+        _youDeadBackgroundRenderer.sortingOrder = 4;
+
+        await BackgroundFadeIn();
+
+        await youDead.PlayAnimationAndWait();
+
+        await Awaitable.WaitForSecondsAsync(5);
+
+        Destroy(youDeadGO);
+        _youDeadBackgroundRenderer.sortingOrder = -1;
+    }
+
+    private async Task BackgroundFadeIn()
+    {
+        float fadeDuration = 2f;
+        float elapsed = 0f;
+        Color startColor = Color.black;
+        Color endColor = _youDeadBackgroundRenderer.color; // original sprite color
+
+
+        // Temporarily set the sprite color to black
+        _youDeadBackgroundRenderer.color = startColor;
+
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / fadeDuration);
+            _youDeadBackgroundRenderer.color = Color.Lerp(startColor, endColor, t);
+            await Task.Yield();
+        }
+
+        // Ensure exact final color
+        _youDeadBackgroundRenderer.color = endColor;
     }
 
     private void DestroyDigits()
@@ -180,11 +235,8 @@ public class ActionDisplayer : MonoBehaviour
             Destroy(digit);
     }
 
-    public IEnumerator ScaleAndFade()
+    public async Task ScaleAndFade()
     {
-        if (_spawnedDigits == null || _spawnedDigits.Count == 0)
-            yield break;
-
         int count = _spawnedDigits.Count;
 
         // Cache transforms, renderers, and original positions
@@ -242,7 +294,7 @@ public class ActionDisplayer : MonoBehaviour
                 digits[i].localPosition = new Vector3(newX, initialPositions[i].y, initialPositions[i].z);
             }
 
-            yield return null;
+            await Task.Yield();
         }
 
         // Clean up digits after fade

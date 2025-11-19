@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Threading.Tasks;
 
 
 public class BattlePlayer : BattleUnit
@@ -46,13 +47,13 @@ public class BattlePlayer : BattleUnit
         return blockedDamage;
     }
 
-    protected override IEnumerator PlayTakeDamageAnimation(int damage)
-    {
-        // play animation
-        _actionDisplayer.Damage = damage;
-        yield return StartCoroutine(_actionDisplayer.ShowDamageOnPlayer());
+    // protected override IEnumerator PlayTakeDamageAnimation(int damage)
+    // {
+    //     // play animation
+    //     _actionDisplayer.Damage = damage;
+    //     yield return StartCoroutine(_actionDisplayer.ShowDamageOnPlayer());
 
-    }
+    // }
 
     // private IEnumerator PlayTentacleAndCrack()
     // {
@@ -77,31 +78,31 @@ public class BattlePlayer : BattleUnit
         _isBlocking = false;
     }
 
-    public IEnumerator MoveCardToCenter()
+    public async Task MoveCardToCenter()
     {
         Debug.Log("Card is moving towads center");
 
-        yield return StartCoroutine(MoveCard(_centerPosition));
+        await MoveCard(_centerPosition);
 
         Debug.Log("Card is in the center");
     }
 
-    public IEnumerator MoveCardToRight()
+    public async Task MoveCardToRight()
     {
         Debug.Log("Card is moving to right corner");
 
-        yield return StartCoroutine(MoveCard(_rightCornerPosition));
+        await MoveCard(_rightCornerPosition);
 
         Debug.Log("Card is in the right corner");
     }
 
-    private IEnumerator MoveCard(Vector2 targetPosition)
+    private async Task MoveCard(Vector2 targetPosition)
     {
         while (Vector2.Distance(_cardTransform.position, targetPosition) > 0.05f)
         {
             _cardTransform.position = Vector2.MoveTowards(_cardTransform.position, targetPosition, _cardSpeed * Time.deltaTime);
 
-            yield return null;
+            await Task.Yield();
         }
 
         // Snap to final position to avoid small offset

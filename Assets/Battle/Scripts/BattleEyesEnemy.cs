@@ -63,24 +63,24 @@ public class BattleEyesEnemy : BattleUnit
         return blockedDamage;
     }
 
-    protected override IEnumerator PlayTakeDamageAnimation(int damage)
-    {
-        _actionDisplayer.Damage = damage;
-        _actionDisplayer.Blink = Blink;
-        yield return StartCoroutine(_actionDisplayer.ShowDamageOnEnemy());
+    // protected override IEnumerator PlayTakeDamageAnimation(int damage)
+    // {
+    //     _actionDisplayer.Damage = damage;
+    //     _actionDisplayer.Blink = Blink;
+    //     yield return StartCoroutine(_actionDisplayer.ShowDamageOnEnemy());
 
-    }
+    // }
 
 
 
-    protected override IEnumerator PlayBlockAnimation()
-    {
-        // play animation
-        // yield return StartCoroutine(PlayAnimation("Shield", _shieldAnimator));
-        yield return StartCoroutine(_actionDisplayer.ShowShieldOnEnemy());
+    // protected override IEnumerator PlayBlockAnimation()
+    // {
+    //     // play animation
+    //     // yield return StartCoroutine(PlayAnimation("Shield", _shieldAnimator));
+    //     yield return StartCoroutine(_actionDisplayer.ShowShieldOnEnemy());
         
-        // yield return new WaitForSeconds(0.1f);
-    }
+    //     // yield return new WaitForSeconds(0.1f);
+    // }
 
     protected override void PlayDieAnimation()
     {
@@ -142,5 +142,50 @@ public class BattleEyesEnemy : BattleUnit
         Color final = _renderer.color;
         final.a = 1f;
         _renderer.color = final;
+    }
+
+    private float GetTakenDamgeMultiplier(ChosenTarget target)
+    {
+        float multiplier;
+
+        switch (target)
+        {
+            case ChosenTarget.Head:
+                multiplier = _headDamageMultiplier;
+                break;
+            case ChosenTarget.Body:
+                multiplier = _bodyDamageMultiplier;
+                break;
+            case ChosenTarget.Eyes:
+                multiplier = _eyesDamageMultiplier;
+                break;
+            default:
+                Debug.LogError("Target part was not chosen! Setting damage multiplier to 1.");
+                multiplier = 1f;
+                break;
+        }
+
+        return multiplier;
+    }
+
+    public void TakeDamage(int damage, ChosenTarget target)
+    {
+        float takenDamageMultiplier;
+
+        if (damage < 0)
+        {
+            Debug.LogError("TakeDamage damage is negative number: " + damage + ". Taking absolute value.");
+            damage = Mathf.Abs(damage);
+        }
+
+        takenDamageMultiplier = GetTakenDamgeMultiplier(target);
+
+        _health -= damage * takenDamageMultiplier;
+
+        if (_health <= 0)
+        {
+            Debug.Log(gameObject.name + " has died!");
+            _isDead = true;
+        }
     }
 }

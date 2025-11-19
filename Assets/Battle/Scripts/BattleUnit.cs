@@ -36,16 +36,46 @@ public class BattleUnit : MonoBehaviour
         _targetUnit = target;
     }
 
+    public int AttackDamage()
+    {
+        int attackDamage = CalculateAttackDamage();
+
+        Debug.Log(gameObject.name + " attacks with damage: " + attackDamage);
+
+        return attackDamage;
+    }
+
     public IEnumerator Attack()
     {
         int attackDamage = CalculateAttackDamage();
 
         Debug.Log(gameObject.name + " attacks with damage: " + attackDamage);
 
-        yield return StartCoroutine(_targetUnit.TakeDamage(attackDamage));
+        yield return StartCoroutine(_targetUnit._TakeDamage(attackDamage));
     }
 
-    public IEnumerator TakeDamage(int damage)
+    public void TakeDamage(int damage)
+    {
+        float takenDamageMultiplier = 1f;
+
+        if (damage < 0)
+        {
+            Debug.LogError("TakeDamage damage is negative number: " + damage + ". Taking absolute value.");
+            damage = Mathf.Abs(damage);
+        }
+
+        _health -= damage * takenDamageMultiplier;
+
+        Debug.Log(gameObject.name + " got damage: " + damage + ", health left: " + _health);
+
+        if (_health <= 0)
+        {
+            Debug.Log(gameObject.name + " has died!");
+            _isDead = true;
+        }
+    }
+
+    public IEnumerator _TakeDamage(int damage)
     {
         float takenDamageMultiplier = 1f;
 
@@ -61,7 +91,6 @@ public class BattleUnit : MonoBehaviour
         }
         else
         {
-            takenDamageMultiplier = CalculateTakenDamgeMultiplier();
             yield return StartCoroutine(PlayTakeDamageAnimation(damage));
 
             _health -= damage * takenDamageMultiplier;
