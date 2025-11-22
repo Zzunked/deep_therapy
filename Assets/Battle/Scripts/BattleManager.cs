@@ -98,7 +98,6 @@ public class BattleManager : MonoBehaviour
                 {
                     _actionBar.HideAndDisableAll();
                     await HandleAttackRound();
-                    print("Handled");
                 }
                 break;
 
@@ -128,17 +127,10 @@ public class BattleManager : MonoBehaviour
         int enemyDamage;
 
         _battleState = BattleState.EnemysTurn;
-        _enemyUnit.SetTargetPart(_target);
 
         await _playerUnit.MoveCardToCenter();
 
-        if (_enemyUnit.IsBlocking())
-        {
-            await _actionDisplayer.ShowShieldOnEnemy();
-            await _playerUnit.MoveCardToRight();
-            EndRound();
-        }
-        else
+        if (!_enemyUnit.IsBlocking())
         {
             playersDamage = _playerUnit.AttackDamage();
             _enemyUnit.TakeDamage(playersDamage, _target);
@@ -150,10 +142,10 @@ public class BattleManager : MonoBehaviour
 
                 enemyDamage = _enemyUnit.AttackDamage();
                 _playerUnit.TakeDamage(enemyDamage);
+                _actionDisplayer.Damage = enemyDamage;
 
                 if(!_playerUnit.IsDead())
                 {
-                    _actionDisplayer.Damage = enemyDamage;
                     await _actionDisplayer.ShowDamageOnPlayer();
                     await _playerUnit.MoveCardToRight();
                     EndRound();
@@ -162,6 +154,7 @@ public class BattleManager : MonoBehaviour
                 {
                     await _actionDisplayer.ShowDamageOnPlayer();
                     await _actionDisplayer.ShowPlayerDeadScreen();
+                    _battleState = BattleState.Defeat;
                     ResetBattle();
                 }
             }
@@ -173,7 +166,12 @@ public class BattleManager : MonoBehaviour
                 ResetBattle();
             }
         }
-        
+        else
+        {
+            await _actionDisplayer.ShowShieldOnEnemy();
+            await _playerUnit.MoveCardToRight();
+            EndRound();
+        }
     }
 
     private IEnumerator _HandleAttackRound()

@@ -1,11 +1,23 @@
-using System;
+using System.Threading.Tasks;
 
 public class Blast : ActionAnimation
 {
-    public event Action BlastDamagePhase;
-    public event Action BlastSignPhase;
     protected override string _animationName => "Blast";
+    private TaskCompletionSource<bool> _signTcs;
+    private TaskCompletionSource<bool> _damageTcs;
 
+    public TaskCompletionSource<bool> SignTcs
+    {
+        get => _signTcs;
+        set => _signTcs = value;
+        
+    }
+    public TaskCompletionSource<bool> DamageTcs
+    {
+        get => _damageTcs;
+        set => _damageTcs = value;
+        
+    }
 
     public void OnBlastAnimationEnd()
     {
@@ -14,11 +26,11 @@ public class Blast : ActionAnimation
 
     public void OnBlastDamagePhase()
     {
-        BlastDamagePhase?.Invoke();
+        _damageTcs?.TrySetResult(true);
     }
 
     public void OnBlastSignPhase()
     {
-        BlastSignPhase?.Invoke();
+        _signTcs?.TrySetResult(true);
     }
 }

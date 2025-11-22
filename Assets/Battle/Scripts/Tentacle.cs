@@ -5,10 +5,21 @@ using System.Threading.Tasks;
 public class Tentacle : ActionAnimation
 {
     protected override string _animationName => "Tentacle";
-    public event Action TentacleDamagePhase;
-    // public event Action TentacleCrackPhase;
-    public TaskCompletionSource<bool> CrackTcs;
+    private TaskCompletionSource<bool> _crackTcs;
+    private TaskCompletionSource<bool> _damageTcs;
 
+    public TaskCompletionSource<bool> CrackTcs
+    {
+        get => _crackTcs;
+        set => _crackTcs = value;
+        
+    }
+    public TaskCompletionSource<bool> DamageTcs
+    {
+        get => _damageTcs;
+        set => _damageTcs = value;
+        
+    }
 
     public void OnTentacleAnimationEnd()
     {
@@ -17,11 +28,12 @@ public class Tentacle : ActionAnimation
 
     public void OnTentacleDamagePhase()
     {
-        TentacleDamagePhase?.Invoke();
+        // TentacleDamagePhase?.Invoke();
+        _damageTcs?.TrySetResult(true);
     }
 
     public void OnTentacleCrackPhase()
     {
-        CrackTcs?.TrySetResult(true);
+        _crackTcs?.TrySetResult(true);
     }
 }

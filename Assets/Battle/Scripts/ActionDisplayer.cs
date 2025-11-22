@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 public class ActionDisplayer : MonoBehaviour
 {
+    [Header("Animation objects Settings")]
     [SerializeField] private GameObject _youDeadPrefab;
     [SerializeField] private SpriteRenderer _youDeadBackgroundRenderer;
     [SerializeField] private GameObject _blastPrefab;
@@ -13,16 +14,20 @@ public class ActionDisplayer : MonoBehaviour
     [SerializeField] private GameObject _boomPrefab;
     [SerializeField] private GameObject _skdshhhPrefab;
     [SerializeField] private GameObject _tentaclePrefab;
-    [SerializeField] private GameObject _crackPrefab; 
+    [SerializeField] private GameObject _crackPrefab;
     [SerializeField] private GameObject _digitPrefab;
     [SerializeField] private Sprite[] _digitSprites;
+
+    [Header("Damage digits Settings")]
     [SerializeField] private float _digitSpacing = 0.47f;
     [SerializeField] private float _scaleMultiplier = 1.7f;
-    [SerializeField] private float _fadeDuration = 1.5f;
+    [SerializeField] private float _fadeDuration = 1f;
 
-    public delegate void StartBlinking();
-
-    public StartBlinking Blink;
+    // Blink config
+    [Header("Blink Settings")]
+    [SerializeField] private int _enemyBlinkCount = 11;
+    [SerializeField] private float _enemyBlinkingSpeed = 0.1f;
+    [SerializeField] private SpriteRenderer _enemyRenderer;
 
     public int Damage { get; set ; }
     private readonly List<GameObject> _spawnedDigits = new List<GameObject>();
@@ -61,6 +66,7 @@ public class ActionDisplayer : MonoBehaviour
     private List<(float x, float y)> _enemyDamageNumPos = new() { (-2f, 0f), (0f, 0f), (2f, 0f) };
     private List<(GameObject prefab, Vector3 pos, float rotZ)> _signPrefabs;
 
+
     private void Awake()
     {
         List<(GameObject prefab, Vector3 pos, float rotZ)> signPrefabs = new()
@@ -75,18 +81,31 @@ public class ActionDisplayer : MonoBehaviour
 
     public async Task ShowDamageOnEnemy()
     {
+        var animationTasks = new Task[4];
         GameObject blastGO = Instantiate(_blastPrefab);
-        Blast blast = blastGO.GetComponent<Blast>();
+        var blast = blastGO.GetComponent<Blast>();
         blastGO.transform.position = _blastPos;
+        blast.DamageTcs = new TaskCompletionSource<bool>();
+        blast.SignTcs = new TaskCompletionSource<bool>();
 
-        blast.BlastDamagePhase += ShowDamageNumberOnEnemy;
-        blast.BlastDamagePhase += BlinkFromDamage;
-        blast.BlastSignPhase += ShowDamageSignOnEnemy;
+        // Start blast animation
+        animationTasks[0] = blast.PlayAnimationAndWait();
 
-        await blast.PlayAnimationAndWait();
+        // Show damage done to the enemy and start enemy to blink
+        // as soon as damage phase trigger is fired
+        await blast.DamageTcs.Task;
+        animationTasks[1] = ShowDamageNumberOnEnemy();
+        animationTasks[2] = BlinkEnemy();
+        
+        // Show damage sign on the enemy as soon as sign trigger is fired
+        await blast.SignTcs.Task;
+        animationTasks[3] = ShowDamageSignOnEnemy();
+
+        // Wait for all animations to complete
+        await Task.WhenAll(animationTasks);
     }
 
-    private async void ShowDamageNumberOnEnemy()
+    private async Task ShowDamageNumberOnEnemy()
     {
         int randInx = Random.Range(0, _enemyDamageNumPos.Count);
         await ShowDamageNumber(_enemyDamageNumPos[randInx].x, _enemyDamageNumPos[randInx].y);
@@ -101,7 +120,7 @@ public class ActionDisplayer : MonoBehaviour
         await shield.PlayAnimationAndWait();
     }
 
-    private void ShowDamageSignOnEnemy()
+    private async Task ShowDamageSignOnEnemy()
     {
         int randIdx = Random.Range(0, _signPrefabs.Count);
 
@@ -114,23 +133,32 @@ public class ActionDisplayer : MonoBehaviour
 
         actionAnimationGO.transform.position = pos;
         actionAnimationGO.transform.rotation = Quaternion.Euler(0, 0, rotZ);
-        actionAnimation.PlayAnimation();
+
+        await actionAnimation.PlayAnimationAndWait();
     }
 
     public async Task ShowDamageOnPlayer()
     {
+        var animationTasks = new Task[3];
         GameObject tentacleGO = Instantiate(_tentaclePrefab);
-        Tentacle tentacle = tentacleGO.GetComponent<Tentacle>();
+        var tentacle = tentacleGO.GetComponent<Tentacle>();
+        tentacleGO.transform.position = _tentaclePos;
+        tentacle.DamageTcs = new TaskCompletionSource<bool>();
         tentacle.CrackTcs = new TaskCompletionSource<bool>();
 
-        tentacleGO.transform.position = _tentaclePos;
-        tentacle.TentacleDamagePhase += ShowDamageNumberOnPlayer;
+        // Start tentacle animation
+        animationTasks[0] =  tentacle.PlayAnimationAndWait();
 
+        // Show damage done to player as soon as damage trigger is fired
+        await tentacle.DamageTcs.Task;
+        animationTasks[1] = ShowDamageNumberOnPlayer();
 
-        tentacle.PlayAnimation();
+        // Show crack animation as soon as crack trigger is fired
         await tentacle.CrackTcs.Task;
+        animationTasks[2] = ShowCrackOnPlayer();
 
-        await ShowCrackOnPlayer();
+        // Wait for all animations to complete
+        await Task.WhenAll(animationTasks);
     }
 
     private async Task ShowCrackOnPlayer()
@@ -151,7 +179,7 @@ public class ActionDisplayer : MonoBehaviour
         yield return StartCoroutine(shield.PlayAnimationEnum());
     }
     
-    private async void ShowDamageNumberOnPlayer()
+    private async Task ShowDamageNumberOnPlayer()
     {
         int randIdx = Random.Range(0, _playerDamageNumPos.Count);
         await ShowDamageNumber(_playerDamageNumPos[randIdx].x, _playerDamageNumPos[randIdx].y);
@@ -191,7 +219,6 @@ public class ActionDisplayer : MonoBehaviour
     public async Task ShowPlayerDeadScreen()
     {
         GameObject youDeadGO = Instantiate(_youDeadPrefab);
-        // Crack crack = crackGO.GetComponent<Crack>();
         YouDead youDead = youDeadGO.GetComponent<YouDead>();
         youDeadGO.transform.position = _youDeadPos;
         _youDeadBackgroundRenderer.sortingOrder = 4;
@@ -301,8 +328,29 @@ public class ActionDisplayer : MonoBehaviour
         DestroyDigits();
     }
 
-    private void BlinkFromDamage()
+    private async Task BlinkEnemy()
     {
-        Blink?.Invoke();
+        await BlinkAlpha(_enemyRenderer, _enemyBlinkCount, _enemyBlinkingSpeed);
+    }
+
+    private async Task BlinkAlpha(SpriteRenderer renderer, int blinkCount, float blinkingSpeed)
+    {
+        bool visible = true;
+
+        for(int i = 0; i < blinkCount; i++)
+        {
+            Color c = renderer.color;
+            c.a = visible ? 0f : 1f;
+            renderer.color = c;
+
+            visible = !visible;
+
+            await Awaitable.WaitForSecondsAsync(blinkingSpeed);
+        }
+
+        // restore alpha
+        Color final = renderer.color;
+        final.a = 1f;
+        renderer.color = final;
     }
 }

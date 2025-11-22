@@ -200,7 +200,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 1
   m_Sprite: {fileID: -7940284976815197978, guid: 90b9f538bdc9b420ab433cb562c9f094, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1000,7 +1000,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 403a995ac23634d89bf18f626257a8fd, type: 3}
   _digitSpacing: 0.47
   _scaleMultiplier: 1.7
-  _fadeDuration: 1.5
+  _fadeDuration: 1
+  _enemyBlinkCount: 11
+  _enemyBlinkingSpeed: 0.1
+  _enemyRenderer: {fileID: 1947515730}
 --- !u!1 &996412854
 GameObject:
   m_ObjectHideFlags: 0
