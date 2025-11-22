@@ -110,7 +110,7 @@ public class BattleManager : MonoBehaviour
 
             case ChousenAction.RunAway:
                 _actionBar.HideAndDisableAll();
-                StartCoroutine(HandleRunAwayRound());
+                await HandleRunAwayRound();
                 break;
 
             default:
@@ -170,6 +170,22 @@ public class BattleManager : MonoBehaviour
             await HandleDamageToPlayer();
         }
     }
+    private async Task HandleRunAwayRound()
+    {
+        if (_playerUnit.CanRunAway())
+        {
+            Debug.Log("Player ran away! Resetting the battle.");
+            ResetBattle();
+        }
+        else
+        {
+            Debug.Log("Player failed to ran away! Now Enemy attacks!");
+            _battleState = BattleState.EnemysTurn;
+            await _actionDisplayer.MoveCardToCenter();
+
+            await HandleDamageToPlayer();
+        }
+    }
 
     private async Task HandleDamageToPlayer()
     {
@@ -189,37 +205,6 @@ public class BattleManager : MonoBehaviour
             await _actionDisplayer.ShowPlayerDeadScreen();
             _battleState = BattleState.Defeat;
             ResetBattle();
-        }
-    }
-
-    private IEnumerator HandleRunAwayRound()
-    {
-        if (_playerUnit.CanRunAway())
-        {
-            Debug.Log("Player ran away! Resetting the battle.");
-            ResetBattle();
-        }
-        else
-        {
-            Debug.Log("Player failed to ran away! Now Enemy attacks!");
-
-            _battleState = BattleState.EnemysTurn;
-            _enemyUnit.SetTargetPart(_target);
-
-            // yield return StartCoroutine(_playerUnit.MoveCardToCenter());
-
-            yield return StartCoroutine(EnemyAttack());
-
-            if (_playerUnit.IsDead())
-            {
-                Debug.Log("Player is dead!");
-                ResetBattle();
-            }
-            else
-            {
-                // yield return StartCoroutine(_playerUnit.MoveCardToRight());
-                EndRound();
-            }
         }
     }
 
