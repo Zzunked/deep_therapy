@@ -15,26 +15,7 @@ public class ActionAnimation : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    public void PlayAnimation()
-    {
-        Debug.Log("Playing " + _animationName + " animation");
-        _animator.Play(_animationName);
-    }
-
-    public IEnumerator PlayAnimationEnum()
-    {
-        _animator.Play(_animationName);
-
-        yield return null;
-
-        AnimatorStateInfo info = _animator.GetCurrentAnimatorStateInfo(0);
-
-        Debug.Log("Playing " + _animator + " animation for " + info.length + "s");
-
-        yield return new WaitForSeconds(info.length);
-    }
-
-    public async Task PlayAnimationAndWait()
+    public async Task PlayAnimation()
     {
         _animator.Play(_animationName);
 

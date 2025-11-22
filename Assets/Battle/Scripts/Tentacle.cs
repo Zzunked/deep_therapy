@@ -28,7 +28,6 @@ public class Tentacle : ActionAnimation
 
     public void OnTentacleDamagePhase()
     {
-        // TentacleDamagePhase?.Invoke();
         _damageTcs?.TrySetResult(true);
     }
 

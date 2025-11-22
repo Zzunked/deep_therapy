@@ -1742,17 +1742,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d27acc0e48804464daaa9315b11fb163, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattlePlayer
-  _level: 0
   _health: 10000
+  _baseAttackDamage: 1000
   _maxAttackMultiplier: 1.5
   _minAttackMultiplier: 0.8
-  _maxBlockMultiplier: 0
-  _minBlockMultiplier: 0
   _isDead: 0
   _blockProbability: 0.8
-  _baseAttackDamage: 1000
-  _runAwayProbability: 0.5
-  _actionDisplayer: {fileID: 710300396}
+  _runAwayProbability: 0.3
 --- !u!1 &1863355054
 GameObject:
   m_ObjectHideFlags: 0
@@ -1941,21 +1937,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8735a75e218734cbe9c736ea5d0f28f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattleEyesEnemy
-  _level: 0
   _health: 10000
+  _baseAttackDamage: 1000
   _maxAttackMultiplier: 1.2
   _minAttackMultiplier: 0.7
-  _maxBlockMultiplier: 0
-  _minBlockMultiplier: 0
   _isDead: 0
-  _blockProbability: 0
-  _baseAttackDamage: 1000
+  _blockProbability: 0.3
   _headDamageMultiplier: 1
   _bodyDamageMultiplier: 1
   _eyesDamageMultiplier: 1
-  _actionDisplayer: {fileID: 710300396}
-  _blinkingDuration: 2.5
-  _blinkingSpeed: 0.1
 --- !u!95 &1947515733
 Animator:
   serializedVersion: 7

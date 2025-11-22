@@ -101,7 +101,7 @@ public class ActionDisplayer : MonoBehaviour
         blast.SignTcs = new TaskCompletionSource<bool>();
 
         // Start blast animation
-        animationTasks[0] = blast.PlayAnimationAndWait();
+        animationTasks[0] = blast.PlayAnimation();
 
         // Show damage done to the enemy and start enemy to blink
         // as soon as damage phase trigger is fired
@@ -129,7 +129,7 @@ public class ActionDisplayer : MonoBehaviour
         Shield shield = shieldGO.GetComponent<Shield>();
         shieldGO.transform.position = _enemyShieldPos;
 
-        await shield.PlayAnimationAndWait();
+        await shield.PlayAnimation();
     }
 
     private async Task ShowDamageSignOnEnemy()
@@ -146,7 +146,7 @@ public class ActionDisplayer : MonoBehaviour
         actionAnimationGO.transform.position = pos;
         actionAnimationGO.transform.rotation = Quaternion.Euler(0, 0, rotZ);
 
-        await actionAnimation.PlayAnimationAndWait();
+        await actionAnimation.PlayAnimation();
     }
 
     public async Task ShowDamageOnPlayer()
@@ -159,7 +159,7 @@ public class ActionDisplayer : MonoBehaviour
         tentacle.CrackTcs = new TaskCompletionSource<bool>();
 
         // Start tentacle animation
-        animationTasks[0] =  tentacle.PlayAnimationAndWait();
+        animationTasks[0] =  tentacle.PlayAnimation();
 
         // Show damage done to player as soon as damage trigger is fired
         await tentacle.DamageTcs.Task;
@@ -179,7 +179,7 @@ public class ActionDisplayer : MonoBehaviour
         Crack crack = crackGO.GetComponent<Crack>();
         crackGO.transform.position = _crackPos;
         
-        await crack.PlayAnimationAndWait();
+        await crack.PlayAnimation();
     }
 
     public async Task ShowShieldOnPlayer()
@@ -188,7 +188,7 @@ public class ActionDisplayer : MonoBehaviour
         Shield shield = shieldGO.GetComponent<Shield>();
         shieldGO.transform.position = _playerShieldPos;
 
-        await shield.PlayAnimationAndWait();
+        await shield.PlayAnimation();
     }
     
     private async Task ShowDamageNumberOnPlayer()
@@ -237,7 +237,7 @@ public class ActionDisplayer : MonoBehaviour
 
         await BackgroundFadeIn();
 
-        await youDead.PlayAnimationAndWait();
+        await youDead.PlayAnimation();
 
         await Awaitable.WaitForSecondsAsync(5);
 
