@@ -25,7 +25,7 @@ public class ActionDisplayer : MonoBehaviour
 
     // Blink config
     [Header("Blink Settings")]
-    [SerializeField] private int _enemyBlinkCount = 11;
+    [SerializeField] private int _enemyBlinkCount = 8;
     [SerializeField] private float _enemyBlinkingSpeed = 0.1f;
     [SerializeField] private SpriteRenderer _enemyRenderer;
 
@@ -75,7 +75,6 @@ public class ActionDisplayer : MonoBehaviour
     private List<(float x, float y)> _playerDamageNumPos = new(){ (-0.96f, -3.29f), (0.3f, -1.88f), (2.21f, -1.69f) };
     private List<(float x, float y)> _enemyDamageNumPos = new() { (-2f, 0f), (0f, 0f), (2f, 0f) };
     private List<SignPrefabConfig> _signPrefabs;
-
 
     private void Awake()
     {
@@ -266,7 +265,6 @@ public class ActionDisplayer : MonoBehaviour
         float elapsed = 0f;
         Color startColor = Color.black;
         Color endColor = _youDeadBackgroundRenderer.color; // original sprite color
-
 
         // Temporarily set the sprite color to black
         _youDeadBackgroundRenderer.color = startColor;

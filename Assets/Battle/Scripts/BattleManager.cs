@@ -14,35 +14,25 @@ enum BattleState
 
 public class BattleManager : MonoBehaviour
 {
-    [SerializeField] private ActionBar _actionBar;
+    [SerializeField] private ActionMenuManager _actionMenu;
     [SerializeField] private BattlePlayer _playerUnit;
     [SerializeField] private BattleEyesEnemy _enemyUnit;
     [SerializeField] private ActionDisplayer _actionDisplayer;
 
-    private BattleState _battleState = BattleState.PlayersTurn;
+    private BattleState _battleState;
     private int _round = 1;
-    private ChosenTarget _target;
-    private ChousenAction _action;
 
-    private void Start()
+    private void Awake()
     {
-        SetupBattle();
+        PlayersTurn();
     }
 
     private void Update()
     {
         if (_battleState == BattleState.PlayersTurn)
         {
-            _target = _actionBar.GetChosenTarget();
-            _action = _actionBar.GetChousenAction();
             CheckPlayersChoice();
         }
-    }
-
-    void SetupBattle()
-    {
-        PlayersTurn();
-        _actionBar.EnableActionButtons();
     }
 
     private void PlayersTurn()
@@ -60,7 +50,7 @@ public class BattleManager : MonoBehaviour
         Debug.Log("-------------------------------------------------------------------");
 
         _round++;
-        _actionBar.Reset();
+        _actionMenu.Reset();
         PlayersTurn();
     }
 
@@ -69,38 +59,31 @@ public class BattleManager : MonoBehaviour
         _round = 1;
         _playerUnit.Ressurect();
         _enemyUnit.Ressurect();
-        _actionBar.Reset();
+        _actionMenu.Reset();
         _actionDisplayer.SetCardDefaultPosition();
         PlayersTurn();
     }
 
     private async void CheckPlayersChoice()
     {
-        switch (_action)
+        ChousenAction action = _actionMenu.ChosenAction;
+
+        switch (action)
         {
             case ChousenAction.Attack:
-                if (_target == ChosenTarget.None && !_actionBar.IsTargetsEnabled())
-                {
-                    _actionBar.ShowTargets();
-                    _actionBar.EnableTargetButtons();
-                    _actionBar.DisableActionButtons();
-                }
+                ChosenTarget target = _actionMenu.ChosenTarget;
 
-                if (_target != ChosenTarget.None)
+                if (target != ChosenTarget.None)
                 {
-                    _actionBar.HideAndDisableAll();
-                    await HandleAttackRound();
+                    await HandleAttackRound(target);
                 }
                 break;
 
             case ChousenAction.Block:
-                _actionBar.HideAndDisableAll();
                 await HandleBlockRound();
-
                 break;
 
             case ChousenAction.RunAway:
-                _actionBar.HideAndDisableAll();
                 await HandleRunAwayRound();
                 break;
 
@@ -109,7 +92,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private async Task HandleAttackRound()
+    private async Task HandleAttackRound(ChosenTarget target)
     {
         float playersDamage;
 
@@ -120,17 +103,17 @@ public class BattleManager : MonoBehaviour
         if (!_enemyUnit.IsBlocking())
         {
             playersDamage = _playerUnit.AttackDamage();
-            _enemyUnit.TakeDamage(playersDamage, _target);
+            _enemyUnit.TakeDamage(playersDamage, target);
 
             if (!_enemyUnit.IsDead)
             {
                 _actionDisplayer.Damage = (int)playersDamage;
-                await _actionDisplayer.ShowDamageOnEnemy(_target);
+                await _actionDisplayer.ShowDamageOnEnemy(target);
                 await HandleDamageToPlayer();
             }
             else
             {
-                await _actionDisplayer.ShowDamageOnEnemy(_target);
+                await _actionDisplayer.ShowDamageOnEnemy(target);
                 await _actionDisplayer.ShowWinScreen();
                 _battleState = BattleState.Win;
                 ResetBattle();

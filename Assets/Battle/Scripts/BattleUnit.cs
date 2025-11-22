@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 
@@ -11,6 +12,7 @@ public class BattleUnit : MonoBehaviour
     [SerializeField] protected float _minAttackMultiplier;
     [SerializeField] protected bool _isDead = false;
     [SerializeField] private float _blockProbability = 0.5f;
+    private float _initialHealth;
 
     public bool IsDead
     {
@@ -25,9 +27,14 @@ public class BattleUnit : MonoBehaviour
         
     }
 
+    private void Awake()
+    {
+        _initialHealth = _health;
+    }
+
     public void Ressurect()
     {
-        Health = 100;
+        Health = _initialHealth;
         IsDead = false;
     }
 

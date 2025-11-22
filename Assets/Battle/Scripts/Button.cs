@@ -3,26 +3,36 @@ using UnityEngine;
 public class Button : MonoBehaviour
 {
     private SpriteRenderer _frameSpriteRenderer;
-    private bool _isMouseEntered = false;
+    [SerializeField] private bool _isMouseEntered = false;
+    [SerializeField] private bool _isEnabled = true;
     private bool _isClicked = false;
-    private bool _isEnabled = false;
 
     public bool IsClicked
     {
-        get { return _isClicked; }
-        set { _isClicked = value; }
+        get => _isClicked;
+        private set => _isClicked = value;
     }
 
-    void Start()
-    {
-        _frameSpriteRenderer = GetComponent<SpriteRenderer>();
+    void Awake()
+    {   
+        _frameSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         SetFrameInvisible();
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0) && _isMouseEntered && _isEnabled)
+        {
+            Debug.Log(gameObject.name + " CLICKED!");
+            IsClicked = true;
+        }
     }
 
     public void Disable()
     {
         _isEnabled = false;
         _isMouseEntered = false;
+        _isClicked = false;
     }
 
     public void Enable()
@@ -56,14 +66,5 @@ public class Button : MonoBehaviour
     public void SetFrameInvisible()
     {
         _frameSpriteRenderer.sortingOrder = -1;
-    }
-
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0) && _isMouseEntered && _isEnabled)
-        {
-            Debug.Log(gameObject.name + " CLICKED!");
-            _isClicked = true;
-        }
     }
 }
