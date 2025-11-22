@@ -125,12 +125,12 @@ public class BattleManager : MonoBehaviour
             if (!_enemyUnit.IsDead)
             {
                 _actionDisplayer.Damage = (int)playersDamage;
-                await _actionDisplayer.ShowDamageOnEnemy();
+                await _actionDisplayer.ShowDamageOnEnemy(_target);
                 await HandleDamageToPlayer();
             }
             else
             {
-                await _actionDisplayer.ShowDamageOnEnemy();
+                await _actionDisplayer.ShowDamageOnEnemy(_target);
                 await _actionDisplayer.ShowWinScreen();
                 _battleState = BattleState.Win;
                 ResetBattle();

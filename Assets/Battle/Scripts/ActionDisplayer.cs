@@ -1,8 +1,7 @@
 using UnityEngine;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnityEditor;
 
 
 public class ActionDisplayer : MonoBehaviour
@@ -49,11 +48,13 @@ public class ActionDisplayer : MonoBehaviour
     private Vector3 _tentaclePos = new Vector3(2.89f, -3.44f, 0);
 
     // Shield
-    private Vector3 _enemyShieldPos = new Vector3(0f, 1.65f, 0);
+    private Vector3 _enemyShieldPos = new Vector3(0f, 2.14f, 0);
     private Vector3 _playerShieldPos = new Vector3(0f, -3.47f, 0);
 
     // Blast
-    private Vector3 _blastPos = new Vector3(-0.04f, 1.54f, 0);
+    private Vector3 _blastBodyPos = new Vector3(-0.04f, 0.84f, 0);
+    private Vector3 _blastHeadPos = new Vector3(-0.09f, 2.62f, 0);
+    private Vector3 _blastEyesPos = new Vector3(-1.11f, 2.62f, 0);
 
     // YouDead
     private Vector3 _youDeadPos = new Vector3(0, 0, 0);
@@ -91,14 +92,28 @@ public class ActionDisplayer : MonoBehaviour
         _centerPosition = new Vector2(0, _cardTransform.position.y);
     }
 
-    public async Task ShowDamageOnEnemy()
+    public async Task ShowDamageOnEnemy(ChosenTarget target)
     {
         var animationTasks = new Task[4];
         GameObject blastGO = Instantiate(_blastPrefab);
         var blast = blastGO.GetComponent<Blast>();
-        blastGO.transform.position = _blastPos;
         blast.DamageTcs = new TaskCompletionSource<bool>();
         blast.SignTcs = new TaskCompletionSource<bool>();
+
+        switch (target)
+        {
+            case ChosenTarget.Eyes:
+                blastGO.transform.position = _blastEyesPos;
+                break;
+            case ChosenTarget.Head:
+                blastGO.transform.position = _blastHeadPos;
+                break;
+            case ChosenTarget.Body:
+                blastGO.transform.position = _blastBodyPos;
+                break;
+            default:
+                throw new ArgumentException("Unexpected target", nameof(target));
+        }
 
         // Start blast animation
         animationTasks[0] = blast.PlayAnimation();
@@ -119,7 +134,7 @@ public class ActionDisplayer : MonoBehaviour
 
     private async Task ShowDamageNumberOnEnemy()
     {
-        int randInx = Random.Range(0, _enemyDamageNumPos.Count);
+        int randInx = UnityEngine.Random.Range(0, _enemyDamageNumPos.Count);
         await ShowDamageNumber(_enemyDamageNumPos[randInx].x, _enemyDamageNumPos[randInx].y);
     }
 
@@ -134,7 +149,7 @@ public class ActionDisplayer : MonoBehaviour
 
     private async Task ShowDamageSignOnEnemy()
     {
-        int randIdx = Random.Range(0, _signPrefabs.Count);
+        int randIdx = UnityEngine.Random.Range(0, _signPrefabs.Count);
 
         GameObject actionAnimationPrefab = _signPrefabs[randIdx].Prefab;
         Vector3 pos = _signPrefabs[randIdx].Pos;
@@ -193,7 +208,7 @@ public class ActionDisplayer : MonoBehaviour
     
     private async Task ShowDamageNumberOnPlayer()
     {
-        int randIdx = Random.Range(0, _playerDamageNumPos.Count);
+        int randIdx = UnityEngine.Random.Range(0, _playerDamageNumPos.Count);
         await ShowDamageNumber(_playerDamageNumPos[randIdx].x, _playerDamageNumPos[randIdx].y);
     }
 

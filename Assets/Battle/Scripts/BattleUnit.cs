@@ -70,6 +70,6 @@ public class BattleUnit : MonoBehaviour
         float blockRate = UnityEngine.Random.Range(0f, 1f);
         Debug.Log(gameObject.name + " blockRate: " + blockRate + ", blockProbability: " + _blockProbability);
 
-        return (blockRate <= _blockProbability) ? true : false;;
+        return (blockRate <= _blockProbability) ? true : false;
     }
 }
