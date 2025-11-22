@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEditor;
 
 
 public class ActionDisplayer : MonoBehaviour
@@ -28,6 +29,14 @@ public class ActionDisplayer : MonoBehaviour
     [SerializeField] private int _enemyBlinkCount = 11;
     [SerializeField] private float _enemyBlinkingSpeed = 0.1f;
     [SerializeField] private SpriteRenderer _enemyRenderer;
+
+
+    // Player card
+    [Header("Players card Settings")]
+    [SerializeField] private Transform _cardTransform;
+    [SerializeField] private float _cardSpeed = 10f;
+    private Vector2 _centerPosition;
+    private Vector2 _rightCornerPosition;
 
     public int Damage { get; set ; }
     private readonly List<GameObject> _spawnedDigits = new List<GameObject>();
@@ -64,19 +73,22 @@ public class ActionDisplayer : MonoBehaviour
     // Damage numbers
     private List<(float x, float y)> _playerDamageNumPos = new(){ (-0.96f, -3.29f), (0.3f, -1.88f), (2.21f, -1.69f) };
     private List<(float x, float y)> _enemyDamageNumPos = new() { (-2f, 0f), (0f, 0f), (2f, 0f) };
-    private List<(GameObject prefab, Vector3 pos, float rotZ)> _signPrefabs;
+    private List<SignPrefabConfig> _signPrefabs;
 
 
     private void Awake()
     {
-        List<(GameObject prefab, Vector3 pos, float rotZ)> signPrefabs = new()
+        List<SignPrefabConfig> signPrefabs = new()
         {
-            (_boomPrefab, _boomRightPos, _boomRightRotZ),
-            (_boomPrefab, _boomLeftPos, _boomLeftRotZ),
-            (_skdshhhPrefab, _skdshhhRightPos, _skdshhhRightRotZ),
-            (_skdshhhPrefab, _skdshhhLeftPos, _skdshhhLeftRotZ)
+            new SignPrefabConfig(_boomPrefab, _boomRightPos, _boomRightRotZ),
+            new SignPrefabConfig(_boomPrefab, _boomLeftPos, _boomLeftRotZ),
+            new SignPrefabConfig(_skdshhhPrefab, _skdshhhRightPos, _skdshhhRightRotZ),
+            new SignPrefabConfig(_skdshhhPrefab, _skdshhhLeftPos, _skdshhhLeftRotZ),
         };
         _signPrefabs = signPrefabs;
+
+        _rightCornerPosition = _cardTransform.position;
+        _centerPosition = new Vector2(0, _cardTransform.position.y);
     }
 
     public async Task ShowDamageOnEnemy()
@@ -124,9 +136,9 @@ public class ActionDisplayer : MonoBehaviour
     {
         int randIdx = Random.Range(0, _signPrefabs.Count);
 
-        GameObject actionAnimationPrefab = _signPrefabs[randIdx].prefab;
-        Vector3 pos = _signPrefabs[randIdx].pos;
-        float rotZ = _signPrefabs[randIdx].rotZ;
+        GameObject actionAnimationPrefab = _signPrefabs[randIdx].Prefab;
+        Vector3 pos = _signPrefabs[randIdx].Pos;
+        float rotZ = _signPrefabs[randIdx].RotZ;
 
         GameObject actionAnimationGO = Instantiate(actionAnimationPrefab);
         ActionAnimation actionAnimation = actionAnimationGO.GetComponent<ActionAnimation>();
@@ -170,13 +182,13 @@ public class ActionDisplayer : MonoBehaviour
         await crack.PlayAnimationAndWait();
     }
 
-    public IEnumerator ShowShieldOnPlayer()
+    public async Task ShowShieldOnPlayer()
     {
         GameObject shieldGO = Instantiate(_shieldPrefab);
         Shield shield = shieldGO.GetComponent<Shield>();
         shieldGO.transform.position = _playerShieldPos;
 
-        yield return StartCoroutine(shield.PlayAnimationEnum());
+        await shield.PlayAnimationAndWait();
     }
     
     private async Task ShowDamageNumberOnPlayer()
@@ -352,5 +364,56 @@ public class ActionDisplayer : MonoBehaviour
         Color final = renderer.color;
         final.a = 1f;
         renderer.color = final;
+    }
+
+    public async Task MoveCardToCenter()
+    {
+        Debug.Log("Card is moving towads center");
+
+        await MoveCard(_centerPosition);
+
+        Debug.Log("Card is in the center");
+    }
+
+    public async Task MoveCardToRight()
+    {
+        Debug.Log("Card is moving to right corner");
+
+        await MoveCard(_rightCornerPosition);
+
+        Debug.Log("Card is in the right corner");
+    }
+
+    private async Task MoveCard(Vector2 targetPosition)
+    {
+        while (Vector2.Distance(_cardTransform.position, targetPosition) > 0.05f)
+        {
+            _cardTransform.position = Vector2.MoveTowards(_cardTransform.position, targetPosition, _cardSpeed * Time.deltaTime);
+
+            await Task.Yield();
+        }
+
+        // Snap to final position to avoid small offset
+        _cardTransform.position = targetPosition;
+    }
+
+    public void SetCardDefaultPosition()
+    {
+        _cardTransform.position = _rightCornerPosition;
+    }
+}
+
+
+struct SignPrefabConfig
+{
+    public GameObject Prefab;
+    public Vector3 Pos;
+    public float RotZ;
+
+    public SignPrefabConfig(GameObject prefab, Vector3 pos, float rotZ)
+    {
+        this.Prefab = prefab;
+        this.Pos = pos;
+        this.RotZ = rotZ;
     }
 }

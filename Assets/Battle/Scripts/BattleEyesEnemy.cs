@@ -5,7 +5,6 @@ using System;
 public class BattleEyesEnemy : BattleUnit
 {
     [SerializeField] private float _baseAttackDamage = 10f;
-    [SerializeField] private float _blockProbability = 0.5f;
     [SerializeField] private float _headDamageMultiplier = 1f;
     [SerializeField] private float _bodyDamageMultiplier = 1f;
     [SerializeField] private float _eyesDamageMultiplier = 1f;
@@ -100,20 +99,6 @@ public class BattleEyesEnemy : BattleUnit
     public void ResetTargetPart()
     {
         _targetPart = ChosenTarget.None;
-    }
-
-    public override bool IsBlocking()
-    {
-        float blockRate = UnityEngine.Random.Range(0f, 1f);
-        Debug.Log("Enemy blockRate: " + blockRate + ", blockProbability: " + _blockProbability);
-        _isBlocking = (blockRate <= _blockProbability) ? true : false;
-
-        return _isBlocking;
-    }
-
-    public bool DidBlock()
-    {
-        return _isBlocking;
     }
 
     public void Blink()

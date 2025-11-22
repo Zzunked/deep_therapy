@@ -12,7 +12,8 @@ public class BattleUnit : MonoBehaviour
     [SerializeField] protected float _maxBlockMultiplier;
     [SerializeField] protected float _minBlockMultiplier;
     [SerializeField] protected bool _isDead = false;
-    [SerializeField] protected bool _isBlocking = false;
+    [SerializeField] private float _blockProbability = 0.5f;
+
     protected BattleUnit _targetUnit;
 
     public bool IsDead()
@@ -191,8 +192,11 @@ public class BattleUnit : MonoBehaviour
         return blockedDamage;
     }
 
-    public virtual bool IsBlocking()
+    public bool IsBlocking()
     {
-        return _isBlocking;
+        float blockRate = UnityEngine.Random.Range(0f, 1f);
+        Debug.Log(gameObject.name + " blockRate: " + blockRate + ", blockProbability: " + _blockProbability);
+
+        return (blockRate <= _blockProbability) ? true : false;;
     }
 }

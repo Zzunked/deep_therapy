@@ -1004,6 +1004,8 @@ MonoBehaviour:
   _enemyBlinkCount: 11
   _enemyBlinkingSpeed: 0.1
   _enemyRenderer: {fileID: 1947515730}
+  _cardTransform: {fileID: 1582224802}
+  _cardSpeed: 10
 --- !u!1 &996412854
 GameObject:
   m_ObjectHideFlags: 0
@@ -1747,11 +1749,10 @@ MonoBehaviour:
   _maxBlockMultiplier: 0
   _minBlockMultiplier: 0
   _isDead: 0
-  _isBlocking: 0
+  _blockProbability: 0.8
   _baseAttackDamage: 1000
   _runAwayProbability: 0.5
   _actionDisplayer: {fileID: 710300396}
-  _cardSpeed: 8
 --- !u!1 &1863355054
 GameObject:
   m_ObjectHideFlags: 0
@@ -1947,9 +1948,8 @@ MonoBehaviour:
   _maxBlockMultiplier: 0
   _minBlockMultiplier: 0
   _isDead: 0
-  _isBlocking: 0
-  _baseAttackDamage: 1000
   _blockProbability: 0
+  _baseAttackDamage: 1000
   _headDamageMultiplier: 1
   _bodyDamageMultiplier: 1
   _eyesDamageMultiplier: 1

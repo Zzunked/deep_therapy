@@ -8,20 +8,7 @@ public class BattlePlayer : BattleUnit
     [SerializeField] private float _baseAttackDamage = 10f;
     [SerializeField] private float _runAwayProbability = 0.5f;
     [SerializeField] private ActionDisplayer _actionDisplayer;
-    [SerializeField] private float _cardSpeed = 10f;
 
-    private Vector2 _centerPosition;
-    private Vector2 _rightCornerPosition;
-    private Transform _cardTransform;
-    
-
-
-    private void Start()
-    {
-        _cardTransform = GetComponent<Transform>();
-        _rightCornerPosition = _cardTransform.position;
-        _centerPosition = new Vector2(0, _cardTransform.position.y);
-    }
 
     protected override int CalculateAttackDamage()
     {
@@ -62,57 +49,11 @@ public class BattlePlayer : BattleUnit
     //     // yield return StartCoroutine(PlayAnimation("Crack", _crackAnimator));
     // }
 
-    protected override IEnumerator PlayBlockAnimation()
-    {
-        // play animation
-        yield return StartCoroutine(_actionDisplayer.ShowShieldOnPlayer());
-    }
-
-    public void SetBlocking()
-    {
-        _isBlocking = true;
-    }
-
-    public void ResetBlocking()
-    {
-        _isBlocking = false;
-    }
-
-    public async Task MoveCardToCenter()
-    {
-        Debug.Log("Card is moving towads center");
-
-        await MoveCard(_centerPosition);
-
-        Debug.Log("Card is in the center");
-    }
-
-    public async Task MoveCardToRight()
-    {
-        Debug.Log("Card is moving to right corner");
-
-        await MoveCard(_rightCornerPosition);
-
-        Debug.Log("Card is in the right corner");
-    }
-
-    private async Task MoveCard(Vector2 targetPosition)
-    {
-        while (Vector2.Distance(_cardTransform.position, targetPosition) > 0.05f)
-        {
-            _cardTransform.position = Vector2.MoveTowards(_cardTransform.position, targetPosition, _cardSpeed * Time.deltaTime);
-
-            await Task.Yield();
-        }
-
-        // Snap to final position to avoid small offset
-        _cardTransform.position = targetPosition;
-    }
-
-    public void SetDefaultPosition()
-    {
-        _cardTransform.position = _rightCornerPosition;
-    }
+    // protected override IEnumerator PlayBlockAnimation()
+    // {
+    //     // play animation
+    //     yield return StartCoroutine(_actionDisplayer.ShowShieldOnPlayer());
+    // }
 
     public bool CanRunAway()
     {

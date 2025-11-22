@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Threading.Tasks;
 using System;
+using Unity.VisualScripting;
 
 
 enum BattleState
@@ -77,7 +78,7 @@ public class BattleManager : MonoBehaviour
         _playerUnit.Ressurect();
         _enemyUnit.Ressurect();
         _actionBar.Reset();
-        _playerUnit.SetDefaultPosition();
+        _actionDisplayer.SetCardDefaultPosition();
         StopAllCoroutines();
         PlayersTurn();
     }
@@ -102,12 +103,8 @@ public class BattleManager : MonoBehaviour
                 break;
 
             case ChousenAction.Block:
-                _playerUnit.SetBlocking();
                 _actionBar.HideAndDisableAll();
-
-                Debug.Log("Player is blocking!");
-
-                StartCoroutine(HandleBlockRound());
+                await HandleBlockRound();
 
                 break;
 
@@ -124,11 +121,10 @@ public class BattleManager : MonoBehaviour
     private async Task HandleAttackRound()
     {
         int playersDamage;
-        int enemyDamage;
 
         _battleState = BattleState.EnemysTurn;
 
-        await _playerUnit.MoveCardToCenter();
+        await _actionDisplayer.MoveCardToCenter();
 
         if (!_enemyUnit.IsBlocking())
         {
@@ -139,24 +135,7 @@ public class BattleManager : MonoBehaviour
             {
                 _actionDisplayer.Damage = playersDamage;
                 await _actionDisplayer.ShowDamageOnEnemy();
-
-                enemyDamage = _enemyUnit.AttackDamage();
-                _playerUnit.TakeDamage(enemyDamage);
-                _actionDisplayer.Damage = enemyDamage;
-
-                if(!_playerUnit.IsDead())
-                {
-                    await _actionDisplayer.ShowDamageOnPlayer();
-                    await _playerUnit.MoveCardToRight();
-                    EndRound();
-                }
-                else
-                {
-                    await _actionDisplayer.ShowDamageOnPlayer();
-                    await _actionDisplayer.ShowPlayerDeadScreen();
-                    _battleState = BattleState.Defeat;
-                    ResetBattle();
-                }
+                await HandleDamageToPlayer();
             }
             else
             {
@@ -169,67 +148,48 @@ public class BattleManager : MonoBehaviour
         else
         {
             await _actionDisplayer.ShowShieldOnEnemy();
-            await _playerUnit.MoveCardToRight();
+            await _actionDisplayer.MoveCardToRight();
             EndRound();
         }
     }
 
-    private IEnumerator _HandleAttackRound()
+    private async Task HandleBlockRound()
     {
         _battleState = BattleState.EnemysTurn;
-        _enemyUnit.SetTargetPart(_target);
 
-        // yield return StartCoroutine(_playerUnit.MoveCardToCenter());
+        await _actionDisplayer.MoveCardToCenter();
 
-        yield return StartCoroutine(PlayerAttack());
-
-        if (_enemyUnit.IsDead())
+        if(_playerUnit.IsBlocking())
         {
-            Debug.Log("Enemy is dead");
-            ResetBattle();
+            await _actionDisplayer.ShowShieldOnPlayer();
+            await _actionDisplayer.MoveCardToRight();
+            EndRound();
         }
         else
         {
-            if (!_enemyUnit.DidBlock())
-            {
-                yield return StartCoroutine(EnemyAttack());
-
-                if (_playerUnit.IsDead())
-                {
-                    Debug.Log("Player is dead!");
-
-                    // yield return StartCoroutine(ShowPlayerDeadScreen());
-
-                    ResetBattle();
-                }
-                else
-                {
-                    // yield return StartCoroutine(_playerUnit.MoveCardToRight());
-                    EndRound();
-                }
-            }
-            else
-            {
-                // yield return StartCoroutine(_playerUnit.MoveCardToRight());
-                EndRound();
-            }
+            await HandleDamageToPlayer();
         }
     }
 
-    private IEnumerator HandleBlockRound()
+    private async Task HandleDamageToPlayer()
     {
-        _battleState = BattleState.EnemysTurn;
-        _enemyUnit.SetTargetPart(_target);
+        int enemyDamage = _enemyUnit.AttackDamage();
+        _playerUnit.TakeDamage(enemyDamage);
+        _actionDisplayer.Damage = enemyDamage;
 
-        // yield return StartCoroutine(_playerUnit.MoveCardToCenter());
-
-        yield return StartCoroutine(EnemyAttack());
-
-        // yield return StartCoroutine(_playerUnit.MoveCardToRight());
-
-        _playerUnit.ResetBlocking();
-
-        EndRound();
+        if(!_playerUnit.IsDead())
+        {
+            await _actionDisplayer.ShowDamageOnPlayer();
+            await _actionDisplayer.MoveCardToRight();
+            EndRound();
+        }
+        else
+        {
+            await _actionDisplayer.ShowDamageOnPlayer();
+            await _actionDisplayer.ShowPlayerDeadScreen();
+            _battleState = BattleState.Defeat;
+            ResetBattle();
+        }
     }
 
     private IEnumerator HandleRunAwayRound()
