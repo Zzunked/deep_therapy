@@ -1,8 +1,8 @@
 public class ActionButton : Button
 {
-    private ChousenAction _action;
+    private PlayersAction _action;
 
-    public ChousenAction Action
+    public PlayersAction Action
     {
         get => _action;
         set => _action = value;

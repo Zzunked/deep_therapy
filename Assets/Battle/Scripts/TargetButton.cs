@@ -1,8 +1,8 @@
 public class TargetButton : Button
 {
-    private ChosenTarget _target;
+    private PlayersTarget _target;
 
-    public ChosenTarget Target
+    public PlayersTarget Target
     {
         get => _target;
         set => _target = value;

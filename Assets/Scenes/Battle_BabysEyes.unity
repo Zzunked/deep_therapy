@@ -423,10 +423,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d720c5bac95f141d5a5fbb3691bb2015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ActionsBar
-  _actionButtonPrefab: {fileID: 207182909302683942, guid: 648153ece34e84572bb651d3b350cbbb, type: 3}
-  _targetButtonPrefab: {fileID: 773586012023604392, guid: 34657e2263d184db1a8e51920450e757, type: 3}
-  _actionsPrefab: {fileID: 1692495998281772589, guid: 74499b80803b3428e90ef954acfa91f2, type: 3}
-  _targetsPrefab: {fileID: 5581494182046650637, guid: 37bea733365964a259c8e41c82e6963e, type: 3}
+  _actionBarPrefab: {fileID: 6523167536194700098, guid: b34c84fa3e9f247b2827b39653d77872, type: 3}
+  _targetBarPrefab: {fileID: 505671075182364251, guid: 4dd1aa400cf934fc185669dc923294fd, type: 3}
 --- !u!4 &579521161
 Transform:
   m_ObjectHideFlags: 0

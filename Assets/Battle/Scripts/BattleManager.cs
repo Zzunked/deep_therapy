@@ -66,24 +66,24 @@ public class BattleManager : MonoBehaviour
 
     private async void CheckPlayersChoice()
     {
-        ChousenAction action = _actionMenu.ChosenAction;
+        PlayersAction action = _actionMenu.ChosenAction;
 
         switch (action)
         {
-            case ChousenAction.Attack:
-                ChosenTarget target = _actionMenu.ChosenTarget;
+            case PlayersAction.Attack:
+                PlayersTarget target = _actionMenu.ChosenTarget;
 
-                if (target != ChosenTarget.None)
+                if (target != PlayersTarget.None)
                 {
                     await HandleAttackRound(target);
                 }
                 break;
 
-            case ChousenAction.Block:
+            case PlayersAction.Block:
                 await HandleBlockRound();
                 break;
 
-            case ChousenAction.RunAway:
+            case PlayersAction.RunAway:
                 await HandleRunAwayRound();
                 break;
 
@@ -92,7 +92,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private async Task HandleAttackRound(ChosenTarget target)
+    private async Task HandleAttackRound(PlayersTarget target)
     {
         float playersDamage;
 

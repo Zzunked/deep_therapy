@@ -8,19 +8,19 @@ public class BattleEyesEnemy : BattleUnit
     [SerializeField] private float _bodyDamageMultiplier = 1f;
     [SerializeField] private float _eyesDamageMultiplier = 1f;
 
-    private float GetTakenDamgeMultiplier(ChosenTarget target)
+    private float GetTakenDamgeMultiplier(PlayersTarget target)
     {
         float multiplier;
 
         switch (target)
         {
-            case ChosenTarget.Head:
+            case PlayersTarget.Head:
                 multiplier = _headDamageMultiplier;
                 break;
-            case ChosenTarget.Body:
+            case PlayersTarget.Body:
                 multiplier = _bodyDamageMultiplier;
                 break;
-            case ChosenTarget.Eyes:
+            case PlayersTarget.Eyes:
                 multiplier = _eyesDamageMultiplier;
                 break;
             default:
@@ -30,7 +30,7 @@ public class BattleEyesEnemy : BattleUnit
         return multiplier;
     }
 
-    public void TakeDamage(float damage, ChosenTarget target)
+    public void TakeDamage(float damage, PlayersTarget target)
     {
         float takenDamageMultiplier;
 

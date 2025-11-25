@@ -91,7 +91,7 @@ public class ActionDisplayer : MonoBehaviour
         _centerPosition = new Vector2(0, _cardTransform.position.y);
     }
 
-    public async Task ShowDamageOnEnemy(ChosenTarget target)
+    public async Task ShowDamageOnEnemy(PlayersTarget target)
     {
         var animationTasks = new Task[4];
         GameObject blastGO = Instantiate(_blastPrefab);
@@ -101,13 +101,13 @@ public class ActionDisplayer : MonoBehaviour
 
         switch (target)
         {
-            case ChosenTarget.Eyes:
+            case PlayersTarget.Eyes:
                 blastGO.transform.position = _blastEyesPos;
                 break;
-            case ChosenTarget.Head:
+            case PlayersTarget.Head:
                 blastGO.transform.position = _blastHeadPos;
                 break;
-            case ChosenTarget.Body:
+            case PlayersTarget.Body:
                 blastGO.transform.position = _blastBodyPos;
                 break;
             default:

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Button : MonoBehaviour
@@ -6,6 +7,7 @@ public class Button : MonoBehaviour
     [SerializeField] private bool _isMouseEntered = false;
     [SerializeField] private bool _isEnabled = true;
     private bool _isClicked = false;
+    public Action<Button> OnClick;
 
     public bool IsClicked
     {
@@ -24,6 +26,7 @@ public class Button : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && _isMouseEntered && _isEnabled)
         {
             Debug.Log(gameObject.name + " CLICKED!");
+            OnClick?.Invoke(this);
             IsClicked = true;
         }
     }
