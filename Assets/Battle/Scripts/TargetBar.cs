@@ -18,8 +18,7 @@ public class TargetBar : MonoBehaviour
 
     public void Init(List<PlayersTarget> targets)
     {
-        var buttons = new List<TargetButton> {_button1, _button2, _button3};
-        _buttons = buttons;
+        _buttons = new List<TargetButton> {_button1, _button2, _button3};
 
         if (targets.Count != _buttons.Count)
             throw new ArgumentException("Number of targets does not match number of buttons");

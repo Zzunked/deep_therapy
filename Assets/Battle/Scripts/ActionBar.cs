@@ -17,8 +17,7 @@ public class ActionBar : MonoBehaviour
 
     public void Init(List<PlayersAction> actions)
     {
-        var buttons = new List<ActionButton> {_button1, _button2, _button3};
-        _buttons = buttons;
+        _buttons = new List<ActionButton> {_button1, _button2, _button3};
 
         if (actions.Count != _buttons.Count)
             throw new ArgumentException("Number of actions does not match number of buttons");
@@ -43,7 +42,7 @@ public class ActionBar : MonoBehaviour
         foreach(ActionButton btn in _buttons)
         {
             btn.OnClick -= SetClickedAction;
-            
+
             if(btn.IsClicked)
             {
                 btn.SetFrameVisible();
