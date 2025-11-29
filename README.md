@@ -1,4 +1,4 @@
-# Deap Therapy
+# Deep Therapy
 Unity based 2d rpg game.
 
 ## Build

@@ -493,6 +493,7 @@ MonoBehaviour:
   _tentaclePrefab: {fileID: 2108182113007141771, guid: 7bc6af2ace9604f6a84cdbdfc56c3990, type: 3}
   _crackPrefab: {fileID: 2851501333652466955, guid: ea8ee4c0dface45cbbbbbf000a1084db, type: 3}
   _digitPrefab: {fileID: 1566930419612463744, guid: a5c9449ecd6cb482a8cc98538dbede62, type: 3}
+  _victoryPrefab: {fileID: 8268271505708275980, guid: 4cff6ddbde1d547acab2c9671f8abbfc, type: 3}
   _digitSprites:
   - {fileID: 21300000, guid: 6261d125183a14148b50c788ef0b5564, type: 3}
   - {fileID: 21300000, guid: 60c0ebd2228a24a899623d8f13e6ebf2, type: 3}
@@ -508,6 +509,7 @@ MonoBehaviour:
   _scaleMultiplier: 1.7
   _fadeDuration: 1
   _enemyBlinkCount: 8
+  _enemyBlinkCountLast: 15
   _enemyBlinkingSpeed: 0.1
   _enemyRenderer: {fileID: 1947515730}
   _cardTransform: {fileID: 1582224802}
@@ -649,7 +651,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattlePlayer
   _health: 10000
-  _baseAttackDamage: 1000
+  _baseAttackDamage: 100000
   _maxAttackMultiplier: 1.5
   _minAttackMultiplier: 0.8
   _isDead: 0
@@ -848,7 +850,7 @@ MonoBehaviour:
   _maxAttackMultiplier: 1.2
   _minAttackMultiplier: 0.7
   _isDead: 0
-  _blockProbability: 0.3
+  _blockProbability: 0
   _headDamageMultiplier: 1
   _bodyDamageMultiplier: 1
   _eyesDamageMultiplier: 1

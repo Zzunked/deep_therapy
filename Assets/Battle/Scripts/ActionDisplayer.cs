@@ -16,6 +16,7 @@ public class ActionDisplayer : MonoBehaviour
     [SerializeField] private GameObject _tentaclePrefab;
     [SerializeField] private GameObject _crackPrefab;
     [SerializeField] private GameObject _digitPrefab;
+    [SerializeField] private GameObject _victoryPrefab;
     [SerializeField] private Sprite[] _digitSprites;
 
     [Header("Damage digits Settings")]
@@ -26,6 +27,7 @@ public class ActionDisplayer : MonoBehaviour
     // Blink config
     [Header("Blink Settings")]
     [SerializeField] private int _enemyBlinkCount = 8;
+    [SerializeField] private int _enemyBlinkCountLast = 8;
     [SerializeField] private float _enemyBlinkingSpeed = 0.1f;
     [SerializeField] private SpriteRenderer _enemyRenderer;
 
@@ -59,6 +61,9 @@ public class ActionDisplayer : MonoBehaviour
     // YouDead
     private Vector3 _youDeadPos = new Vector3(0, 0, 0);
 
+    // Victory
+    private Vector3 _victoryPos = new Vector3(-0.4f, -0.85f, 0);
+
     // Skdshhh sign
     private Vector3 _skdshhhRightPos = new Vector3(2.91f, 2.45f, 0);
     private float _skdshhhRightRotZ = 11f;
@@ -91,13 +96,23 @@ public class ActionDisplayer : MonoBehaviour
         _centerPosition = new Vector2(0, _cardTransform.position.y);
     }
 
-    public async Task ShowDamageOnEnemy(PlayersTarget target)
+    public void Reset()
+    {
+        Color enemyColor = _enemyRenderer.color;
+        enemyColor.a = 1;
+        _enemyRenderer.color = enemyColor;
+
+        SetCardDefaultPosition();
+    }
+
+    public async Task ShowDamageOnEnemy(PlayersTarget target, bool isLastDamage)
     {
         var animationTasks = new Task[4];
         GameObject blastGO = Instantiate(_blastPrefab);
         var blast = blastGO.GetComponent<Blast>();
         blast.DamageTcs = new TaskCompletionSource<bool>();
         blast.SignTcs = new TaskCompletionSource<bool>();
+        int blinkCount = (isLastDamage) ? _enemyBlinkCountLast : _enemyBlinkCount;
 
         switch (target)
         {
@@ -121,7 +136,7 @@ public class ActionDisplayer : MonoBehaviour
         // as soon as damage phase trigger is fired
         await blast.DamageTcs.Task;
         animationTasks[1] = ShowDamageNumberOnEnemy();
-        animationTasks[2] = BlinkEnemy();
+        animationTasks[2] = BlinkEnemy(blinkCount, !isLastDamage);
         
         // Show damage sign on the enemy as soon as sign trigger is fired
         await blast.SignTcs.Task;
@@ -236,10 +251,22 @@ public class ActionDisplayer : MonoBehaviour
         await ScaleAndFade();
     }
 
-    public async Task ShowWinScreen()
+    public async Task ShowVictory()
     {
+        GameObject victoryGO = Instantiate(_victoryPrefab);
+        Victory victory = victoryGO.GetComponent<Victory>();
+        victoryGO.transform.position = _victoryPos;
         Debug.Log("YOU WIN");
-        await Awaitable.WaitForSecondsAsync(1);
+        await victory.PlayAnimation();
+        await Awaitable.WaitForSecondsAsync(3);
+        Destroy(victoryGO);
+    }
+
+    private void HideEnemy()
+    {
+        Color color = _enemyRenderer.color;
+        color.a = 0;
+        _enemyRenderer.color = color;
     }
 
     public async Task ShowPlayerDeadScreen()
@@ -353,12 +380,12 @@ public class ActionDisplayer : MonoBehaviour
         DestroyDigits();
     }
 
-    private async Task BlinkEnemy()
+    private async Task BlinkEnemy(int enemyBlinkCount, bool restoreAlpha)
     {
-        await BlinkAlpha(_enemyRenderer, _enemyBlinkCount, _enemyBlinkingSpeed);
+        await BlinkAlpha(_enemyRenderer, enemyBlinkCount, _enemyBlinkingSpeed, restoreAlpha);
     }
 
-    private async Task BlinkAlpha(SpriteRenderer renderer, int blinkCount, float blinkingSpeed)
+    private async Task BlinkAlpha(SpriteRenderer renderer, int blinkCount, float blinkingSpeed, bool restoreAlpha)
     {
         bool visible = true;
 
@@ -373,9 +400,8 @@ public class ActionDisplayer : MonoBehaviour
             await Awaitable.WaitForSecondsAsync(blinkingSpeed);
         }
 
-        // restore alpha
         Color final = renderer.color;
-        final.a = 1f;
+        final.a = (restoreAlpha) ? 1f : 0f;
         renderer.color = final;
     }
 

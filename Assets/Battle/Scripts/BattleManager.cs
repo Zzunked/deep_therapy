@@ -60,7 +60,7 @@ public class BattleManager : MonoBehaviour
         _playerUnit.Ressurect();
         _enemyUnit.Ressurect();
         _actionMenu.Reset();
-        _actionDisplayer.SetCardDefaultPosition();
+        _actionDisplayer.Reset();
         PlayersTurn();
     }
 
@@ -104,17 +104,18 @@ public class BattleManager : MonoBehaviour
         {
             playersDamage = _playerUnit.AttackDamage();
             _enemyUnit.TakeDamage(playersDamage, target);
+            _actionDisplayer.Damage = (int)playersDamage;
 
             if (!_enemyUnit.IsDead)
             {
-                _actionDisplayer.Damage = (int)playersDamage;
-                await _actionDisplayer.ShowDamageOnEnemy(target);
+                await _actionDisplayer.ShowDamageOnEnemy(target, false);
                 await HandleDamageToPlayer();
             }
             else
             {
-                await _actionDisplayer.ShowDamageOnEnemy(target);
-                await _actionDisplayer.ShowWinScreen();
+                await _actionDisplayer.ShowDamageOnEnemy(target, true);
+                await _actionDisplayer.MoveCardToRight();
+                await _actionDisplayer.ShowVictory();
                 _battleState = BattleState.Win;
                 ResetBattle();
             }

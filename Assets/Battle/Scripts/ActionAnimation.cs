@@ -19,7 +19,7 @@ public class ActionAnimation : MonoBehaviour
     {
         _animator.Play(_animationName);
 
-        await Task.Yield();
+        await Awaitable.EndOfFrameAsync();
 
         AnimatorStateInfo info = _animator.GetCurrentAnimatorStateInfo(0);
 
