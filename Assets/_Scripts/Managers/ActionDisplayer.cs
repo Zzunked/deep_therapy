@@ -81,6 +81,9 @@ public class ActionDisplayer : MonoBehaviour
     private List<(float x, float y)> _enemyDamageNumPos = new() { (-2f, 0f), (0f, 0f), (2f, 0f) };
     private List<SignPrefabConfig> _signPrefabs;
 
+    // Other
+    public Action OnCrackFinished;
+
     private void Awake()
     {
         List<SignPrefabConfig> signPrefabs = new()
@@ -209,6 +212,7 @@ public class ActionDisplayer : MonoBehaviour
         crackGO.transform.position = _crackPos;
         
         await crack.PlayAnimation();
+        OnCrackFinished?.Invoke();
     }
 
     public async Task ShowShieldOnPlayer()

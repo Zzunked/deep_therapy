@@ -12,7 +12,7 @@ public class BattleUnit : MonoBehaviour
     [SerializeField] protected float _minAttackMultiplier;
     [SerializeField] protected bool _isDead = false;
     [SerializeField] private float _blockProbability = 0.5f;
-    private float _initialHealth;
+    protected float _initialHealth;
 
     public bool IsDead
     {

@@ -58,6 +58,7 @@ public class BattleManager : MonoBehaviour
     {
         _round = 1;
         _playerUnit.Ressurect();
+        _playerUnit.ResetHearts();
         _enemyUnit.Ressurect();
         _actionMenu.Reset();
         _actionDisplayer.Reset();
@@ -166,6 +167,7 @@ public class BattleManager : MonoBehaviour
         float enemyDamage = _enemyUnit.AttackDamage();
         _playerUnit.TakeDamage(enemyDamage);
         _actionDisplayer.Damage = (int)enemyDamage;
+        _actionDisplayer.OnCrackFinished += _playerUnit.UpdateHearts;
 
         if(!_playerUnit.IsDead)
         {
@@ -180,5 +182,7 @@ public class BattleManager : MonoBehaviour
             _battleState = BattleState.Defeat;
             ResetBattle();
         }
+
+        _actionDisplayer.OnCrackFinished -= _playerUnit.UpdateHearts;
     }
 }
