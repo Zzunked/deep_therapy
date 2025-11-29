@@ -627,7 +627,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: -2968266242050400545, guid: 889603395803a49fa907bcc88ff2f332, type: 3}
+  m_Sprite: {fileID: 1697170563135024225, guid: 8c623dbd33dae4a36a6d10a86c12fe03, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -651,7 +651,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattlePlayer
   _health: 10000
-  _baseAttackDamage: 100000
+  _baseAttackDamage: 1000
   _maxAttackMultiplier: 1.5
   _minAttackMultiplier: 0.8
   _isDead: 0
